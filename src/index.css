@@ -1,0 +1,31 @@
+body{
+  background-color: #FAF9F6;
+  color: #111111;
+  font-family: 'inter', sans-serif;
+}
+
+/* HEADER */
+.header {
+  background: #111111;
+  color: #fff;
+  padding: 15px 0px;
+}
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  color: #c5a46d;
+  text-transform: uppercase;
+}
+
+#nav-link  {
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.3s ease;
+  padding: 8px;
+}
+
+#nav-link:hover {
+  color: #C5A46D;
+}
