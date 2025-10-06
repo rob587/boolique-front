@@ -11,7 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<DefaultLayout />}>
             <Route index element={<Homepage />} />
-            <Route path="details/:id" element={<DetailProducts />} />
+            <Route path="details/:param" element={<DetailProducts />} />
           </Route>
         </Routes>
       </BrowserRouter>

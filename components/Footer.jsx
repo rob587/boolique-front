@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container">
     
         <div className="footer-left">
-          <img src="./imgs/logo.png" alt="Logo" className="footer-logo" />
+          <img src="../imgs/logo.png" alt="Logo" className="footer-logo" />
           <div className="elegant">Boolique, l'eleganza a portata di click</div>
         </div>
 

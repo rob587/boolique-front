@@ -60,12 +60,12 @@ const Header = () => {
 
   return (
     <header>
-      <nav className="navbar bg-body-tertiary">
+      <nav className="navbar navbar-dark" style={{ backgroundColor: "#111" }}>
         <div className="container-fluid">
           <Link to="/" className="navbar-brand">
             <img
               className="boolique-logo"
-              src="imgs/logo-boolique.png"
+              src="../imgs/logo-boolique.png"
               alt="boolique"
               width="64"
               height="64"
@@ -79,7 +79,7 @@ const Header = () => {
               placeholder="Cerca"
               aria-label="Cerca"
             />
-            <button className="btn btn-outline-success" type="submit">
+            <button className="btn btn-outline-warning" type="submit">
               Cerca
             </button>
           </form>
