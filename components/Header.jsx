@@ -60,8 +60,8 @@ const Header = () => {
 
   return (
     <header>
-      <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
+      <nav className="navbar bg-body-tertiary">
+        <div className="container-fluid">
           <Link to="/" className="navbar-brand">
             <img
               className="boolique-logo"
@@ -72,14 +72,14 @@ const Header = () => {
             />
             <span>Boolique</span>
           </Link>
-          <form class="d-flex" role="search">
+          <form className="d-flex" role="search">
             <input
-              class="form-control me-2"
+              className="form-control me-2"
               type="search"
               placeholder="Cerca"
               aria-label="Cerca"
             />
-            <button class="btn btn-outline-success" type="submit">
+            <button className="btn btn-outline-success" type="submit">
               Cerca
             </button>
           </form>
