@@ -22,16 +22,16 @@ const Homepage = () => {
 
   return (
     <div>
+      <div className="d-flex justify-content-center">
+        <img className="img-fluid"
+          src="/jumbotron/jumbo.png"
+          alt="abiti in evidenza"
+        />
+      </div>
       <div className="container mt-5">
         <div className="row">
-          <div className="col-12">
+          <div className="col-12 text-center">
             <h1>Prodotti in evidenza</h1>
-          </div>
-          <div className="col-12">
-            <img
-              src="../public/jumbotron/herospace.png"
-              alt="abiti in evidenza"
-            />
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ const Homepage = () => {
                   />
                   <div className="card-body">
                     <h5 className="card-title">{product.name}</h5>
-                    <p className="card-text">{product.price}</p>
+                    <p className="card-text">${product.price}</p>
                   </div>
                 </div>
               </div>

@@ -27,7 +27,7 @@ const DetailProducts = () => {
       </header> */}
       {/* PRODUCT DETAILS */}
       <section className="product-section">
-        <div className="container">
+        <div className="container my-4">
           <div className="row g-3 align-item-start">
             <div className="col-md-5 text-center">
               <img src={products.image} alt="Vestito-Prova" className="img-fluid rounded mb-3 main-image" />
@@ -38,7 +38,7 @@ const DetailProducts = () => {
             <div className="com-md-6">
               <h1 className="product-title">{products.name}</h1>
               <p className="price">${products.price}</p>
-              <p className="desc">{products.descrition}</p>
+              <p className="desc">{products.description}</p>
 
               <div className="mb-3">
                 <label htmlFor="" className="form-label small text-uppercase text-secondary">
