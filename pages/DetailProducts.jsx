@@ -18,9 +18,9 @@ const DetailProducts = () => {
       {/* PRODUCT DETAILS */ }
       <section className="product-section">
         <div className="container">
-          <div className="row g-4 align-item-start">
-            <div className="col-md-6 text-center">
-              <img className="img-fluid rounded mb-3 main-image" src="./public/img/vestito-prova.jpg" alt="Vestito-Prova" />
+          <div className="row g-3 align-item-start">
+            <div className="col-md-5 text-center">
+              <img src="/img/Vestitoprova.jpeg" alt="Vestito-Prova" className="img-fluid rounded mb-3 main-image" />
             </div>
 
             { /* INFO */ }
