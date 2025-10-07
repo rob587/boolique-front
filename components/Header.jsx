@@ -79,8 +79,8 @@ const Header = () => {
               placeholder="Cerca"
               aria-label="Cerca"
             />
-            <button className="btn btn-outline-warning" type="submit">
-              Cerca
+            <button className="btn btn-outline-warning me-2" type="submit">
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </form>
         </div>
