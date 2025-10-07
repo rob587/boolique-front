@@ -7,7 +7,7 @@ const Homepage = () => {
   const [products, setProducts] = useState([]);
 
   const url = "http://localhost:3000/products";
-  
+
   const fetchData = () => {
     axios.get(url).then((resp) => {
       setProducts(resp.data);
@@ -57,10 +57,10 @@ const Homepage = () => {
           })}
         </div>
         <Link className="wish-link text-end fs-1" to={"wish"}>
-          <i class="fa-solid fa-heart"></i>
+          <i className="fa-solid fa-heart"></i>
         </Link>
         <Link className="cart-link text-end fs-1" to={"cart"}>
-          <i class="fa-solid fa-cart-shopping"></i>
+          <i className="fa-solid fa-cart-shopping"></i>
         </Link>
       </div>
     </div>
