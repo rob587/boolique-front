@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartPage from "./CartPage";
-
+import ProductCard from "../components/ProductCard";
 const Homepage = () => {
   const [products, setProducts] = useState([]);
 
   const url = "http://localhost:3000/products";
-  const navigate = useNavigate();
+  
   const fetchData = () => {
     axios.get(url).then((resp) => {
       setProducts(resp.data);
@@ -16,9 +16,7 @@ const Homepage = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const goToDetail = (product) => {
-    navigate(`/details/${product.slug || product.id}`);
-  };
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/products?minId=44&maxId=49")
@@ -53,22 +51,7 @@ const Homepage = () => {
                 className="col-12 col-sm-6 col-md-4"
                 key={product.slug || product.id}
               >
-                <div
-                  className="card my-3"
-                  style={{ height: "40rem" }}
-                  onClick={() => goToDetail(product)}
-                >
-                  <img
-                    src={product.image}
-                    className="card-img-top img-fluid"
-                    style={{ maxHeight: "33rem" }}
-                    alt={product.name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{product.name}</h5>
-                    <p className="card-text">${product.price}</p>
-                  </div>
-                </div>
+                <ProductCard product={product} />
               </div>
             );
           })}
