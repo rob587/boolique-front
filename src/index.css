@@ -135,19 +135,46 @@ body {
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
 }
 
-/* IMMAGINE PRINCIPALE */
-.main-image {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 15px;
-  object-fit: cover;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* CONTENITORE IMMAGINE */
+.col-md-5 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
 }
 
+/* IMMAGINE PRINCIPALE - centrata e con effetto soft */
+.main-image {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Effetto hover leggero */
 .main-image:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: scale(0.80);
+  box-shadow: 0 10px 28px rgba(189, 160, 106, 0.3);
+}
+
+/* Bagliore dorato sottile */
+.main-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at center, rgba(189, 160, 106, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.main-image:hover::after {
+  opacity: 1;
 }
 
 /* TITOLI E TESTO */
