@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Homepage = () => {
@@ -72,6 +72,12 @@ const Homepage = () => {
             );
           })}
         </div>
+        <Link className="wish-link text-end fs-1">
+          <i class="fa-solid fa-heart"></i>
+        </Link>
+        <Link className="cart-link text-end fs-1">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </Link>
       </div>
     </div>
   );

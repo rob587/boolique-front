@@ -174,3 +174,27 @@ body {
 .title {
   color: #c3993a;
 }
+
+.wish-link .cart-link {
+  padding: 5px;
+  z-index: 2;
+  opacity: 1;
+  border-radius: 30%;
+  border: 1px solid black;
+}
+
+.cart-link {
+  position: fixed;
+  background-color: #98d5cd;
+  margin-bottom: 10px;
+  bottom: 10%;
+  right: 5%;
+}
+
+.wish-link {
+  position: fixed;
+  background-color: #98d5cd;
+  margin-bottom: 10px;
+  bottom: 10%;
+  right: 8%;
+}
