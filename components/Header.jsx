@@ -70,7 +70,7 @@ const Header = () => {
               width="64"
               height="64"
             />
-            <span className="d-none d-md-inline-block mx-4">Boolique</span>
+            <span className="logo d-none d-md-inline-block mx-3">Boolique</span>
           </Link>
           <form className="d-flex" role="search">
             <input
