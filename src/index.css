@@ -63,6 +63,13 @@ body {
   font-family: "inter", sans-serif;
 }
 
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  color: #c5a46d;
+  text-transform: uppercase;
+}
+
 /* HEADER */
 /* .header {
   background: #111111;
