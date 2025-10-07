@@ -42,7 +42,7 @@ const Homepage = () => {
         <h1 className="title">BENVENUTO IN BOOLIQUE</h1>
         <h2 className="subtitle">La casa dell'eleganza sartoriale</h2>
       </div>
-      <div className="container mt-5">
+      <div className="container-h4 mt-5 mb-5">
         <div className="row">
           <div className="col-12 text-center">
             <h4 className="subtitle">Prodotti in evidenza</h4>
