@@ -180,3 +180,66 @@ body {
   color: #c3993a;
 }
 
+/* Palette diretta */
+body {
+  background-color: #faf9f6; 
+  color: #111111;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Header & Footer */
+.wishlist-header,
+.wishlist-footer {
+  background-color: #111111;
+  color: #faf9f6;
+}
+
+.wishlist-footer small {
+  color: #d8c3a5; 
+}
+
+/* Card */
+.wishlist-card {
+  border: none;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(17, 17, 17, 0.1);
+  transition: all 0.3s ease;
+}
+
+.wishlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(17, 17, 17, 0.2);
+}
+
+/* Testo */
+.card-title {
+  color: #111111;
+  font-weight: bold;
+}
+
+.card-text {
+  color: #333333;
+  font-size: 15px;
+}
+
+.wishlist-price {
+  color: #c5a46d; 
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Bottone */
+.wishlist-btn {
+  background-color: #c5a46d; 
+  color: #faf9f6;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.wishlist-btn:hover {
+  background-color: #d8c3a5; 
+  color: #111111;
+}
