@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import CartPage from "./CartPage";
 
 const Homepage = () => {
   const [products, setProducts] = useState([]);
@@ -72,10 +73,10 @@ const Homepage = () => {
             );
           })}
         </div>
-        <Link className="wish-link text-end fs-1">
+        <Link className="wish-link text-end fs-1" to={"wish"}>
           <i class="fa-solid fa-heart"></i>
         </Link>
-        <Link className="cart-link text-end fs-1">
+        <Link className="cart-link text-end fs-1" to={"cart"}>
           <i class="fa-solid fa-cart-shopping"></i>
         </Link>
       </div>
