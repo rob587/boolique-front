@@ -278,3 +278,70 @@ body {
     right: 6%;
   }
 }
+
+.jumbotron-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px; /*Arrotondato se non lo volete metto 0 */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.jumbotron-image {
+  width: 100%;
+  height: auto;
+  max-height: 80vh; 
+  object-fit: cover; 
+  filter: brightness(85%); 
+  transition: transform 0.6s ease, filter 0.3s ease;
+}
+
+
+.jumbotron-container:hover .jumbotron-image {
+  transform: scale(1.05);
+  filter: brightness(90%);
+}
+
+
+.jumbotron-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #D8C3A5;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.0);
+  z-index: 2;
+}
+
+.jumbotron-text h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.jumbotron-text p {
+  font-size: 1.25rem;
+}
+
+/*Media query: Mobile */
+@media (max-width: 768px) {
+  .jumbotron-text h1 {
+    font-size: 2rem;
+  }
+
+  .jumbotron-text p {
+    font-size: 1rem;
+  }
+
+  .jumbotron-image {
+    max-height: 60vh;
+  }
+}
+
+.jumbotron-container::after {
+  content: ""; /*serve solo per attivare lo pseudo-elemento Senza di quello, il browser non lo renderizza affatto*/
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+  z-index: 1;
+}
