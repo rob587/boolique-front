@@ -36,12 +36,12 @@ const Homepage = () => {
       </div>
       <div className="col-12 text-center my-5">
         <h1 className="title">BENVENUTO IN BOOLIQUE</h1>
-        <h2>La casa dell'eleganza sartoriale</h2>
+        <h2 className="subtitle">La casa dell'eleganza sartoriale</h2>
       </div>
       <div className="container mt-5">
         <div className="row">
           <div className="col-12 text-center">
-            <h4>Prodotti in evidenza</h4>
+            <h4 className="subtitle">Prodotti in evidenza</h4>
           </div>
         </div>
       </div>
