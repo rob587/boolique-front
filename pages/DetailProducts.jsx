@@ -1,10 +1,21 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 const DetailProducts = () => {
-  return(
-     <div className="details-page">
+  const [products, setProducts] = useState([])
+  const { param } = useParams();
+  useEffect(() => {
+    axios.get(`http://localhost:3000/products/${param}`).then((res) => {
+      setProducts(res.data)
+    })
+  }, [param])
 
-      { /* HEADER */ }
+  return (
+    <div className="details-page">
 
-      <header className="header">
+      { /* HEADER */}
+
+      {/* <header className="header">
         <div className="container d-flex justify-content-between align-item-center">
           <div className="logo">BOOLIQUE</div>
           <nav className="nav-menu d none d-md-flex gap-3">
@@ -13,42 +24,40 @@ const DetailProducts = () => {
             <a href="#" id="nav-link">Contatti</a>
           </nav>
         </div>
-      </header>
-
-      {/* PRODUCT DETAILS */ }
+      </header> */}
+      {/* PRODUCT DETAILS */}
       <section className="product-section">
-        <div className="container">
+        <div className="container my-4">
           <div className="row g-3 align-item-start">
             <div className="col-md-5 text-center">
-              <img src="/img/Vestitoprova.jpeg" alt="Vestito-Prova" className="img-fluid rounded mb-3 main-image" />
+              <img src={products.image} alt="Vestito-Prova" className="img-fluid rounded mb-3 main-image" />
             </div>
 
-            { /* INFO */ }
+            { /* INFO */}
 
             <div className="com-md-6">
-              <h1 className="product-title">GIACCA CAMMELLO</h1>
-              <p className="price">€ 20.000,00</p>
-              <p className="desc"> Giacca sartoriale in pelle di cammello extra-pesante, con taglio slim e fodera in seta. Cuciture rifinite a mano per un tocco di classe senza tempo.</p>
+              <h1 className="product-title">{products.name}</h1>
+              <p className="price">${products.price}</p>
+              <p className="desc">{products.description}</p>
 
               <div className="mb-3">
                 <label htmlFor="" className="form-label small text-uppercase text-secondary">
                   Taglia
                 </label>
-                  <div className="d-flex gap-2">
-                   <button className="btn btn-outline-dark btn-size">46</button>
-                   <button className="btn btn-outline-dark btn-size">48</button>
-                   <button className="btn btn-outline-dark btn-size">50</button>
-                   <button className="btn btn-outline-dark btn-size">52</button>
-                  </div>
+                <div className="d-flex gap-2">
+                  <button className="btn btn-outline-dark btn-size">{products.size}</button>
+                  {/* <button className="btn btn-outline-dark btn-size">m</button>
+                  <button className="btn btn-outline-dark btn-size">l</button>
+                  <button className="btn btn-outline-dark btn-size">xl</button> */}
+                </div>
               </div>
               <div className="mb-4">
                 <label htmlFor="" className="form-label small text-uppercase text-secondary">
                   Colore
                 </label>
                 <div className="d-flex gap-2 color-badges">
-                  <span className="badge bg-dark">Nero</span>
-                  <span className="badge bg-secondary">Grigio</span>
-                  <span className="badge bg-warning">Cammello</span>                  
+                  <span className="badge bg-dark">{products.color}</span>
+
                 </div>
               </div>
 
@@ -58,13 +67,13 @@ const DetailProducts = () => {
         </div>
       </section>
 
-      { /* FOOTER */ }
-      <footer className="footer">
+      { /* FOOTER */}
+      {/* <footer className="footer">
         <div className="container text-center">
           <p className="mb-0">© 2025 BOOLIQUE · Eleganza sartoriale</p>
         </div>
-      </footer>
-     </div>
+      </footer> */}
+    </div>
   );
 };
 
