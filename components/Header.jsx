@@ -88,8 +88,8 @@ const Header = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
-            <button className="btn btn-outline-warning" type="submit">
-              Cerca
+            <button className="btn btn-outline-warning me-2" type="submit">
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
             {filteredProducts.length > 0 && (
               <div

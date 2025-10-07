@@ -174,3 +174,51 @@ body {
 .title {
   color: #c3993a;
 }
+
+.wish-link,
+.cart-link {
+  padding: 8px;
+  z-index: 10;
+  opacity: 1;
+  border-radius: 50%;
+  border: 1px solid #C5A46D; 
+  background-color: #FAF9F6; 
+  color: #111111; 
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(17, 17, 17, 0.1); 
+}
+
+
+.wish-link:hover,
+.cart-link:hover {
+  background-color: #D8C3A5; 
+  border-color: #C5A46D; 
+  color: #111111;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(197, 164, 109, 0.3);
+}
+
+
+.cart-link {
+  position: fixed;
+  bottom: 10%;
+  right: 2%;
+}
+
+.wish-link {
+  position: fixed;
+  bottom: 10%;
+  right: 6%;
+}
+
+
+.wish-link i,
+.cart-link i {
+  font-size: 35px;
+  transition: transform 0.3s ease;
+}
+
+.wish-link:hover i,
+.cart-link:hover i {
+  transform: scale(1.2);
+}
