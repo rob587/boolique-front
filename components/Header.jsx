@@ -22,7 +22,7 @@ const Header = () => {
     const [query, setQuery] = useState("");
     const [filteredProducts, setFilteredProducts] = useState([]);
 
-    // 🔹 Carica prodotti dal backend all'inizio
+    // Carica prodotti dal backend all'inizio
     useEffect(() => {
       axios
         .get("/api/products")
@@ -30,7 +30,7 @@ const Header = () => {
         .catch((err) => console.error(err));
     }, []);
 
-    // 🔹 Filtra prodotti in base alla query
+    // Filtra prodotti in base alla query
     useEffect(() => {
       const q = query.toLowerCase().trim();
 
@@ -60,17 +60,17 @@ const Header = () => {
 
   return (
     <header>
-      <nav className="navbar bg-body-tertiary">
+      <nav className="navbar navbar-dark" style={{ backgroundColor: "#111" }}>
         <div className="container-fluid">
           <Link to="/" className="navbar-brand">
             <img
               className="boolique-logo"
-              src="imgs/logo-boolique.png"
+              src="../imgs/logo-boolique.png"
               alt="boolique"
               width="64"
               height="64"
             />
-            <span>Boolique</span>
+            <span className="logo d-none d-md-inline-block mx-3">Boolique</span>
           </Link>
           <form className="d-flex" role="search">
             <input
@@ -79,7 +79,7 @@ const Header = () => {
               placeholder="Cerca"
               aria-label="Cerca"
             />
-            <button className="btn btn-outline-success" type="submit">
+            <button className="btn btn-outline-warning" type="submit">
               Cerca
             </button>
           </form>
