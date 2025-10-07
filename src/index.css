@@ -222,3 +222,48 @@ body {
 .cart-link:hover i {
   transform: scale(1.2);
 }
+
+/*Mobile (max 768px)*/
+@media (max-width: 768px) {
+  .wish-link,
+  .cart-link {
+    bottom: 5%; 
+    border-width: 0.8px;
+    padding: 6px;
+  }
+
+  .wish-link i,
+  .cart-link i {
+    font-size: 28px;
+  }
+
+  .wish-link {
+    right: 18%; 
+  }
+
+  .cart-link {
+    right: 5%;
+  }
+}
+
+/*Extra small (max 480px)*/
+@media (max-width: 480px) {
+  .wish-link,
+  .cart-link {
+    bottom: 4%;
+    padding: 5px;
+  }
+
+  .wish-link i,
+  .cart-link i {
+    font-size: 24px;
+  }
+
+  .wish-link {
+    right: 20%;
+  }
+
+  .cart-link {
+    right: 6%;
+  }
+}
