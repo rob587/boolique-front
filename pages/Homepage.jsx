@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 
 const Homepage = () => {
   const [products, setProducts] = useState([]);
@@ -19,32 +18,48 @@ const Homepage = () => {
   const goToDetail = (product) => {
     navigate(`/details/${product.slug || product.id}`);
   };
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/products?minId=44&maxId=49")
+      .then((resp) => setProducts(resp.data));
+  }, []);
 
   return (
     <div>
-      <div className="d-flex justify-content-center">
-        <img className="img-fluid"
+      <div className="d-flex justify-content-center jumbotron">
+        <img
+          className="img-fluid"
           src="/jumbotron/jumbo.png"
           alt="abiti in evidenza"
         />
       </div>
+      <div className="col-12 text-center my-5">
+        <h1 className="title">BENVENUTO IN BOOLIQUE</h1>
+        <h2>La casa dell'eleganza sartoriale</h2>
+      </div>
       <div className="container mt-5">
         <div className="row">
           <div className="col-12 text-center">
-            <h1>Prodotti in evidenza</h1>
+            <h4>Prodotti in evidenza</h4>
           </div>
         </div>
       </div>
-      <div className="container">
+      <div className="container mb-5">
         <div className="row">
-
           {products.map((product) => {
             return (
-              <div className="col-4" key={product.slug || product.id}>
-                <div className="card my-3" style={{ height: "40rem" }} onClick={() => goToDetail(product)}>
+              <div
+                className="col-12 col-sm-6 col-md-4"
+                key={product.slug || product.id}
+              >
+                <div
+                  className="card my-3"
+                  style={{ height: "40rem" }}
+                  onClick={() => goToDetail(product)}
+                >
                   <img
                     src={product.image}
-                    className="card-img-top"
+                    className="card-img-top img-fluid"
                     style={{ maxHeight: "33rem" }}
                     alt={product.name}
                   />
@@ -54,7 +69,6 @@ const Homepage = () => {
                   </div>
                 </div>
               </div>
-
             );
           })}
         </div>

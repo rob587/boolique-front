@@ -58,9 +58,9 @@ footer .container {
 }
 
 body {
-  background-color: #FAF9F6;
+  background-color: #faf9f6;
   color: #111111;
-  font-family: 'inter', sans-serif;
+  font-family: "inter", sans-serif;
 }
 
 /* HEADER */
@@ -95,14 +95,14 @@ body {
 }
 
 .product-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   text-transform: uppercase;
   font-size: 35px;
   letter-spacing: 1px;
 }
 
 .price {
-  color: #C5A46D;
+  color: #c5a46d;
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 16px;
@@ -117,7 +117,7 @@ body {
 
 /* BUTTONS */
 .btn-buy {
-  background-color: #C5A46D;
+  background-color: #c5a46d;
   color: #111111;
   border: none;
   padding: 10px 20px;
@@ -128,7 +128,7 @@ body {
 }
 
 .btn-buy:hover {
-  background-color: #D8C3A5;
+  background-color: #d8c3a5;
 }
 
 .btn-size {
@@ -142,7 +142,6 @@ body {
   margin-top: 8px;
 }
 
-
 .main-image {
   width: 100%;
   max-width: 600px;
@@ -153,7 +152,7 @@ body {
 }
 
 .main-image:hover {
-  border-color: #C5A46D;
+  border-color: #c5a46d;
   transform: scale(1.05);
 }
 
@@ -164,3 +163,7 @@ body {
   padding: 24px 0;
   font-size: 14px;
 } */
+
+.title {
+  color: #c3993a;
+}

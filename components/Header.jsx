@@ -22,7 +22,7 @@ const Header = () => {
     const [query, setQuery] = useState("");
     const [filteredProducts, setFilteredProducts] = useState([]);
 
-    // 🔹 Carica prodotti dal backend all'inizio
+    // Carica prodotti dal backend all'inizio
     useEffect(() => {
       axios
         .get("/api/products")
@@ -30,7 +30,7 @@ const Header = () => {
         .catch((err) => console.error(err));
     }, []);
 
-    // 🔹 Filtra prodotti in base alla query
+    // Filtra prodotti in base alla query
     useEffect(() => {
       const q = query.toLowerCase().trim();
 
@@ -70,7 +70,7 @@ const Header = () => {
               width="64"
               height="64"
             />
-            <span>Boolique</span>
+            <span className="d-none d-md-inline-block mx-4">Boolique</span>
           </Link>
           <form className="d-flex" role="search">
             <input
