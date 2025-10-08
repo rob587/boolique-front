@@ -17,24 +17,18 @@ const Homepage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/products?minId=44&maxId=49")
-      .then((resp) => setProducts(resp.data));
-  }, []);
-
   return (
     <div>
       <div className="jumbotron-container d-flex justify-content-center align-items-center">
-       <img
-        className="jumbotron-image img-fluid"
-        src="/jumbotron/jumbo.png"
-        alt="Abiti in evidenza"
-       />
-       <div className="jumbotron-text text-center">
-        <h1>Nuova Collezione</h1>
-        <p>Scopri i capi più amati della stagione</p>
-       </div>
+        <img
+          className="jumbotron-image img-fluid"
+          src="/jumbotron/jumbo.png"
+          alt="Abiti in evidenza"
+        />
+        <div className="jumbotron-text text-center">
+          <h1>Nuova Collezione</h1>
+          <p>Scopri i capi più amati della stagione</p>
+        </div>
       </div>
       <div className="col-12 text-center my-5">
         <h1 className="title">BENVENUTO IN BOOLIQUE</h1>

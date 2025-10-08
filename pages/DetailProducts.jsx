@@ -29,9 +29,36 @@ const DetailProducts = () => {
       <section className="product-section">
         <div className="container my-4">
           <div className="row g-3 align-item-start">
-            <div className="col-md-5 text-center">
-              <img src={products.image} alt="Vestito-Prova" className="img-fluid rounded mb-3 main-image" />
-            </div>
+           <div className="col-md-5 text-center">
+             {products.images && products.images.length > 0 && (
+               <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
+                 <div className="carousel-inner">
+                   {products.images.map((img, index) => (
+                     <div
+                       key={index}
+                       className={`carousel-item ${index === 0 ? "active" : ""}`}
+                     >
+                       <img
+                         src={img}
+                         alt={`Slide ${index + 1}`}
+                         className="d-block w-100 rounded main-image"
+                       />
+                     </div>
+                   ))}
+                 </div>
+
+                 <button className="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                   <span className="carousel-control-prev-icon"></span>
+                 </button>
+
+                 <button className="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                   <span className="carousel-control-next-icon"></span>
+                 </button>
+               </div>
+             )}
+          </div>
+
+
 
             { /* INFO */}
 
