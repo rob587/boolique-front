@@ -26,7 +26,7 @@ const CartPage = () => {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="container my-5">
+    <div className="container my-5 pay-box">
       <div className="row">
         {/* Checkout */}
         <div className="col-md-8">
