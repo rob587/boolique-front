@@ -124,7 +124,6 @@ body {
 }
 
 .container {
-  background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
   padding: 40px;
@@ -307,8 +306,8 @@ label.form-label {
 
 .wish-link {
   position: fixed;
-  bottom: 10%;
-  right: 6%;
+  bottom: 25%;
+  right: 2%;
 }
 
 .wish-link i,
@@ -341,11 +340,13 @@ label.form-label {
   }
 
   .wish-link {
-    right: 18%;
+   bottom: 20%;
+   right: 2%;
   }
 
   .cart-link {
-    right: 5%;
+    bottom: 5%;
+    right: 2%;
   }
 }
 
@@ -363,10 +364,12 @@ label.form-label {
   }
 
   .wish-link {
-    right: 20%;
+    bottom: 16%;
+    right: 6%;
   }
 
   .cart-link {
+    bottom: 4%;
     right: 6%;
   }
 }
