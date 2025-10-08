@@ -1,12 +1,15 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import useCartStore from "../src/store/useCartStore";
 
 const DetailProducts = () => {
   const [products, setProducts] = useState([]);
   const [related, setRelated] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const { param } = useParams();
+
+  const addToCart = useCartStore((state) => state.addToCart);
 
   useEffect(() => {
     if (products.id) {
@@ -132,7 +135,15 @@ const DetailProducts = () => {
                 </div>
               </div>
 
-              <button className="btn-buy">Aggiungi al carrello</button>
+              <button
+                className="btn-buy"
+                onClick={() => {
+                  addToCart(products);
+                  alert(`Il prodotto è stato aggiunto al carrello!`);
+                }}
+              >
+                Aggiungi al carrello
+              </button>
             </div>
           </div>
         </div>
