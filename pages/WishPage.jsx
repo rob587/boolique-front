@@ -1,5 +1,5 @@
 import React from "react";
-import useWishlistStore from '../src/store/useWishlIstStore'; 
+import useWishlistStore from '../src/store/useWishlIstStore';
 import ProductCard from '../components/ProductCard';
 
 const WishPage = () => {
@@ -18,11 +18,11 @@ const WishPage = () => {
         {wishlistProducts.length > 0 ? (
           wishlistProducts.map((product) => (
             <div
-              className="col-12 col-sm-6 col-md-4 mb-4"
+              className="col-12 col-md-6 col-lg-4 mb-4"
               key={product.slug || product.id}
             >
               <ProductCard product={product} />
-      
+
             </div>
           ))
         ) : (
