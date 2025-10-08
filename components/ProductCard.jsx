@@ -51,7 +51,7 @@ const ProductCard = ({ product }) => {
             cursor: "pointer",
             position: 'absolute',
             top: '10px',
-            right: '10px',
+            left: '10px',
             fontSize: '1.5rem'
           }}
           onClick={toggleWishlist}
@@ -63,7 +63,7 @@ const ProductCard = ({ product }) => {
           style={{
             position: 'absolute',
             bottom: '10px',
-            right: '10px',
+            left: '10px',
             cursor: "pointer",
             fontSize: '1.5rem',
             color: isInCart ? "#C3993A" : "#111111"

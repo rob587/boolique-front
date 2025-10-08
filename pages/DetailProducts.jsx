@@ -30,8 +30,19 @@ const DetailProducts = () => {
         <div className="container my-4">
           <div className="row g-3 align-item-start">
             <div className="col-md-5 text-center">
-              <img src={products.image} alt="Vestito-Prova" className="img-fluid rounded mb-3 main-image" />
+              {products.images && products.images.length > 0 && (
+                products.images.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`Immagine ${index + 1}`}
+                    className="img-fluid rounded mb-3 main-image"
+                  />
+                ))
+              )}
             </div>
+
+
 
             { /* INFO */}
 
