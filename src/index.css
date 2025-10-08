@@ -321,7 +321,8 @@ label.form-label {
   transform: scale(1.2);
 }
 
-.pay-box {
+.pay-box,
+.wish-box {
   height: 75vh;
 }
 
@@ -340,8 +341,8 @@ label.form-label {
   }
 
   .wish-link {
-   bottom: 20%;
-   right: 2%;
+    bottom: 20%;
+    right: 2%;
   }
 
   .cart-link {
