@@ -268,14 +268,6 @@ label.form-label {
   letter-spacing: 1px;
 }
 
-/* FOOTER */
-/* .footer {
-  background-color: #111111;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 24px 0;
-  font-size: 14px;
-} */
-
 .wish-link,
 .cart-link {
   padding: 8px;
@@ -323,7 +315,7 @@ label.form-label {
 
 .pay-box,
 .wish-box {
-  height: 75vh;
+  min-height: 75vh;
 }
 
 /*Mobile (max 768px)*/
@@ -447,4 +439,21 @@ label.form-label {
 html,
 body {
   overflow-x: hidden;
+}
+
+/* POINTER PER CARD  */
+
+/* Applica pointer a tutta la card */
+.card {
+  cursor: pointer !important;
+}
+
+/* Pointer all'immagine */
+.card-img-top {
+  cursor: pointer !important;
+}
+
+/* Pointer al card-body */
+.card-body {
+  cursor: pointer !important;
 }
