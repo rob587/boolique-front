@@ -27,21 +27,25 @@ const Homepage = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-center jumbotron">
-        <img
-          className="img-fluid"
-          src="/jumbotron/jumbo.png"
-          alt="abiti in evidenza"
-        />
+      <div className="jumbotron-container d-flex justify-content-center align-items-center">
+       <img
+        className="jumbotron-image img-fluid"
+        src="/jumbotron/jumbo.png"
+        alt="Abiti in evidenza"
+       />
+       <div className="jumbotron-text text-center">
+        <h1>Nuova Collezione</h1>
+        <p>Scopri i capi più amati della stagione</p>
+       </div>
       </div>
       <div className="col-12 text-center my-5">
         <h1 className="title">BENVENUTO IN BOOLIQUE</h1>
-        <h2>La casa dell'eleganza sartoriale</h2>
+        <h2 className="subtitle">La casa dell'eleganza sartoriale</h2>
       </div>
-      <div className="container mt-5">
+      <div className="container-h4 mt-5 mb-5">
         <div className="row">
           <div className="col-12 text-center">
-            <h4>Prodotti in evidenza</h4>
+            <h4 className="subtitle">Prodotti in evidenza</h4>
           </div>
         </div>
       </div>

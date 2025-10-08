@@ -41,7 +41,7 @@ footer .container {
 
 .footer-links li a {
   font-family: Cambria;
-  color: #ffffff;
+  color: #c5a46d;
   text-decoration: none;
   font-size: 14px;
   transition: 0.3s ease;
@@ -53,8 +53,22 @@ footer .container {
 
 .elegant {
   font-family: cambria;
-  color: #fdfdfd;
+  color: #c5a46d;
   font-style: italic;
+}
+
+.title{
+  color: #c5a46d;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 50px;
+  font-weight: 600;
+   text-transform: uppercase;
+   text-decoration: underline 3px;
+}
+
+.subtitle{
+  font-family: cambria;
+  text-transform: uppercase;
 }
 
 body {
@@ -96,71 +110,159 @@ body {
   color: #C5A46D;
 } */
 
-/* PRODUCT SECTION */
-.product-section {
-  padding: 48px 0px;
+.details-page {
+  background-color: #f8f5f0;
+  min-height: 100vh;
+  font-family: "Cormorant Garamond", serif;
+  color: #1a1a1a;
+  padding-bottom: 50px;
 }
 
+/* SEZIONE PRODOTTO */
+.product-section {
+  padding: 60px 0;
+}
+
+.container {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  padding: 40px;
+  transition: all 0.3s ease;
+}
+
+.container:hover {
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* CONTENITORE IMMAGINE */
+.col-md-5 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+/* IMMAGINE PRINCIPALE - centrata e con effetto soft */
+.main-image {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Effetto hover leggero */
+.main-image:hover {
+  transform: scale(0.80);
+  box-shadow: 0 10px 28px rgba(189, 160, 106, 0.3);
+}
+
+/* Bagliore dorato sottile */
+.main-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(circle at center, rgba(189, 160, 106, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.main-image:hover::after {
+  opacity: 1;
+}
+
+/* TITOLI E TESTO */
 .product-title {
-  font-family: "Cormorant Garamond", serif;
-  text-transform: uppercase;
-  font-size: 35px;
+  font-size: 38px;
+  font-weight: 600;
   letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  color: #111;
 }
 
 .price {
-  color: #c5a46d;
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 16px;
+  color: #bda06a;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 18px;
 }
 
 .desc {
-  color: #333333;
-  font-size: 15px;
-  margin-bottom: 24px;
-  line-height: 1.6;
+  font-family: "Poppins", sans-serif;
+  color: #444;
+  font-size: 16px;
+  margin-bottom: 28px;
+  line-height: 1.7;
 }
 
-/* BUTTONS */
+/* BOTTONI */
 .btn-buy {
-  background-color: #c5a46d;
-  color: #111111;
+  background-color: #bda06a;
+  color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
+  letter-spacing: 1px;
   transition: all 0.3s ease;
-  font-size: 15px;
 }
 
 .btn-buy:hover {
-  background-color: #d8c3a5;
+  background-color: #d1b57a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(189, 160, 106, 0.4);
 }
 
+/* TAGLIA */
 .btn-size {
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 14px;
-}
-
-/* IMMAGINI */
-.thumb-gallery {
-  margin-top: 8px;
-}
-
-.main-image {
-  width: 100%;
-  max-width: 600px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  object-fit: cover;
-  cursor: pointer;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  text-transform: uppercase;
+  border: 1px solid #bda06a;
+  color: #1a1a1a;
+  transition: all 0.3s ease;
 }
 
-.main-image:hover {
-  border-color: #c5a46d;
-  transform: scale(1.05);
+.btn-size:hover {
+  background-color: #bda06a;
+  color: #fff;
+}
+
+/* COLORI */
+.color-badges span {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 30px;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.color-badges span:hover {
+  background-color: #bda06a;
+}
+
+/* LABELS */
+label.form-label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #777;
+  font-size: 13px;
+  letter-spacing: 1px;
 }
 
 /* FOOTER */
@@ -170,10 +272,6 @@ body {
   padding: 24px 0;
   font-size: 14px;
 } */
-/*Title*/
-.title {
-  color: #c3993a;
-}
 
 .wish-link,
 .cart-link {
@@ -220,6 +318,124 @@ body {
   transform: scale(1.2);
 }
 
+
 .pay-box {
   height: 70vh;
 }
+
+/*Mobile (max 768px)*/
+@media (max-width: 768px) {
+  .wish-link,
+  .cart-link {
+    bottom: 5%; 
+    border-width: 0.8px;
+    padding: 6px;
+  }
+
+  .wish-link i,
+  .cart-link i {
+    font-size: 28px;
+  }
+
+  .wish-link {
+    right: 18%; 
+  }
+
+  .cart-link {
+    right: 5%;
+  }
+}
+
+/*Extra small (max 480px)*/
+@media (max-width: 480px) {
+  .wish-link,
+  .cart-link {
+    bottom: 4%;
+    padding: 5px;
+  }
+
+  .wish-link i,
+  .cart-link i {
+    font-size: 24px;
+  }
+
+  .wish-link {
+    right: 20%;
+  }
+
+  .cart-link {
+    right: 6%;
+  }
+}
+
+.jumbotron-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0; /*Arrotondato se non lo volete metto 0 */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.jumbotron-image {
+  width: 100%;
+  height: auto;
+  max-height: 80vh; 
+  object-fit: cover; 
+  filter: brightness(85%); 
+  transition: transform 0.6s ease, filter 0.3s ease;
+}
+
+
+.jumbotron-container:hover .jumbotron-image {
+  transform: scale(1.05);
+  filter: brightness(90%);
+}
+
+
+.jumbotron-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #D8C3A5;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.0);
+  z-index: 2;
+}
+
+.jumbotron-text h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.jumbotron-text p {
+  font-size: 1.25rem;
+}
+
+/*Media query: Mobile */
+@media (max-width: 768px) {
+  .jumbotron-text h1 {
+    font-size: 2rem;
+  }
+
+  .jumbotron-text p {
+    font-size: 1rem;
+  }
+
+  .jumbotron-image {
+    max-height: 60vh;
+  }
+}
+
+.jumbotron-container::after {
+  content: ""; /*serve solo per attivare lo pseudo-elemento Senza di quello, il browser non lo renderizza affatto*/
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+  z-index: 1;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
