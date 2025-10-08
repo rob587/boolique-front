@@ -152,6 +152,12 @@ const DetailProducts = () => {
                 <div className="card-body">
                   <h5 className="card-title">{prod.name}</h5>
                   <p className="text-muted">{prod.price} €</p>
+                  <a
+                    href={`/details/${prod.slug}`}
+                    className="btn btn-outline-dark btn-sm"
+                  >
+                    Vedi prodotto
+                  </a>
                 </div>
               </div>
             </div>
