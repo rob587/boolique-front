@@ -1,21 +1,32 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 const useCartStore = create(
   persist(
     (set, get) => ({
       cart: [],
       addToCart: (product) => {
-        const existing = get().cart.find(p => p.id === product.id);
+        const existing = get().cart.find((p) => p.id === product.id);
         if (!existing) set({ cart: [...get().cart, product] });
       },
-      removeFromCart: (id) => {
-        set({ cart: get().cart.filter(p => p.id !== id) });
+      updateQuantity: (id, newQuantity) => {
+        if (newQuantity < 1) {
+          set({ cart: get().cart.filter((p) => p.id !== id) });
+        } else {
+          set({
+            cart: get().cart.map((p) =>
+              p.id === id ? { ...p, quantity: newQuantity } : p
+            ),
+          });
+        }
       },
-      clearCart: () => set({ cart: [] })
+      removeFromCart: (id) => {
+        set({ cart: get().cart.filter((p) => p.id !== id) });
+      },
+      clearCart: () => set({ cart: [] }),
     }),
     {
-      name: 'cart-storage', // chiave su localStorage
+      name: "cart-storage", // chiave su localStorage
       getStorage: () => localStorage,
     }
   )
