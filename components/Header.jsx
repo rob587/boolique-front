@@ -45,16 +45,17 @@ const Header = () => {
 
     setFilteredProducts(scored);
   }, [query, products]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (query && filteredProducts.length > 0) {
-      // Naviga al primo risultato
-      const firstResult = filteredProducts[0];
-      navigate(`/details/${firstResult.slug || firstResult.id}`);
-      setQuery(""); // Pulisci la query
+    const q = query.trim();
+    if (q) {
+      navigate(`/search?q=${encodeURIComponent(q)}`);
+      setQuery("");
     }
   };
+
+
+
 
   const handleResultClick = (product) => {
     navigate(`/details/${product.slug || product.id}`);
