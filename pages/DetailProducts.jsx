@@ -62,7 +62,7 @@ const DetailProducts = () => {
 
             { /* INFO */}
 
-            <div className="com-md-6">
+            <div className="col-md-6">
               <h1 className="product-title">{products.name}</h1>
               <p className="price">${products.price}</p>
               <p className="desc">{products.description}</p>
