@@ -1,29 +1,43 @@
-import React from "react";
-import DetailProducts from "./DetailProducts";
-import Homepage from "./Homepage";
 import { useState, useEffect } from "react";
+import useCartStore from "../src/store/useCartStore";
 
 const CartPage = () => {
-  const [cart, setCart] = useState([]);
+  const cart = useCartStore((state) => state.cart);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const clearCart = useCartStore((state) => state.clearCart);
   const [error, setError] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(savedCart);
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (cart.length === 0) {
-      setError("Il carrello è vuoto! Aggiungi almeno un prodotto.");
-      return;
-    }
-    setError("");
+    const formData = new FormData(e.target);
+    const nome = formData.get("nome");
+    const cognome = formData.get("cognome");
+    const indirizzo = formData.get("indirizzo");
+    const cap = formData.get("cap");
+    const citta = formData.get("citta");
+    const provincia = formData.get("provincia");
+    const pagamento = formData.get("pagamento");
+    if (
+      !nome ||
+      !cognome ||
+      !indirizzo ||
+      !cap ||
+      !citta ||
+      !provincia ||
+      !pagamento
+    )
+      setError("");
     alert("Pagamento effettuato!");
+    clearCart();
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce((sum, item) => {
+    const price = item.price;
+    const quantity = parseInt(item.quantity) || 1;
+    return sum + price * quantity;
+  }, 0);
 
   return (
     <div className="container my-5 pay-box">
@@ -36,22 +50,28 @@ const CartPage = () => {
             <div className="mb-3">
               <input
                 type="text"
+                name="nome"
                 className="form-control"
                 placeholder="Inserisci il nome"
+                required
               />
             </div>
             <div className="mb-3">
               <input
                 type="text"
+                name="cognome"
                 className="form-control"
                 placeholder="Inserisci il cognome"
+                required
               />
             </div>
             <div className="mb-3">
               <input
                 type="text"
+                name="indirizzo"
                 className="form-control"
                 placeholder="Indirizzo di fatturazione"
+                required
               />
             </div>
             <div className="mb-3">
@@ -59,6 +79,7 @@ const CartPage = () => {
                 type="text"
                 className="form-control"
                 placeholder="Interno,scala, etc"
+                required
               />
             </div>
             <div className="row">
@@ -66,8 +87,10 @@ const CartPage = () => {
                 <div className="mb-3">
                   <input
                     type="text"
+                    name="cap"
                     className="form-control"
                     placeholder="Inserisci il Cap"
+                    required
                   />
                 </div>
               </div>
@@ -75,13 +98,15 @@ const CartPage = () => {
                 <div className="mb-3">
                   <input
                     type="text"
+                    name="citta"
                     className="form-control"
                     placeholder="Inserisci Città"
+                    required
                   />
                 </div>
               </div>
               <div className="col-md-4">
-                <select className="form-select">
+                <select className="form-select" name="provincia" required>
                   <option>Napoli</option>
                   <option>Salerno</option>
                   <option>Avellino</option>
@@ -93,7 +118,7 @@ const CartPage = () => {
 
             <div className="mb-3">
               <label className="form-label">Metodo di pagamento</label>
-              <select className="form-select">
+              <select className="form-select" name="pagamento" required>
                 <option>Carta di credito</option>
                 <option>PayPal</option>
                 <option>Contrassegno</option>
@@ -118,19 +143,83 @@ const CartPage = () => {
             <p>Il carrello è vuoto.</p>
           ) : (
             <ul className="list-group mb-3">
-              {cart.map((item) => (
-                <li
-                  key={item.id}
-                  className="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  <div>
-                    <strong>{item.name}</strong>
-                    <br />
-                    <small>Qt: {item.quantity}</small>
-                  </div>
-                  <span>€{(item.price * item.quantity).toFixed(2)}</span>
-                </li>
-              ))}
+              {cart.map((item) => {
+                const price = parseFloat(item.price) || 0;
+                const quantity = parseInt(item.quantity) || 1;
+
+                return (
+                  <li key={item.id} className="list-group-item">
+                    <div className="d-flex gap-3">
+                      <img
+                        src={
+                          item.image ||
+                          item.img ||
+                          "https://via.placeholder.com/80"
+                        }
+                        alt={item.name}
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <div className="flex-grow-1">
+                        <div className="d-flex justify-content-between align-items-start">
+                          <div>
+                            <strong>{item.name}</strong>
+                            <span className="badge text-bg-success ms-2">
+                              Disponibile
+                            </span>
+                            <br />
+                            <small className="text-muted">
+                              €{price.toFixed(2)} cad.
+                            </small>
+                          </div>
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={() => removeFromCart(item.id)}
+                          >
+                            ×
+                          </button>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between mt-2">
+                          <div className="d-flex align-items-center gap-2">
+                            <button
+                              className="btn btn-sm btn-outline-secondary"
+                              onClick={() =>
+                                updateQuantity(item.id, quantity - 1)
+                              }
+                            >
+                              −
+                            </button>
+                            <input
+                              type="number"
+                              className="form-control form-control-sm text-center"
+                              style={{ width: "60px" }}
+                              value={quantity}
+                              min="1"
+                              onChange={(e) => {
+                                const newQty = parseInt(e.target.value) || 1;
+                                updateQuantity(item.id, newQty);
+                              }}
+                            />
+                            <button
+                              className="btn btn-sm btn-outline-secondary"
+                              onClick={() =>
+                                updateQuantity(item.id, quantity + 1)
+                              }
+                            >
+                              +
+                            </button>
+                          </div>
+                          <strong>€{(price * quantity).toFixed(2)}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
               <li className="list-group-item d-flex justify-content-between">
                 <strong>Totale</strong>
                 <strong>€{total.toFixed(2)}</strong>
