@@ -85,14 +85,15 @@ body {
 .navbar-dark .container-fluid {
   display: flex;
   justify-content: space-between;
-  align-items: center; 
-  flex-wrap: nowrap; }
+  align-items: center;
+  flex-wrap: nowrap;
+}
 
 .navbar-brand {
-  display: flex; 
+  display: flex;
   align-items: center;
   text-decoration: none;
-  color: #ffffff; 
+  color: #ffffff;
 }
 
 .navbar-brand:hover {
@@ -111,18 +112,20 @@ body {
   color: #fff;
   text-decoration: none;
   font-size: 20px;
-  transition: color 0.3s ease; }
+  transition: color 0.3s ease;
+}
 
 
 .wish-link,
 .cart-link {
   padding: 8px;
-  z-index: 1; /* Non più 10, in quanto sono nella navbar */
+  z-index: 1;
+  /* Non più 10, in quanto sono nella navbar */
   opacity: 1;
   border-radius: 50%;
   color: #e3e3e3;
   transition: all 0.3s ease;
-  text-decoration: none; 
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,7 +145,7 @@ body {
 
 .wish-link i,
 .cart-link i {
-  font-size: 35px; 
+  font-size: 35px;
   transition: transform 0.3s ease;
   line-height: 1;
 }
@@ -162,6 +165,7 @@ body {
   color: #1a1a1a;
   padding-bottom: 50px;
 }
+
 /* SEZIONE PRODOTTO */
 .product-section {
   padding: 60px 0;
@@ -177,6 +181,7 @@ body {
 .container:hover {
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
 }
+
 /* CONTENITORE IMMAGINE */
 .col-md-5 {
   display: flex;
@@ -185,6 +190,7 @@ body {
   text-align: center;
   flex-direction: column;
 }
+
 /* IMMAGINE PRINCIPALE - centrata e con effetto soft */
 
 .main-image {
@@ -197,12 +203,14 @@ body {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
+
 /* Effetto hover leggero */
 
 .main-image:hover {
   transform: scale(0.8);
   box-shadow: 0 10px 28px rgba(189, 160, 106, 0.3);
 }
+
 /* Bagliore dorato sottile */
 
 .main-image::after {
@@ -220,6 +228,7 @@ body {
 .main-image:hover::after {
   opacity: 1;
 }
+
 /* TITOLI E TESTO */
 
 .product-title {
@@ -245,6 +254,7 @@ body {
   margin-bottom: 28px;
   line-height: 1.7;
 }
+
 /* BOTTONI */
 
 .btn-buy {
@@ -264,6 +274,7 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(189, 160, 106, 0.4);
 }
+
 /* TAGLIA */
 .btn-size {
   border-radius: 8px;
@@ -280,6 +291,7 @@ body {
   background-color: #bda06a;
   color: #fff;
 }
+
 /* COLORI */
 .color-badges span {
   display: inline-block;
@@ -307,15 +319,16 @@ label.form-label {
   letter-spacing: 1px;
 }
 
-.pay-box, .wish-box {
-  height: 75vh;
+.pay-box,
+.wish-box {
+  min-height: 80vh;
 }
 
 .jumbotron-container {
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-radius: 0;  
+  border-radius: 0;
   /*Arrotondato se non lo volete metto 0 */
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
@@ -414,6 +427,7 @@ body {
 
 /* Tablet e Mobile (max 768px) */
 @media (max-width: 768px) {
+
   /* Jumbotron - Stili esistenti */
   .jumbotron-text h1 {
     font-size: 2rem;
@@ -434,16 +448,16 @@ body {
   }
 
   .navbar-dark .container-fluid form {
-    max-width: 250px; 
+    max-width: 250px;
   }
 
-  
-  .wish-link.fs-1 i, 
+
+  .wish-link.fs-1 i,
   .cart-link.fs-1 i {
     font-size: 2rem;
   }
 
-  
+
   .wishcart .wish-link {
     margin-right: 0.75rem !important;
   }
@@ -454,8 +468,10 @@ body {
 
   .wish-link,
   .cart-link {
-    border-width: 1px; /* Ritorna al default se modificato */
-    padding: 8px; /* Ritorna al default se modificato */
+    border-width: 1px;
+    /* Ritorna al default se modificato */
+    padding: 8px;
+    /* Ritorna al default se modificato */
   }
 
   .wish-link i,
@@ -470,11 +486,14 @@ body {
   /* HEADER - Stili per 480px */
 
   .navbar-dark .container-fluid form {
-  max-width: 200px !important;}
+    max-width: 200px !important;
+  }
 
   .wishcart {
-    margin-left: auto !important; /* Forza il margine automatico */
-    margin-right: 0.5rem; /* Piccolo margine a destra */
+    margin-left: auto !important;
+    /* Forza il margine automatico */
+    margin-right: 0.5rem;
+    /* Piccolo margine a destra */
   }
 
   .wish-link.fs-1 i,

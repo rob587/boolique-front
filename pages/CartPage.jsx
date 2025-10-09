@@ -39,7 +39,7 @@ const CartPage = () => {
   }, 0);
 
   return (
-    <div className="container my-5" style={{ minHeight: "80vh" }}>
+    <div className="container my-5 pay-box">
       <div className="row">
         {/* Checkout */}
         <div className="col-12 col-md-7 col-lg">
