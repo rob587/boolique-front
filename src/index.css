@@ -307,7 +307,7 @@ label.form-label {
   letter-spacing: 1px;
 }
 
-.pay-box {
+.pay-box, .wish-box {
   height: 75vh;
 }
 
