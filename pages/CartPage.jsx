@@ -196,9 +196,7 @@ const CartPage = () => {
                               Disponibile
                             </span>
                             <br />
-                            <small className="text-muted">
-                              €{price.toFixed(2)} cad.
-                            </small>
+                            <small className>€{price.toFixed(2)} cad.</small>
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
