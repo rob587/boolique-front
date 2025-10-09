@@ -128,8 +128,6 @@ const CartPage = () => {
               type="submit"
               className="btn btn-dark w-100 mt-3"
               disabled={cart.length === 0}
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
             >
               Procedi al pagamento
             </button>
