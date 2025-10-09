@@ -149,7 +149,7 @@ const DetailProducts = () => {
         </div>
       </section>
 
-      <section className="related-section my-5">
+      <section className="related-section container my-5">
         <h2 className="mb-4">Prodotti correlati</h2>
         <div className="row g-4">
           {relatedProducts.map((prod) => (
