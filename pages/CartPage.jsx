@@ -145,7 +145,9 @@ const CartPage = () => {
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header"></div>
-              <div class="modal-body">Pagamento effettuato correttamente!</div>
+              <div class="modal-body text-center">
+                Pagamento effettuato correttamente!
+              </div>
               <div class="modal-footer">
                 <button
                   type="button"
