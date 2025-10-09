@@ -137,13 +137,39 @@ const DetailProducts = () => {
 
               <button
                 className="btn-buy"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
                 onClick={() => {
                   addToCart(products);
-                  alert(`Il prodotto è stato aggiunto al carrello!`);
                 }}
               >
                 Aggiungi al carrello
               </button>
+              <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header"></div>
+                    <div class="modal-body">
+                      Pagamento effettuato correttamente!
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-dark w-100 mt-3"
+                        data-bs-dismiss="modal"
+                      >
+                        Chiudi
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
