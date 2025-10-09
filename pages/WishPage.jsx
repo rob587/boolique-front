@@ -7,7 +7,7 @@ const WishPage = () => {
   const removeFromWishlist = useWishlistStore((state) => state.removeFromWishlist);
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="container wish-box mt-5 mb-5">
       <div className="row">
         <div className="col-12 text-center">
           <h1 className="title">La Tua Lista dei Desideri</h1>

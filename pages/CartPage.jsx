@@ -29,7 +29,6 @@ const CartPage = () => {
       !pagamento
     )
       setError("");
-    alert("Pagamento effettuato!");
     clearCart();
   };
 
@@ -129,10 +128,35 @@ const CartPage = () => {
               type="submit"
               className="btn btn-dark w-100 mt-3"
               disabled={cart.length === 0}
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
             >
               Procedi al pagamento
             </button>
           </form>
+        </div>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header"></div>
+              <div class="modal-body">Pagamento effettuato correttamente!</div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-dark w-100 mt-3"
+                  data-bs-dismiss="modal"
+                >
+                  Chiudi
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Riepilogo carrello */}
@@ -172,9 +196,7 @@ const CartPage = () => {
                               Disponibile
                             </span>
                             <br />
-                            <small className="text-muted">
-                              €{price.toFixed(2)} cad.
-                            </small>
+                            <small className>€{price.toFixed(2)} cad.</small>
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
