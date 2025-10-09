@@ -156,7 +156,7 @@ const DetailProducts = () => {
                   <div class="modal-content">
                     <div class="modal-header"></div>
                     <div class="modal-body">
-                      Pagamento effettuato correttamente!
+                      Aggiunto al carrello correttamente!
                     </div>
                     <div class="modal-footer">
                       <button
