@@ -39,10 +39,10 @@ const CartPage = () => {
   }, 0);
 
   return (
-    <div className="container my-5 pay-box">
+    <div className="container my-5" style={{ minHeight: "80vh" }}>
       <div className="row">
         {/* Checkout */}
-        <div className="col-md-8">
+        <div className="col-12 col-md-7 col-lg">
           <h2 className="mb-4">Check-out</h2>
 
           <form onSubmit={handleSubmit}>
@@ -160,7 +160,7 @@ const CartPage = () => {
         </div>
 
         {/* Riepilogo carrello */}
-        <div className="col-md-4">
+        <div className="col-12 col-md-5 col-lg-4">
           <h4 className="mb-3">Il tuo carrello</h4>
 
           {cart.length === 0 ? (
