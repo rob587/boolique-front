@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useCartStore from "../src/store/useCartStore";
 
 const CartPage = () => {
   const cart = useCartStore((state) => state.cart);
-  const addToCart = useCartStore((state) => state.addToCart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const clearCart = useCartStore((state) => state.clearCart);
-  const [error, setError] = useState("");
+
+  // Stato per gestire il modal via React
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState("success"); // success | error
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+
     const nome = formData.get("nome");
     const cognome = formData.get("cognome");
     const indirizzo = formData.get("indirizzo");
@@ -19,6 +23,8 @@ const CartPage = () => {
     const citta = formData.get("citta");
     const provincia = formData.get("provincia");
     const pagamento = formData.get("pagamento");
+
+    // Controlla se tutti i campi sono compilati
     if (
       !nome ||
       !cognome ||
@@ -27,9 +33,18 @@ const CartPage = () => {
       !citta ||
       !provincia ||
       !pagamento
-    )
-      setError("");
+    ) {
+      setModalType("error");
+      setModalMessage("⚠️ Compila tutti i campi per procedere al pagamento!");
+      setShowModal(true);
+      return;
+    }
+
+    // Tutto ok → svuota carrello e mostra conferma
     clearCart();
+    setModalType("success");
+    setModalMessage("✅ Pagamento effettuato correttamente!");
+    setShowModal(true);
   };
 
   const total = cart.reduce((sum, item) => {
@@ -77,8 +92,7 @@ const CartPage = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Interno,scala, etc"
-                required
+                placeholder="Interno, scala, ecc."
               />
             </div>
             <div className="row">
@@ -88,7 +102,7 @@ const CartPage = () => {
                     type="text"
                     name="cap"
                     className="form-control"
-                    placeholder="Inserisci il Cap"
+                    placeholder="CAP"
                     required
                   />
                 </div>
@@ -99,13 +113,14 @@ const CartPage = () => {
                     type="text"
                     name="citta"
                     className="form-control"
-                    placeholder="Inserisci Città"
+                    placeholder="Città"
                     required
                   />
                 </div>
               </div>
               <div className="col-md-4">
                 <select className="form-select" name="provincia" required>
+                  <option value="">Provincia</option>
                   <option>Napoli</option>
                   <option>Salerno</option>
                   <option>Avellino</option>
@@ -118,6 +133,7 @@ const CartPage = () => {
             <div className="mb-3">
               <label className="form-label">Metodo di pagamento</label>
               <select className="form-select" name="pagamento" required>
+                <option value="">Seleziona...</option>
                 <option>Carta di credito</option>
                 <option>PayPal</option>
                 <option>Contrassegno</option>
@@ -132,31 +148,6 @@ const CartPage = () => {
               Procedi al pagamento
             </button>
           </form>
-        </div>
-        <div
-          class="modal fade"
-          id="exampleModal"
-          tabindex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header"></div>
-              <div class="modal-body text-center">
-                Pagamento effettuato correttamente!
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-dark w-100 mt-3"
-                  data-bs-dismiss="modal"
-                >
-                  Chiudi
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Riepilogo carrello */}
@@ -196,7 +187,7 @@ const CartPage = () => {
                               Disponibile
                             </span>
                             <br />
-                            <small className>€{price.toFixed(2)} cad.</small>
+                            <small>€{price.toFixed(2)} cad.</small>
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
@@ -250,6 +241,36 @@ const CartPage = () => {
           )}
         </div>
       </div>
+
+      {/* Modal gestito da React */}
+      {showModal && (
+        <div
+          className="modal fade show"
+          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+          tabIndex="-1"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div
+                className={`modal-body text-center ${
+                  modalType === "success" ? "text-success" : "text-danger"
+                }`}
+              >
+                <h5>{modalMessage}</h5>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-dark w-100"
+                  onClick={() => setShowModal(false)}
+                >
+                  Chiudi
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
