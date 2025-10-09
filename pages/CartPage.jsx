@@ -57,7 +57,7 @@ const CartPage = () => {
     <div className="container my-5 pay-box">
       <div className="row">
         {/* Checkout */}
-        <div className="col-12 col-md-7 col-lg">
+        <div className="col-12 col-md-7 col-lg-8 mb-5">
           <h2 className="mb-4">Check-out</h2>
 
           <form onSubmit={handleSubmit}>
@@ -252,9 +252,8 @@ const CartPage = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div
-                className={`modal-body text-center ${
-                  modalType === "success" ? "text-success" : "text-danger"
-                }`}
+                className={`modal-body text-center ${modalType === "success" ? "text-success" : "text-danger"
+                  }`}
               >
                 <h5>{modalMessage}</h5>
               </div>
