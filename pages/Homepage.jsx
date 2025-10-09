@@ -54,12 +54,7 @@ const Homepage = () => {
             );
           })}
         </div>
-        <Link className="wish-link text-end fs-1" to={"wish"}>
-          <i className="fa-solid fa-heart"></i>
-        </Link>
-        <Link className="cart-link text-end fs-1" to={"cart"}>
-          <i className="fa-solid fa-cart-shopping"></i>
-        </Link>
+        
       </div>
     </div>
   );

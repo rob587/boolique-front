@@ -5,6 +5,7 @@ import DetailProducts from "../pages/DetailProducts";
 import { useState } from "react";
 import CartPage from "../pages/CartPage";
 import WishPage from "../pages/WishPage";
+import SearchPage from "../pages/SearchPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="details/:param" element={<DetailProducts />} />
             <Route path="cart" element={<CartPage />} />
             <Route path="wish" element={<WishPage />} />
+            <Route path="/search" element={<SearchPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
