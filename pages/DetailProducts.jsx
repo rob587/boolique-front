@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
 
 const DetailProducts = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [related, setRelated] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const { param } = useParams();
@@ -12,7 +12,7 @@ const DetailProducts = () => {
   const addToCart = useCartStore((state) => state.addToCart);
 
   useEffect(() => {
-    if (products.id) {
+    if (products && products.id) {
       axios
         .get(`http://localhost:3000/products/${products.id}/related`)
         .then((res) => setRelatedProducts(res.data))
@@ -37,6 +37,20 @@ const DetailProducts = () => {
     });
   }, [param]);
 
+  if (!products) {
+    return (
+      <div className="container my-5 text-center">Caricamento prodotto...</div>
+    );
+  }
+
+  // Calcolo percentuale sconto se sales != 0
+  const discountPercentage =
+    products.sales != 0
+      ? Math.round(
+          ((products.price - products.sales_price) / products.price) * 100
+        )
+      : 0;
+
   return (
     <div className="details-page">
       {/* PRODUCT DETAILS */}
@@ -54,8 +68,9 @@ const DetailProducts = () => {
                     {products.images.map((img, index) => (
                       <div
                         key={index}
-                        className={`carousel-item ${index === 0 ? "active" : ""
-                          }`}
+                        className={`carousel-item ${
+                          index === 0 ? "active" : ""
+                        }`}
                       >
                         <img
                           src={img}
@@ -91,7 +106,23 @@ const DetailProducts = () => {
 
             <div className="col-md-6">
               <h1 className="product-title">{products.name}</h1>
-              <p className="price">€{products.sales_price}</p>
+              {products.sales != 0 ? (
+                <div>
+                  <p className="price mb-1">
+                    €{products.sales_price.toFixed(2)}
+                    <span className="badge bg-danger ms-2">
+                      -{discountPercentage}%
+                    </span>
+                  </p>
+                  <p className="mb-0">
+                    <small className="text-decoration-line-through text-muted">
+                      €{products.price.toFixed(2)}
+                    </small>
+                  </p>
+                </div>
+              ) : (
+                <p className="price">€{products.price.toFixed(2)}</p>
+              )}
               <p className="desc">{products.description}</p>
 
               <div className="mb-3">
@@ -162,27 +193,53 @@ const DetailProducts = () => {
       <section className="related-section container my-5">
         <h2 className="mb-4">Prodotti correlati</h2>
         <div className="row g-4">
-          {relatedProducts.map((prod) => (
-            <div key={prod.id} className="col-6 col-md-3">
-              <div className="card h-100 text-center">
-                <img
-                  src={prod.image}
-                  alt={prod.name}
-                  className="card-img-top rounded"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{prod.name}</h5>
-                  <p className="text-muted">{prod.sales_price} €</p>
-                  <a
-                    href={`/details/${prod.slug}`}
-                    className="btn btn-outline-dark btn-sm"
-                  >
-                    Vedi prodotto
-                  </a>
+          {relatedProducts.map((prod) => {
+            // Calcolo percentuale sconto per related products
+            const relatedDiscountPercentage =
+              prod.sales != 0 && prod.price && prod.sales_price
+                ? Math.round(
+                    ((prod.price - prod.sales_price) / prod.price) * 100
+                  )
+                : 0;
+
+            return (
+              <div key={prod.id} className="col-6 col-md-3">
+                <div className="card h-100 text-center">
+                  <img
+                    src={prod.image}
+                    alt={prod.name}
+                    className="card-img-top rounded"
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{prod.name}</h5>
+                    {prod.sales != 0 && prod.price && prod.sales_price ? (
+                      <div className="mb-2">
+                        <span className="fw-bold">
+                          €{prod.sales_price.toFixed(2)}
+                        </span>
+                        <small className="text-decoration-line-through text-muted mx-1">
+                          €{prod.price.toFixed(2)}
+                        </small>
+                        <span className="badge bg-danger">
+                          -{relatedDiscountPercentage}%
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-muted mb-2">
+                        €{prod.price?.toFixed(2) || "N/A"}
+                      </p>
+                    )}
+                    <a
+                      href={`/details/${prod.slug}`}
+                      className="btn btn-outline-dark btn-sm"
+                    >
+                      Vedi prodotto
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>
