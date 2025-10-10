@@ -74,7 +74,7 @@ const ProductCard = ({ product }) => {
 
       <div className="card-body" onClick={goToDetail}>
         <h5 className="card-title">{product.name}</h5>
-        <p className="card-text">${product.price}</p>
+        <p className="card-text">€{product.sales_price}</p>
       </div>
     </div>
   );

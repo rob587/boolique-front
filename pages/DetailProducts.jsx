@@ -66,9 +66,8 @@ const DetailProducts = () => {
                     {products.images.map((img, index) => (
                       <div
                         key={index}
-                        className={`carousel-item ${
-                          index === 0 ? "active" : ""
-                        }`}
+                        className={`carousel-item ${index === 0 ? "active" : ""
+                          }`}
                       >
                         <img
                           src={img}
@@ -104,7 +103,7 @@ const DetailProducts = () => {
 
             <div className="col-md-6">
               <h1 className="product-title">{products.name}</h1>
-              <p className="price">${products.price}</p>
+              <p className="price">€{products.sales_price}</p>
               <p className="desc">{products.description}</p>
 
               <div className="mb-3">
@@ -188,7 +187,7 @@ const DetailProducts = () => {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{prod.name}</h5>
-                  <p className="text-muted">{prod.price} €</p>
+                  <p className="text-muted">{prod.sales_price} €</p>
                   <a
                     href={`/details/${prod.slug}`}
                     className="btn btn-outline-dark btn-sm"
