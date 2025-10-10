@@ -85,6 +85,15 @@ const CartPage = () => {
             </div>
             <div className="mb-3">
               <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Inserisci la tua mail"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
                 type="text"
                 name="indirizzo"
                 className="form-control"
@@ -167,9 +176,12 @@ const CartPage = () => {
               {cart.map((item) => {
                 const unitPrice = parseFloat(item.sales_price) || 0;
                 const originalPrice = parseFloat(item.price) || unitPrice;
-                const discountPercentage = item.sales != 0 && originalPrice > 0 
-                  ? Math.round(((originalPrice - unitPrice) / originalPrice) * 100) 
-                  : 0;
+                const discountPercentage =
+                  item.sales != 0 && originalPrice > 0
+                    ? Math.round(
+                        ((originalPrice - unitPrice) / originalPrice) * 100
+                      )
+                    : 0;
                 const isDiscounted = item.sales != 0 && discountPercentage > 0;
                 const quantity = parseInt(item.quantity) || 1;
 
@@ -201,8 +213,10 @@ const CartPage = () => {
                             {isDiscounted ? (
                               <>
                                 <small className="mb-1 d-block">
-                                  €{unitPrice.toFixed(2)} cad. 
-                                  <span className="badge bg-danger ms-1">-{discountPercentage}%</span>
+                                  €{unitPrice.toFixed(2)} cad.
+                                  <span className="badge bg-danger ms-1">
+                                    -{discountPercentage}%
+                                  </span>
                                 </small>
                                 <small className="text-decoration-line-through text-muted">
                                   €{originalPrice.toFixed(2)}
