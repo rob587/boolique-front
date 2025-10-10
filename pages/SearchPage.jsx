@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
 const SearchPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -13,13 +14,15 @@ const SearchPage = () => {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [query, setQuery] = useState("");
 
-  // 🔹 Leggi query dalla URL
+  // 🔹 Leggi query e filtri dalla URL
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    setQuery(searchParams.get("q")?.toLowerCase().trim() || "");
+    const params = new URLSearchParams(location.search);
+    setQuery(params.get("q")?.toLowerCase().trim() || "");
+    setSelectedCategory(params.get("category") || "");
+    setSelectedBrand(params.get("brand") || "");
   }, [location.search]);
 
-  // 🔹 Funzione per caricare prodotti dal backend
+  // 🔹 Carica prodotti dal backend
   const loadProducts = async () => {
     try {
       const res = await axios.get("http://localhost:3000/products");
@@ -33,10 +36,9 @@ const SearchPage = () => {
     }
   };
 
-  // 🔹 Carica prodotti inizialmente e ad ogni modifica dei filtri/query
   useEffect(() => {
     loadProducts();
-  }, [query, selectedCategory, selectedBrand]);
+  }, []);
 
   // 🔹 Filtra prodotti lato client
   useEffect(() => {
@@ -57,9 +59,27 @@ const SearchPage = () => {
     setFiltered(results);
   }, [products, query, selectedCategory, selectedBrand]);
 
-  // 🔹 Toggle filtri
-  const toggleCategory = (cat) => setSelectedCategory(prev => prev === cat ? "" : cat);
-  const toggleBrand = (brand) => setSelectedBrand(prev => prev === brand ? "" : brand);
+  // 🔹 Aggiorna URL quando si cambia un filtro o la query
+  const updateURL = (newQuery, category = selectedCategory, brand = selectedBrand) => {
+    const params = new URLSearchParams();
+    if (newQuery) params.set("q", newQuery);
+    if (category) params.set("category", category);
+    if (brand) params.set("brand", brand);
+
+    navigate(`/search?${params.toString()}`, { replace: true });
+  };
+
+  const handleCategoryClick = (cat) => {
+    const newCat = selectedCategory === cat ? "" : cat;
+    setSelectedCategory(newCat);
+    updateURL(query, newCat, selectedBrand);
+  };
+
+  const handleBrandClick = (brand) => {
+    const newBrand = selectedBrand === brand ? "" : brand;
+    setSelectedBrand(newBrand);
+    updateURL(query, selectedCategory, newBrand);
+  };
 
   return (
     <div className="container-fluid my-4">
@@ -68,17 +88,17 @@ const SearchPage = () => {
         <div className="col-md-3 col-lg-2 border-end">
           <h5 className="mb-3">Categorie</h5>
           <ul className="list-group mb-4">
-            <li className={`list-group-item ${selectedCategory === "" ? "active" : ""}`} onClick={() => toggleCategory("")} style={{cursor: "pointer"}}>Tutti</li>
+            <li className={`list-group-item ${selectedCategory === "" ? "active" : ""}`} onClick={() => handleCategoryClick("")} style={{cursor: "pointer"}}>Tutti</li>
             {categories.map(cat => (
-              <li key={cat} className={`list-group-item ${selectedCategory === cat ? "active" : ""}`} onClick={() => toggleCategory(cat)} style={{cursor: "pointer"}}>{cat}</li>
+              <li key={cat} className={`list-group-item ${selectedCategory === cat ? "active" : ""}`} onClick={() => handleCategoryClick(cat)} style={{cursor: "pointer"}}>{cat}</li>
             ))}
           </ul>
 
           <h5 className="mb-3">Brand</h5>
           <ul className="list-group">
-            <li className={`list-group-item ${selectedBrand === "" ? "active" : ""}`} onClick={() => toggleBrand("")} style={{cursor: "pointer"}}>Tutti</li>
+            <li className={`list-group-item ${selectedBrand === "" ? "active" : ""}`} onClick={() => handleBrandClick("")} style={{cursor: "pointer"}}>Tutti</li>
             {brands.map(brand => (
-              <li key={brand} className={`list-group-item ${selectedBrand === brand ? "active" : ""}`} onClick={() => toggleBrand(brand)} style={{cursor: "pointer"}}>{brand}</li>
+              <li key={brand} className={`list-group-item ${selectedBrand === brand ? "active" : ""}`} onClick={() => handleBrandClick(brand)} style={{cursor: "pointer"}}>{brand}</li>
             ))}
           </ul>
         </div>
