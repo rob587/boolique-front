@@ -49,7 +49,7 @@ const CartPage = () => {
   };
 
   const total = cart.reduce((sum, item) => {
-    const price = item.sales_price;
+    const price = parseFloat(item.sales_price) || 0;
     const quantity = parseInt(item.quantity) || 1;
     return sum + price * quantity;
   }, 0);
@@ -80,15 +80,6 @@ const CartPage = () => {
                 name="cognome"
                 className="form-control"
                 placeholder="Inserisci il cognome"
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="email"
-                name="email"
-                className="form-control"
-                placeholder="Inserisci la tua e-mail"
                 required
               />
             </div>
@@ -174,7 +165,12 @@ const CartPage = () => {
           ) : (
             <ul className="list-group mb-3">
               {cart.map((item) => {
-                const price = parseFloat(item.sales_price) || 0;
+                const unitPrice = parseFloat(item.sales_price) || 0;
+                const originalPrice = parseFloat(item.price) || unitPrice;
+                const discountPercentage = item.sales != 0 && originalPrice > 0 
+                  ? Math.round(((originalPrice - unitPrice) / originalPrice) * 100) 
+                  : 0;
+                const isDiscounted = item.sales != 0 && discountPercentage > 0;
                 const quantity = parseInt(item.quantity) || 1;
 
                 return (
@@ -202,7 +198,19 @@ const CartPage = () => {
                               Disponibile
                             </span>
                             <br />
-                            <small>€{price.toFixed(2)} cad.</small>
+                            {isDiscounted ? (
+                              <>
+                                <small className="mb-1 d-block">
+                                  €{unitPrice.toFixed(2)} cad. 
+                                  <span className="badge bg-danger ms-1">-{discountPercentage}%</span>
+                                </small>
+                                <small className="text-decoration-line-through text-muted">
+                                  €{originalPrice.toFixed(2)}
+                                </small>
+                              </>
+                            ) : (
+                              <small>€{originalPrice.toFixed(2)} cad.</small>
+                            )}
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
@@ -251,7 +259,7 @@ const CartPage = () => {
                               +
                             </button>
                           </div>
-                          <strong>€{(price * quantity).toFixed(2)}</strong>
+                          <strong>€{(unitPrice * quantity).toFixed(2)}</strong>
                         </div>
                       </div>
                     </div>
