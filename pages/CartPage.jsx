@@ -54,6 +54,9 @@ const CartPage = () => {
     return sum + price * quantity;
   }, 0);
 
+  const shippingCost = total > 500 ? 0 : 20;
+  const finalTotal = total + shippingCost;
+
   return (
     <div className="container my-5 pay-box">
       <div className="row">
@@ -154,9 +157,11 @@ const CartPage = () => {
         {/* Riepilogo carrello */}
         <div className="col-12 col-md-5 col-lg-4">
           <h4 className="mb-3">Il tuo carrello</h4>
+          <span>Se la spedizione è superiore i 500€ è gratuita!</span>
+          <span className="mb-2">Altrimenti ci sono 20€ di spedizione</span>
 
           {cart.length === 0 ? (
-            <p>Il carrello è vuoto.</p>
+            <p className="mt-3">Il carrello è vuoto.</p>
           ) : (
             <ul className="list-group mb-3">
               {cart.map((item) => {
@@ -211,7 +216,6 @@ const CartPage = () => {
                                   setPendingRemoveId(item.id);
                                   setShowModal(true);
                                 } else {
-                                  // Se >1, diminuisci normalmente
                                   updateQuantity(item.id, quantity - 1);
                                 }
                               }}
@@ -245,9 +249,25 @@ const CartPage = () => {
                   </li>
                 );
               })}
+
+              {/* Spedizione e Totali */}
               <li className="list-group-item d-flex justify-content-between">
-                <strong>Totale</strong>
+                <span>Totale prodotti</span>
                 <strong>€{total.toFixed(2)}</strong>
+              </li>
+
+              <li className="list-group-item d-flex justify-content-between">
+                <span>Spedizione</span>
+                {shippingCost === 0 ? (
+                  <strong className="text-success">Gratuita 🚚</strong>
+                ) : (
+                  <strong>€{shippingCost.toFixed(2)}</strong>
+                )}
+              </li>
+
+              <li className="list-group-item d-flex justify-content-between">
+                <strong>Totale finale</strong>
+                <strong>€{finalTotal.toFixed(2)}</strong>
               </li>
             </ul>
           )}
