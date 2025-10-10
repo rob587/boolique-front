@@ -49,7 +49,7 @@ const CartPage = () => {
   };
 
   const total = cart.reduce((sum, item) => {
-    const price = item.price;
+    const price = item.sales_price;
     const quantity = parseInt(item.quantity) || 1;
     return sum + price * quantity;
   }, 0);
@@ -165,7 +165,7 @@ const CartPage = () => {
           ) : (
             <ul className="list-group mb-3">
               {cart.map((item) => {
-                const price = parseFloat(item.price) || 0;
+                const price = parseFloat(item.sales_price) || 0;
                 const quantity = parseInt(item.quantity) || 1;
 
                 return (
