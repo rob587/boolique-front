@@ -85,6 +85,15 @@ const CartPage = () => {
             </div>
             <div className="mb-3">
               <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Inserisci la tua e-mail"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
                 type="text"
                 name="indirizzo"
                 className="form-control"
