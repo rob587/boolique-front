@@ -39,18 +39,6 @@ const DetailProducts = () => {
 
   return (
     <div className="details-page">
-      {/* HEADER */}
-
-      {/* <header className="header">
-        <div className="container d-flex justify-content-between align-item-center">
-          <div className="logo">BOOLIQUE</div>
-          <nav className="nav-menu d none d-md-flex gap-3">
-            <a href="#" id="nav-link">Home</a>
-            <a href="#" id="nav-link">Shop</a>
-            <a href="#" id="nav-link">Contatti</a>
-          </nav>
-        </div>
-      </header> */}
       {/* PRODUCT DETAILS */}
       <section className="product-section">
         <div className="container my-4">
@@ -117,9 +105,6 @@ const DetailProducts = () => {
                   <button className="btn btn-outline-dark btn-size">
                     {products.size}
                   </button>
-                  {/* <button className="btn btn-outline-dark btn-size">m</button>
-                  <button className="btn btn-outline-dark btn-size">l</button>
-                  <button className="btn btn-outline-dark btn-size">xl</button> */}
                 </div>
               </div>
               <div className="mb-4">
@@ -200,12 +185,6 @@ const DetailProducts = () => {
           ))}
         </div>
       </section>
-      {/* FOOTER */}
-      {/* <footer className="footer">
-        <div className="container text-center">
-          <p className="mb-0">© 2025 BOOLIQUE · Eleganza sartoriale</p>
-        </div>
-      </footer> */}
     </div>
   );
 };
