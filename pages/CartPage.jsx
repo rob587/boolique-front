@@ -11,6 +11,7 @@ const CartPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalType, setModalType] = useState("success"); // success | error
+  const [pendingRemoveId, setPendingRemoveId] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -200,9 +201,20 @@ const CartPage = () => {
                           <div className="d-flex align-items-center gap-2">
                             <button
                               className="btn btn-sm btn-outline-secondary"
-                              onClick={() =>
-                                updateQuantity(item.id, quantity - 1)
-                              }
+                              onClick={() => {
+                                if (quantity === 1) {
+                                  // Mostra modal di conferma rimozione
+                                  setModalType("confirm");
+                                  setModalMessage(
+                                    `Vuoi rimuovere "${item.name}" dal carrello?`
+                                  );
+                                  setPendingRemoveId(item.id);
+                                  setShowModal(true);
+                                } else {
+                                  // Se >1, diminuisci normalmente
+                                  updateQuantity(item.id, quantity - 1);
+                                }
+                              }}
                             >
                               −
                             </button>
@@ -252,19 +264,53 @@ const CartPage = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div
-                className={`modal-body text-center ${modalType === "success" ? "text-success" : "text-danger"
-                  }`}
+                className={`modal-body text-center ${
+                  modalType === "success"
+                    ? "text-success"
+                    : modalType === "error"
+                    ? "text-danger"
+                    : ""
+                }`}
               >
                 <h5>{modalMessage}</h5>
               </div>
+
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-dark w-100"
-                  onClick={() => setShowModal(false)}
-                >
-                  Chiudi
-                </button>
+                {modalType === "confirm" ? (
+                  <div className="d-flex w-100 gap-2">
+                    <button
+                      type="button"
+                      className="btn btn-danger w-50"
+                      onClick={() => {
+                        if (pendingRemoveId) {
+                          removeFromCart(pendingRemoveId);
+                          setPendingRemoveId(null);
+                        }
+                        setShowModal(false);
+                      }}
+                    >
+                      Sì, rimuovi
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary w-50"
+                      onClick={() => {
+                        setPendingRemoveId(null);
+                        setShowModal(false);
+                      }}
+                    >
+                      Annulla
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-dark w-100"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Chiudi
+                  </button>
+                )}
               </div>
             </div>
           </div>
