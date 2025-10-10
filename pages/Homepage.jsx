@@ -56,6 +56,19 @@ const Homepage = () => {
         <h2 className="subtitle">La casa dell'eleganza sartoriale</h2>
       </div>
 
+      <div className="container">
+<div className="row">
+<div className="col-md-6 col-sm-12"> <img src="/homepagebanners/banner1.png" alt="banner1" className="img-fluid mb-4"/>
+</div>
+<div className="col-md-6 col-sm-12">
+  <img src="/homepagebanners/banner2.png" alt="banner2" className="img-fluid mb-4"/>
+</div>
+
+
+</div>
+
+      </div>
+
       {/* Featured */}
       <div className="container-h4 mt-5 mb-5">
         <div className="row">
@@ -67,6 +80,13 @@ const Homepage = () => {
       <div className="container mb-5">
         <Featured products={featuredProducts} />
       </div>
+
+
+            <div className="container">
+<div className="row">
+<div className="col-12"> <img src="/homepagebanners/banner3 (1).png" alt="banner3" className="img-fluid mb-4"/>
+</div>
+</div> </div>
 
       {/* BestSellers */}
       <div className="container-h4 mt-5 mb-5">
@@ -80,7 +100,12 @@ const Homepage = () => {
         <BestSellers products={bestSellersProducts} />
       </div>
 
-      {/* link al carrello e wishlist */}
+       <div className="container">
+<div className="row">
+<div className="col-12"> <img src="/homepagebanners/banner41.png" alt="banner4" className="img-fluid mb-4"/>
+</div>
+</div> </div>
+
     </div>
   );
 };
