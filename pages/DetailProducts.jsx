@@ -47,8 +47,8 @@ const DetailProducts = () => {
   const discountPercentage =
     products.sales != 0
       ? Math.round(
-          ((products.price - products.sales_price) / products.price) * 100
-        )
+        ((products.price - products.sales_price) / products.price) * 100
+      )
       : 0;
 
   return (
@@ -68,9 +68,8 @@ const DetailProducts = () => {
                     {products.images.map((img, index) => (
                       <div
                         key={index}
-                        className={`carousel-item ${
-                          index === 0 ? "active" : ""
-                        }`}
+                        className={`carousel-item ${index === 0 ? "active" : ""
+                          }`}
                       >
                         <img
                           src={img}
@@ -161,22 +160,22 @@ const DetailProducts = () => {
                 Aggiungi al carrello
               </button>
               <div
-                class="modal fade"
+                className="modal fade"
                 id="exampleModal"
-                tabindex="-1"
+                tabIndex="-1"
                 aria-labelledby="exampleModalLabel"
                 aria-hidden="true"
               >
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header"></div>
-                    <div class="modal-body text-center">
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header"></div>
+                    <div className="modal-body text-center">
                       Aggiunto al carrello correttamente!
                     </div>
-                    <div class="modal-footer">
+                    <div className="modal-footer">
                       <button
                         type="button"
-                        class="btn btn-dark w-100 mt-3"
+                        className="btn btn-dark w-100 mt-3"
                         data-bs-dismiss="modal"
                       >
                         Chiudi
@@ -198,8 +197,8 @@ const DetailProducts = () => {
             const relatedDiscountPercentage =
               prod.sales != 0 && prod.price && prod.sales_price
                 ? Math.round(
-                    ((prod.price - prod.sales_price) / prod.price) * 100
-                  )
+                  ((prod.price - prod.sales_price) / prod.price) * 100
+                )
                 : 0;
 
             return (
