@@ -20,12 +20,23 @@ const CartPage = () => {
     const name = formData.get("nome");
     const surname = formData.get("cognome");
     const email = formData.get("email");
-    const address = `${formData.get("indirizzo")}, ${formData.get("cap")} ${formData.get("citta")} (${formData.get("provincia")})`;
+    const address = `${formData.get("indirizzo")}, ${formData.get(
+      "cap"
+    )} ${formData.get("citta")} (${formData.get("provincia")})`;
     const payment = formData.get("pagamento");
 
-    if (!name || !surname || !email || !address || !payment || cart.length === 0) {
+    if (
+      !name ||
+      !surname ||
+      !email ||
+      !address ||
+      !payment ||
+      cart.length === 0
+    ) {
       setModalType("error");
-      setModalMessage("⚠️ Compila tutti i campi e aggiungi almeno un prodotto al carrello!");
+      setModalMessage(
+        "⚠️ Compila tutti i campi e aggiungi almeno un prodotto al carrello!"
+      );
       setShowModal(true);
       return;
     }
@@ -66,13 +77,12 @@ const CartPage = () => {
     } catch (err) {
       console.error(err);
       setModalType("error");
-      setModalMessage("❌ Si è verificato un errore durante la creazione dell'ordine.");
+      setModalMessage(
+        "❌ Si è verificato un errore durante la creazione dell'ordine."
+      );
       setShowModal(true);
     }
   };
-
-
-
 
   const total = cart.reduce((sum, item) => {
     const price = parseFloat(item.sales_price) || 0;
@@ -205,8 +215,8 @@ const CartPage = () => {
                 const discountPercentage =
                   item.sales != 0 && originalPrice > 0
                     ? Math.round(
-                      ((originalPrice - unitPrice) / originalPrice) * 100
-                    )
+                        ((originalPrice - unitPrice) / originalPrice) * 100
+                      )
                     : 0;
                 const isDiscounted = item.sales != 0 && discountPercentage > 0;
                 const quantity = parseInt(item.quantity) || 1;
@@ -254,7 +264,19 @@ const CartPage = () => {
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
-                            onClick={() => removeFromCart(item.id)}
+                            onClick={() => {
+                              if (quantity === 1) {
+                                // Mostra modal di conferma rimozione
+                                setModalType("confirm");
+                                setModalMessage(
+                                  `Vuoi rimuovere "${item.name}" dal carrello?`
+                                );
+                                setPendingRemoveId(item.id);
+                                setShowModal(true);
+                              } else {
+                                updateQuantity(item.id, quantity - 1);
+                              }
+                            }}
                           >
                             ×
                           </button>
@@ -341,12 +363,13 @@ const CartPage = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div
-                className={`modal-body text-center ${modalType === "success"
-                  ? "text-success"
-                  : modalType === "error"
+                className={`modal-body text-center ${
+                  modalType === "success"
+                    ? "text-success"
+                    : modalType === "error"
                     ? "text-danger"
                     : ""
-                  }`}
+                }`}
               >
                 <h5>{modalMessage}</h5>
               </div>
