@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useCartStore from "../src/store/useCartStore";
-
+import axios from "axios";
 const CartPage = () => {
   const cart = useCartStore((state) => state.cart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -11,47 +11,77 @@ const CartPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalType, setModalType] = useState("success"); // success | error
+  const [pendingRemoveId, setPendingRemoveId] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
-    const nome = formData.get("nome");
-    const cognome = formData.get("cognome");
-    const indirizzo = formData.get("indirizzo");
-    const cap = formData.get("cap");
-    const citta = formData.get("citta");
-    const provincia = formData.get("provincia");
-    const pagamento = formData.get("pagamento");
+    const name = formData.get("nome");
+    const surname = formData.get("cognome");
+    const email = formData.get("email");
+    const address = `${formData.get("indirizzo")}, ${formData.get("cap")} ${formData.get("citta")} (${formData.get("provincia")})`;
+    const payment = formData.get("pagamento");
 
-    // Controlla se tutti i campi sono compilati
-    if (
-      !nome ||
-      !cognome ||
-      !indirizzo ||
-      !cap ||
-      !citta ||
-      !provincia ||
-      !pagamento
-    ) {
+    if (!name || !surname || !email || !address || !payment || cart.length === 0) {
       setModalType("error");
-      setModalMessage("⚠️ Compila tutti i campi per procedere al pagamento!");
+      setModalMessage("⚠️ Compila tutti i campi e aggiungi almeno un prodotto al carrello!");
       setShowModal(true);
       return;
     }
 
-    // Tutto ok → svuota carrello e mostra conferma
-    clearCart();
-    setModalType("success");
-    setModalMessage("✅ Pagamento effettuato correttamente!");
-    setShowModal(true);
+    // Calcolo totale
+    const total = cart.reduce((sum, item) => {
+      const price = parseFloat(item.sales_price) || 0;
+      const quantity = parseInt(item.quantity) || 1;
+      return sum + price * quantity;
+    }, 0);
+
+    const free_shipping = total > 500;
+
+    // Prepara dati da inviare
+    const orderData = {
+      name,
+      surname,
+      email,
+      address,
+      amount: total,
+      free_shipping,
+      cartItems: cart.map((item) => ({
+        id: item.id,
+        name: item.name,
+        sales_price: item.sales_price,
+        quantity: item.quantity || 1,
+      })),
+    };
+
+    try {
+      const res = await axios.post("http://localhost:3000/orders", orderData);
+      if (res.status === 201) {
+        setModalType("success");
+        setModalMessage("✅ Ordine creato con successo!");
+        setShowModal(true);
+        clearCart(); // svuota carrello solo dopo conferma
+      }
+    } catch (err) {
+      console.error(err);
+      setModalType("error");
+      setModalMessage("❌ Si è verificato un errore durante la creazione dell'ordine.");
+      setShowModal(true);
+    }
   };
 
+
+
+
   const total = cart.reduce((sum, item) => {
-    const price = item.price;
+    const price = parseFloat(item.sales_price) || 0;
     const quantity = parseInt(item.quantity) || 1;
     return sum + price * quantity;
   }, 0);
+
+  const shippingCost = total > 500 ? 0 : 20;
+  const finalTotal = total + shippingCost;
 
   return (
     <div className="container my-5 pay-box">
@@ -76,6 +106,15 @@ const CartPage = () => {
                 name="cognome"
                 className="form-control"
                 placeholder="Inserisci il cognome"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Inserisci la tua mail"
                 required
               />
             </div>
@@ -153,13 +192,23 @@ const CartPage = () => {
         {/* Riepilogo carrello */}
         <div className="col-12 col-md-5 col-lg-4">
           <h4 className="mb-3">Il tuo carrello</h4>
+          <span>Se la spedizione è superiore i 500€ è gratuita!</span>
+          <span className="mb-2">Altrimenti ci sono 20€ di spedizione</span>
 
           {cart.length === 0 ? (
-            <p>Il carrello è vuoto.</p>
+            <p className="mt-3">Il carrello è vuoto.</p>
           ) : (
             <ul className="list-group mb-3">
               {cart.map((item) => {
-                const price = parseFloat(item.price) || 0;
+                const unitPrice = parseFloat(item.sales_price) || 0;
+                const originalPrice = parseFloat(item.price) || unitPrice;
+                const discountPercentage =
+                  item.sales != 0 && originalPrice > 0
+                    ? Math.round(
+                      ((originalPrice - unitPrice) / originalPrice) * 100
+                    )
+                    : 0;
+                const isDiscounted = item.sales != 0 && discountPercentage > 0;
                 const quantity = parseInt(item.quantity) || 1;
 
                 return (
@@ -187,7 +236,21 @@ const CartPage = () => {
                               Disponibile
                             </span>
                             <br />
-                            <small>€{price.toFixed(2)} cad.</small>
+                            {isDiscounted ? (
+                              <>
+                                <small className="mb-1 d-block">
+                                  €{unitPrice.toFixed(2)} cad.
+                                  <span className="badge bg-danger ms-1">
+                                    -{discountPercentage}%
+                                  </span>
+                                </small>
+                                <small className="text-decoration-line-through text-muted">
+                                  €{originalPrice.toFixed(2)}
+                                </small>
+                              </>
+                            ) : (
+                              <small>€{originalPrice.toFixed(2)} cad.</small>
+                            )}
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
@@ -200,9 +263,19 @@ const CartPage = () => {
                           <div className="d-flex align-items-center gap-2">
                             <button
                               className="btn btn-sm btn-outline-secondary"
-                              onClick={() =>
-                                updateQuantity(item.id, quantity - 1)
-                              }
+                              onClick={() => {
+                                if (quantity === 1) {
+                                  // Mostra modal di conferma rimozione
+                                  setModalType("confirm");
+                                  setModalMessage(
+                                    `Vuoi rimuovere "${item.name}" dal carrello?`
+                                  );
+                                  setPendingRemoveId(item.id);
+                                  setShowModal(true);
+                                } else {
+                                  updateQuantity(item.id, quantity - 1);
+                                }
+                              }}
                             >
                               −
                             </button>
@@ -226,16 +299,32 @@ const CartPage = () => {
                               +
                             </button>
                           </div>
-                          <strong>€{(price * quantity).toFixed(2)}</strong>
+                          <strong>€{(unitPrice * quantity).toFixed(2)}</strong>
                         </div>
                       </div>
                     </div>
                   </li>
                 );
               })}
+
+              {/* Spedizione e Totali */}
               <li className="list-group-item d-flex justify-content-between">
-                <strong>Totale</strong>
+                <span>Totale prodotti</span>
                 <strong>€{total.toFixed(2)}</strong>
+              </li>
+
+              <li className="list-group-item d-flex justify-content-between">
+                <span>Spedizione</span>
+                {shippingCost === 0 ? (
+                  <strong className="text-success">Gratuita 🚚</strong>
+                ) : (
+                  <strong>€{shippingCost.toFixed(2)}</strong>
+                )}
+              </li>
+
+              <li className="list-group-item d-flex justify-content-between">
+                <strong>Totale finale</strong>
+                <strong>€{finalTotal.toFixed(2)}</strong>
               </li>
             </ul>
           )}
@@ -252,19 +341,52 @@ const CartPage = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div
-                className={`modal-body text-center ${modalType === "success" ? "text-success" : "text-danger"
+                className={`modal-body text-center ${modalType === "success"
+                  ? "text-success"
+                  : modalType === "error"
+                    ? "text-danger"
+                    : ""
                   }`}
               >
                 <h5>{modalMessage}</h5>
               </div>
+
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-dark w-100"
-                  onClick={() => setShowModal(false)}
-                >
-                  Chiudi
-                </button>
+                {modalType === "confirm" ? (
+                  <div className="d-flex w-100 gap-2">
+                    <button
+                      type="button"
+                      className="btn btn-danger w-50"
+                      onClick={() => {
+                        if (pendingRemoveId) {
+                          removeFromCart(pendingRemoveId);
+                          setPendingRemoveId(null);
+                        }
+                        setShowModal(false);
+                      }}
+                    >
+                      Sì, rimuovi
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary w-50"
+                      onClick={() => {
+                        setPendingRemoveId(null);
+                        setShowModal(false);
+                      }}
+                    >
+                      Annulla
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-dark w-100"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Chiudi
+                  </button>
+                )}
               </div>
             </div>
           </div>
