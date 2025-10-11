@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
 import useWishlistStore from "../src/store/useWishlIstStore";
@@ -22,19 +22,40 @@ const ProductCard = ({ product }) => {
   const isInWishlist = wishlist.some((p) => p.id === product.id);
   const isInCart = cart.some((p) => p.id === product.id);
 
+  // Stato per modale
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  // Timer per chiusura automatica
+  const showConfirmation = (message) => {
+    setModalMessage(message);
+    setShowModal(true);
+    setTimeout(() => setShowModal(false), 1500); // chiude dopo 1.5 secondi
+  };
+
   const toggleWishlist = (e) => {
     e.stopPropagation();
-    if (isInWishlist) removeFromWishlist(product.id);
-    else addToWishlist(product);
+    if (isInWishlist) {
+      removeFromWishlist(product.id);
+      showConfirmation("Rimosso dalla wishlist");
+    } else {
+      addToWishlist(product);
+      showConfirmation("Aggiunto alla wishlist ❤️");
+    }
   };
 
   const toggleCart = (e) => {
     e.stopPropagation();
-    if (isInCart) removeFromCart(product.id);
-    else addToCart(product);
+    if (isInCart) {
+      removeFromCart(product.id);
+      showConfirmation("Rimosso dal carrello");
+    } else {
+      addToCart(product);
+      showConfirmation("Aggiunto al carrello 🛒");
+    }
   };
 
-  // Calcolo percentuale sconto se sales != 0
+  // Calcolo percentuale sconto
   const discountPercentage =
     product.sales != 0
       ? Math.round(
@@ -43,7 +64,10 @@ const ProductCard = ({ product }) => {
       : 0;
 
   return (
-    <div className="card my-3" style={{ height: "40rem" }}>
+    <div
+      className="card my-3"
+      style={{ height: "40rem", position: "relative" }}
+    >
       <div style={{ position: "relative" }}>
         <img
           src={product.image}
@@ -102,6 +126,21 @@ const ProductCard = ({ product }) => {
           <p className="card-text">€{product.price.toFixed(2)}</p>
         )}
       </div>
+
+      {/* 🔹 Modal conferma semplice */}
+      {showModal && (
+        <div
+          className="position-absolute top-50 start-50 translate-middle bg-dark text-white text-center p-3 rounded shadow"
+          style={{
+            zIndex: 9999,
+            width: "80%",
+            maxWidth: "300px",
+            fontSize: "0.9rem",
+          }}
+        >
+          {modalMessage}
+        </div>
+      )}
     </div>
   );
 };
