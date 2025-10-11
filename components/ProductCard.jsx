@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import useCartStore from '../src/store/useCartStore';
-import useWishlistStore from '../src/store/useWishlIstStore';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import useCartStore from "../src/store/useCartStore";
+import useWishlistStore from "../src/store/useWishlIstStore";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -10,7 +10,9 @@ const ProductCard = ({ product }) => {
   // Wishlist store
   const wishlist = useWishlistStore((state) => state.wishlist);
   const addToWishlist = useWishlistStore((state) => state.addToWishlist);
-  const removeFromWishlist = useWishlistStore((state) => state.removeFromWishlist);
+  const removeFromWishlist = useWishlistStore(
+    (state) => state.removeFromWishlist
+  );
 
   // Cart store
   const cart = useCartStore((state) => state.cart);
@@ -32,13 +34,21 @@ const ProductCard = ({ product }) => {
     else addToCart(product);
   };
 
+  // Calcolo percentuale sconto se sales != 0
+  const discountPercentage =
+    product.sales != 0
+      ? Math.round(
+          ((product.price - product.sales_price) / product.price) * 100
+        )
+      : 0;
+
   return (
-    <div className="card my-3" style={{ height: '40rem' }}>
-      <div style={{ position: 'relative' }}>
+    <div className="card my-3" style={{ height: "40rem" }}>
+      <div style={{ position: "relative" }}>
         <img
           src={product.image}
           className="card-img-top img-fluid"
-          style={{ maxHeight: '33rem' }}
+          style={{ maxHeight: "33rem" }}
           alt={product.name}
           onClick={goToDetail}
         />
@@ -49,10 +59,10 @@ const ProductCard = ({ product }) => {
           style={{
             color: "#C3993A",
             cursor: "pointer",
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            fontSize: '1.5rem'
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            fontSize: "1.5rem",
           }}
           onClick={toggleWishlist}
         ></i>
@@ -61,12 +71,12 @@ const ProductCard = ({ product }) => {
         <i
           className={`fa-solid fa-cart-plus`}
           style={{
-            position: 'absolute',
-            bottom: '10px',
-            left: '10px',
+            position: "absolute",
+            bottom: "10px",
+            left: "10px",
             cursor: "pointer",
-            fontSize: '1.5rem',
-            color: isInCart ? "#C3993A" : "#111111"
+            fontSize: "1.5rem",
+            color: isInCart ? "#C3993A" : "#111111",
           }}
           onClick={toggleCart}
         ></i>
@@ -74,7 +84,23 @@ const ProductCard = ({ product }) => {
 
       <div className="card-body" onClick={goToDetail}>
         <h5 className="card-title">{product.name}</h5>
-        <p className="card-text">${product.price}</p>
+        {product.sales != 0 ? (
+          <div>
+            <p className="card-text mb-1">
+              €{product.sales_price.toFixed(2)}
+              <span className="badge bg-danger ms-2">
+                -{discountPercentage}%
+              </span>
+            </p>
+            <p className="card-text mb-0">
+              <small className="text-decoration-line-through text-muted">
+                €{product.price.toFixed(2)}
+              </small>
+            </p>
+          </div>
+        ) : (
+          <p className="card-text">€{product.price.toFixed(2)}</p>
+        )}
       </div>
     </div>
   );

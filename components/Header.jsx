@@ -45,6 +45,7 @@ const Header = () => {
 
     setFilteredProducts(scored);
   }, [query, products]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const q = query.trim();
@@ -53,9 +54,6 @@ const Header = () => {
       setQuery("");
     }
   };
-
-
-
 
   const handleResultClick = (product) => {
     navigate(`/details/${product.slug || product.id}`);
@@ -76,10 +74,13 @@ const Header = () => {
             />
             <span className="logo d-none d-md-inline-block mx-3">Boolique</span>
           </Link>
+
+          {/* Spostato qui la form e aggiunta la classe ms-auto */}
           <form
-            className="d-flex position-relative"
+            className="d-flex position-relative ms-auto me-3" // Aggiunto ms-auto e me-3
             role="search"
             onSubmit={handleSubmit}
+            style={{ maxWidth: "400px" }} // Opzionale: limita la larghezza
           >
             <input
               className="form-control me-2"
@@ -89,7 +90,7 @@ const Header = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
-            <button className="btn btn-outline-warning me-2" type="submit">
+            <button className="btn btn-outline-warning" type="submit">
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
             {filteredProducts.length > 0 && (
@@ -144,6 +145,16 @@ const Header = () => {
               </div>
             )}
           </form>
+
+          {/* Wishlist e Carrello */}
+          <div className="wishcart d-flex align-items-center"> {/* Aggiunto d-flex e align-items-center qui */}
+            <Link className="wish-link fs-1 me-3" to={"wish"}> {/* Aggiunto me-3 */}
+              <i className="fa-solid fa-heart"></i>
+            </Link>
+            <Link className="cart-link fs-1" to={"cart"}>
+              <i className="fa-solid fa-cart-shopping"></i>
+            </Link>
+          </div>
         </div>
       </nav>
     </header>

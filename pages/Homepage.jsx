@@ -1,18 +1,56 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import CartPage from "./CartPage";
+import Featured from "../components/Featured";
+import BestSellers from "../components/BestSellers";
+import DiscountedProducts from "../components/DiscountedProducts";
 import ProductCard from "../components/ProductCard";
+
 const Homepage = () => {
   const [products, setProducts] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [bestSellersProducts, setBestSellersProducts] = useState([]);
+  const [discountedProducts, setDiscountedProducts] = useState([]);
 
   const url = "http://localhost:3000/products";
+
+  // funzione per shuffle casuale dell'array
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
 
   const fetchData = () => {
     axios.get(url).then((resp) => {
       setProducts(resp.data);
+      // seleziona 9 prodotti casuali per Featured
+      const shuffledAll = shuffleArray(resp.data);
+      setFeaturedProducts(shuffledAll.slice(0, 9));
+      // seleziona 9 prodotti casuali per BestSellers
+      const shuffledForBest = shuffleArray(resp.data);
+      setBestSellersProducts(shuffledForBest.slice(0, 9));
+      // seleziona i 9 prodotti scontati per ID specifici
+      const discountedIds = [
+        "1",
+        "8",
+        "15",
+        "21",
+        "25",
+        "30",
+        "37",
+        "44",
+        "52",
+      ];
+      setDiscountedProducts(
+        resp.data.filter((p) => discountedIds.includes(p.id.toString()))
+      );
     });
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -34,32 +72,84 @@ const Homepage = () => {
         <h1 className="title">BENVENUTO IN BOOLIQUE</h1>
         <h2 className="subtitle">La casa dell'eleganza sartoriale</h2>
       </div>
+
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6 col-sm-12">
+            <img
+              src="/homepagebanners/banner1.png"
+              alt="banner1"
+              className="img-fluid mb-4"
+            />
+          </div>
+          <div className="col-md-6 col-sm-12">
+            <img
+              src="/homepagebanners/banner2.png"
+              alt="banner2"
+              className="img-fluid mb-4"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Featured */}
       <div className="container-h4 mt-5 mb-5">
         <div className="row">
           <div className="col-12 text-center">
-            <h4 className="subtitle">Prodotti in evidenza</h4>
+            <h4 className="subtitle">Prodotti di tendenza</h4>
           </div>
         </div>
       </div>
       <div className="container mb-5">
+        <Featured products={featuredProducts} />
+      </div>
+
+      <div className="container">
         <div className="row">
-          {products.map((product) => {
-            return (
-              <div
-                className="col-12 col-md-6 col-lg-4"
-                key={product.slug || product.id}
-              >
-                <ProductCard product={product} />
-              </div>
-            );
-          })}
+          <div className="col-12">
+            <img
+              src="/homepagebanners/banner3 (1).png"
+              alt="banner3"
+              className="img-fluid mb-4"
+            />
+          </div>
         </div>
-        <Link className="wish-link text-end fs-1" to={"wish"}>
-          <i className="fa-solid fa-heart"></i>
-        </Link>
-        <Link className="cart-link text-end fs-1" to={"cart"}>
-          <i className="fa-solid fa-cart-shopping"></i>
-        </Link>
+      </div>
+
+      {/* BestSellers */}
+      <div className="container-h4 mt-5 mb-5">
+        <div className="row">
+          <div className="col-12 text-center">
+            <h4 className="subtitle">I più venduti</h4>
+          </div>
+        </div>
+      </div>
+      <div className="container mb-5">
+        <BestSellers products={bestSellersProducts} />
+      </div>
+
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <img
+              src="/homepagebanners/banner41.png"
+              alt="banner4"
+              className="img-fluid mb-4"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* DiscountedProducts */}
+      <div className="container-h4 mt-5 mb-5">
+        <div className="row">
+          <div className="col-12 text-center">
+            <h4 className="subtitle">Prodotti in sconto</h4>
+          </div>
+        </div>
+      </div>
+      <div className="container mb-5">
+        <DiscountedProducts products={discountedProducts} />
       </div>
     </div>
   );
