@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useCartStore from "../src/store/useCartStore";
-
+import axios from "axios";
 const CartPage = () => {
   const cart = useCartStore((state) => state.cart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -13,43 +13,69 @@ const CartPage = () => {
   const [modalType, setModalType] = useState("success"); // success | error
   const [pendingRemoveId, setPendingRemoveId] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
-    const nome = formData.get("nome");
-    const cognome = formData.get("cognome");
-    const indirizzo = formData.get("indirizzo");
-    const cap = formData.get("cap");
-    const citta = formData.get("citta");
-    const provincia = formData.get("provincia");
-    const pagamento = formData.get("pagamento");
+    const name = formData.get("nome");
+    const surname = formData.get("cognome");
+    const email = formData.get("email");
+    const address = `${formData.get("indirizzo")}, ${formData.get("cap")} ${formData.get("citta")} (${formData.get("provincia")})`;
+    const payment = formData.get("pagamento");
 
-    // Controlla se tutti i campi sono compilati
-    if (
-      !nome ||
-      !cognome ||
-      !indirizzo ||
-      !cap ||
-      !citta ||
-      !provincia ||
-      !pagamento
-    ) {
+    if (!name || !surname || !email || !address || !payment || cart.length === 0) {
       setModalType("error");
-      setModalMessage("⚠️ Compila tutti i campi per procedere al pagamento!");
+      setModalMessage("⚠️ Compila tutti i campi e aggiungi almeno un prodotto al carrello!");
       setShowModal(true);
       return;
     }
 
-    // Tutto ok → svuota carrello e mostra conferma
-    clearCart();
-    setModalType("success");
-    setModalMessage("✅ Pagamento effettuato correttamente!");
-    setShowModal(true);
+    // Calcolo totale
+    const total = cart.reduce((sum, item) => {
+      const price = parseFloat(item.sales_price) || 0;
+      const quantity = parseInt(item.quantity) || 1;
+      return sum + price * quantity;
+    }, 0);
+
+    const free_shipping = total > 500;
+
+    // Prepara dati da inviare
+    const orderData = {
+      name,
+      surname,
+      email,
+      address,
+      amount: total,
+      free_shipping,
+      cartItems: cart.map((item) => ({
+        id: item.id,
+        name: item.name,
+        sales_price: item.sales_price,
+        quantity: item.quantity || 1,
+      })),
+    };
+
+    try {
+      const res = await axios.post("http://localhost:3000/orders", orderData);
+      if (res.status === 201) {
+        setModalType("success");
+        setModalMessage("✅ Ordine creato con successo!");
+        setShowModal(true);
+        clearCart(); // svuota carrello solo dopo conferma
+      }
+    } catch (err) {
+      console.error(err);
+      setModalType("error");
+      setModalMessage("❌ Si è verificato un errore durante la creazione dell'ordine.");
+      setShowModal(true);
+    }
   };
 
+
+
+
   const total = cart.reduce((sum, item) => {
-    const price = item.price;
+    const price = parseFloat(item.sales_price) || 0;
     const quantity = parseInt(item.quantity) || 1;
     return sum + price * quantity;
   }, 0);
@@ -80,6 +106,15 @@ const CartPage = () => {
                 name="cognome"
                 className="form-control"
                 placeholder="Inserisci il cognome"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Inserisci la tua mail"
                 required
               />
             </div>
@@ -165,7 +200,15 @@ const CartPage = () => {
           ) : (
             <ul className="list-group mb-3">
               {cart.map((item) => {
-                const price = parseFloat(item.price) || 0;
+                const unitPrice = parseFloat(item.sales_price) || 0;
+                const originalPrice = parseFloat(item.price) || unitPrice;
+                const discountPercentage =
+                  item.sales != 0 && originalPrice > 0
+                    ? Math.round(
+                      ((originalPrice - unitPrice) / originalPrice) * 100
+                    )
+                    : 0;
+                const isDiscounted = item.sales != 0 && discountPercentage > 0;
                 const quantity = parseInt(item.quantity) || 1;
 
                 return (
@@ -193,7 +236,21 @@ const CartPage = () => {
                               Disponibile
                             </span>
                             <br />
-                            <small>€{price.toFixed(2)} cad.</small>
+                            {isDiscounted ? (
+                              <>
+                                <small className="mb-1 d-block">
+                                  €{unitPrice.toFixed(2)} cad.
+                                  <span className="badge bg-danger ms-1">
+                                    -{discountPercentage}%
+                                  </span>
+                                </small>
+                                <small className="text-decoration-line-through text-muted">
+                                  €{originalPrice.toFixed(2)}
+                                </small>
+                              </>
+                            ) : (
+                              <small>€{originalPrice.toFixed(2)} cad.</small>
+                            )}
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
@@ -242,7 +299,7 @@ const CartPage = () => {
                               +
                             </button>
                           </div>
-                          <strong>€{(price * quantity).toFixed(2)}</strong>
+                          <strong>€{(unitPrice * quantity).toFixed(2)}</strong>
                         </div>
                       </div>
                     </div>
@@ -284,13 +341,12 @@ const CartPage = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div
-                className={`modal-body text-center ${
-                  modalType === "success"
-                    ? "text-success"
-                    : modalType === "error"
+                className={`modal-body text-center ${modalType === "success"
+                  ? "text-success"
+                  : modalType === "error"
                     ? "text-danger"
                     : ""
-                }`}
+                  }`}
               >
                 <h5>{modalMessage}</h5>
               </div>

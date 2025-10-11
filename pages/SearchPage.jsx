@@ -6,79 +6,96 @@ import ProductCard from "../components/ProductCard";
 const SearchPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
-  const [query, setQuery] = useState("");
 
-  // 🔹 Leggi query e filtri dalla URL
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setQuery(params.get("q")?.toLowerCase().trim() || "");
-    setSelectedCategory(params.get("category") || "");
-    setSelectedBrand(params.get("brand") || "");
-  }, [location.search]);
-
-  // 🔹 Carica prodotti dal backend
-  const loadProducts = async () => {
+  // 🔹 Carica prodotti
+  const fetchProducts = async () => {
     try {
       const res = await axios.get("http://localhost:3000/products");
       const data = res.data;
-
       setProducts(data);
-      setCategories([...new Set(data.map(p => p.category).filter(Boolean))]);
-      setBrands([...new Set(data.map(p => p.brand).filter(Boolean))]);
+
+      setCategories(Array.from(new Set(data.map(p => p.category).filter(Boolean))));
+      setBrands(Array.from(new Set(data.map(p => p.brand).filter(Boolean))));
     } catch (err) {
       console.error("Errore caricamento prodotti:", err);
     }
   };
 
   useEffect(() => {
-    loadProducts();
+    fetchProducts();
   }, []);
 
-  // 🔹 Filtra prodotti lato client
+  // 🔹 Legge i parametri dalla URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setQuery(searchParams.get("q") || "");
+    setSelectedCategory(searchParams.get("category") || "");
+    setSelectedBrand(searchParams.get("brand") || "");
+  }, [location.search]);
+
+  // 🔹 Filtra prodotti
   useEffect(() => {
     let results = [...products];
 
     if (query) {
+      const qLower = query.toLowerCase().trim();
       results = results.filter(
         p =>
-          p.name.toLowerCase().includes(query) ||
-          (p.brand && p.brand.toLowerCase().includes(query)) ||
-          (p.category && p.category.toLowerCase().includes(query))
+          p.name.toLowerCase().includes(qLower) ||
+          (p.brand && p.brand.toLowerCase().includes(qLower)) ||
+          (p.category && p.category.toLowerCase().includes(qLower))
       );
     }
 
-    if (selectedCategory) results = results.filter(p => p.category === selectedCategory);
-    if (selectedBrand) results = results.filter(p => p.brand === selectedBrand);
+    if (selectedCategory) {
+      results = results.filter(p => p.category === selectedCategory);
+    }
+
+    if (selectedBrand) {
+      results = results.filter(p => p.brand === selectedBrand);
+    }
 
     setFiltered(results);
   }, [products, query, selectedCategory, selectedBrand]);
 
-  // 🔹 Aggiorna URL quando si cambia un filtro o la query
-  const updateURL = (newQuery, category = selectedCategory, brand = selectedBrand) => {
+  // 🔹 Aggiorna URL e filtri quando invii la searchbar
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
     const params = new URLSearchParams();
-    if (newQuery) params.set("q", newQuery);
-    if (category) params.set("category", category);
-    if (brand) params.set("brand", brand);
-
-    navigate(`/search?${params.toString()}`, { replace: true });
+    if (query.trim()) params.set("q", query.trim());
+    if (selectedCategory) params.set("category", selectedCategory);
+    if (selectedBrand) params.set("brand", selectedBrand);
+    navigate(`/search?${params.toString()}`);
   };
 
+  // 🔹 Gestione click categoria
   const handleCategoryClick = (cat) => {
-    const newCat = selectedCategory === cat ? "" : cat;
-    setSelectedCategory(newCat);
-    updateURL(query, newCat, selectedBrand);
+    const params = new URLSearchParams(location.search);
+    if (cat) {
+      params.set("category", cat);
+    } else {
+      params.delete("category");
+    }
+    navigate(`/search?${params.toString()}`);
   };
 
+  // 🔹 Gestione click brand
   const handleBrandClick = (brand) => {
-    const newBrand = selectedBrand === brand ? "" : brand;
-    setSelectedBrand(newBrand);
-    updateURL(query, selectedCategory, newBrand);
+    const params = new URLSearchParams(location.search);
+    if (brand) {
+      params.set("brand", brand);
+    } else {
+      params.delete("brand");
+    }
+    navigate(`/search?${params.toString()}`);
   };
 
   return (
@@ -88,38 +105,80 @@ const SearchPage = () => {
         <div className="col-md-3 col-lg-2 border-end">
           <h5 className="mb-3">Categorie</h5>
           <ul className="list-group mb-4">
-            <li className={`list-group-item ${selectedCategory === "" ? "active" : ""}`} onClick={() => handleCategoryClick("")} style={{cursor: "pointer"}}>Tutti</li>
+            <li
+              className={`list-group-item ${!selectedCategory ? "active" : ""}`}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleCategoryClick("")}
+            >
+              Tutti
+            </li>
             {categories.map(cat => (
-              <li key={cat} className={`list-group-item ${selectedCategory === cat ? "active" : ""}`} onClick={() => handleCategoryClick(cat)} style={{cursor: "pointer"}}>{cat}</li>
+              <li
+                key={cat}
+                className={`list-group-item ${selectedCategory === cat ? "active" : ""}`}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleCategoryClick(cat)}
+              >
+                {cat}
+              </li>
             ))}
           </ul>
 
           <h5 className="mb-3">Brand</h5>
           <ul className="list-group">
-            <li className={`list-group-item ${selectedBrand === "" ? "active" : ""}`} onClick={() => handleBrandClick("")} style={{cursor: "pointer"}}>Tutti</li>
+            <li
+              className={`list-group-item ${!selectedBrand ? "active" : ""}`}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleBrandClick("")}
+            >
+              Tutti
+            </li>
             {brands.map(brand => (
-              <li key={brand} className={`list-group-item ${selectedBrand === brand ? "active" : ""}`} onClick={() => handleBrandClick(brand)} style={{cursor: "pointer"}}>{brand}</li>
+              <li
+                key={brand}
+                className={`list-group-item ${selectedBrand === brand ? "active" : ""}`}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleBrandClick(brand)}
+              >
+                {brand}
+              </li>
             ))}
           </ul>
         </div>
 
-        {/* Prodotti */}
+        {/* Risultati */}
         <div className="col-md-9 col-lg-10">
+          <form className="mb-3 d-flex" onSubmit={handleSearchSubmit}>
+            <input
+              type="search"
+              className="form-control me-2"
+              placeholder="Cerca per nome, brand o categoria"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+            />
+            <button className="btn btn-outline-warning" type="submit">
+              Cerca
+            </button>
+          </form>
+
           <h4 className="mb-4">
             {selectedCategory ? `Categoria: ${selectedCategory}` :
              selectedBrand ? `Brand: ${selectedBrand}` :
-             query ? `Risultati per: "${query}"` : "Tutti i prodotti"}
+             query ? `Risultati per: "${query}"` :
+             "Tutti i prodotti"}
           </h4>
 
-          {filtered.length === 0 ? <p>Nessun prodotto trovato.</p> :
+          {filtered.length === 0 ? (
+            <p>Nessun prodotto trovato.</p>
+          ) : (
             <div className="row">
-              {filtered.map(p => (
-                <div key={p.id} className="col-12 col-md-4 col-lg-3 mb-4">
-                  <ProductCard product={p} />
+              {filtered.map(product => (
+                <div key={product.id} className="col-12 col-md-4 col-lg-3 mb-4">
+                  <ProductCard product={product} />
                 </div>
               ))}
             </div>
-          }
+          )}
         </div>
       </div>
 
@@ -129,6 +188,9 @@ const SearchPage = () => {
           border-color: #C3993A;
           color: #111111;
           font-weight: 600;
+        }
+        .list-group-item {
+          transition: all 0.2s ease;
         }
         .list-group-item:hover {
           background-color: #111111;
