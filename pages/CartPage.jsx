@@ -45,13 +45,15 @@ const CartPage = () => {
     const surname = formData.get("cognome");
     const email = formData.get("email");
     const indirizzo = formData.get("indirizzo");
-    const interno = formData.getAll("input")[4]?.value || "";
+    const interno = formData.get("interno") || "";
     const cap = formData.get("cap");
     const citta = formData.get("citta");
     const provincia = formData.get("provincia");
     const pagamento = formData.get("pagamento");
 
-    const address = `${indirizzo}, ${cap} ${citta} (${provincia})`;
+    const address = `${indirizzo} ${
+      interno ? ", " + interno : ""
+    }, ${cap} ${citta} (${provincia})`;
 
     if (
       !name ||
@@ -217,6 +219,7 @@ const CartPage = () => {
             <div className="mb-3">
               <input
                 type="text"
+                name="interno"
                 className="form-control"
                 placeholder="Interno, scala, ecc."
               />
