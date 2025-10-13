@@ -137,14 +137,23 @@ const CartPage = () => {
         // invio autoreply
         await emailjs.send(
           "service_qzbsi0g",
-          "template_8gxvhar",
+          "template_vdx9vwa",
           {
+            order_number,
+            customer_number,
             nome: name,
             cognome: surname,
             email,
-            order_number,
+            indirizzo: address,
+            pagamento,
+            totale: total.toFixed(2),
             prodotti: cart
-              .map((item) => `• ${item.name} — x${item.quantity}`)
+              .map(
+                (item) =>
+                  `${item.name} (x${item.quantity}) - €${(
+                    item.sales_price * item.quantity
+                  ).toFixed(2)}`
+              )
               .join("\n"),
           },
           "K3JfamoSQh9AVE4XN"
