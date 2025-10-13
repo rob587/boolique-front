@@ -418,6 +418,23 @@ const CartPage = () => {
                 <strong>€{total.toFixed(2)}</strong>
               </li>
 
+              <li className="list-group-item codice-sconto-box">
+                <label htmlFor="codiceSconto" className="form-label mb-1">
+                  Hai un codice sconto?
+                </label>
+                <div className="d-flex gap-2">
+                  <input 
+                  type="text" 
+                  id="codiceSconto"
+                  className="form-control"
+                  placeholder="Inserisci il codice"
+                  />
+                  <button type="button" className="btn btn-outline-dark">
+                    Applica
+                  </button>
+                </div>
+              </li>
+
               <li className="list-group-item d-flex justify-content-between">
                 <span>Spedizione</span>
                 {shippingCost === 0 ? (
