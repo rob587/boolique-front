@@ -1,6 +1,30 @@
 import { useState } from "react";
 import useCartStore from "../src/store/useCartStore";
 import axios from "axios";
+import emailjs from "emailjs-com";
+
+// genero numero ordine progressivo
+function generateOrderNumber() {
+  const lastOrder = localStorage.getItem("lastOrderNumber");
+  const nextOrder = lastOrder ? parseInt(lastOrder) + 1 : 1;
+  localStorage.setItem("lastOrderNumber", nextOrder);
+  return nextOrder;
+}
+
+// assegno numero cliente fisso per email
+function getOrCreateCustomerNumber(email) {
+  let customers = JSON.parse(localStorage.getItem("customers")) || {};
+  if (customers[email]) return customers[email];
+
+  const lastCustomer = localStorage.getItem("lastCustomerNumber");
+  const nextCustomer = lastCustomer ? parseInt(lastCustomer) + 1 : 1;
+
+  customers[email] = nextCustomer;
+  localStorage.setItem("customers", JSON.stringify(customers));
+  localStorage.setItem("lastCustomerNumber", nextCustomer);
+  return nextCustomer;
+}
+
 const CartPage = () => {
   const cart = useCartStore((state) => state.cart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -20,17 +44,36 @@ const CartPage = () => {
     const name = formData.get("nome");
     const surname = formData.get("cognome");
     const email = formData.get("email");
-    const address = `${formData.get("indirizzo")}, ${formData.get("cap")} ${formData.get("citta")} (${formData.get("provincia")})`;
-    const payment = formData.get("pagamento");
+    const indirizzo = formData.get("indirizzo");
+    const interno = formData.get("interno") || "";
+    const cap = formData.get("cap");
+    const citta = formData.get("citta");
+    const provincia = formData.get("provincia");
+    const pagamento = formData.get("pagamento");
 
-    if (!name || !surname || !email || !address || !payment || cart.length === 0) {
+    const address = `${indirizzo} ${
+      interno ? ", " + interno : ""
+    }, ${cap} ${citta} (${provincia})`;
+
+    if (
+      !name ||
+      !surname ||
+      !email ||
+      !indirizzo ||
+      !cap ||
+      !citta ||
+      !provincia ||
+      !pagamento ||
+      cart.length === 0
+    ) {
       setModalType("error");
-      setModalMessage("⚠️ Compila tutti i campi e aggiungi almeno un prodotto al carrello!");
+      setModalMessage(
+        "⚠️ Compila tutti i campi e aggiungi almeno un prodotto al carrello!"
+      );
       setShowModal(true);
       return;
     }
 
-    // Calcolo totale
     const total = cart.reduce((sum, item) => {
       const price = parseFloat(item.sales_price) || 0;
       const quantity = parseInt(item.quantity) || 1;
@@ -39,14 +82,21 @@ const CartPage = () => {
 
     const free_shipping = total > 500;
 
-    // Prepara dati da inviare
+    // numero ordine e cliente
+    const order_number = generateOrderNumber();
+    const customer_number = getOrCreateCustomerNumber(email);
+
+    // oggetto con tutti i dati da inviare al backend e via email
     const orderData = {
+      order_number,
+      customer_number,
       name,
       surname,
       email,
       address,
-      amount: total,
+      pagamento,
       free_shipping,
+      amount: total,
       cartItems: cart.map((item) => ({
         id: item.id,
         name: item.name,
@@ -57,22 +107,61 @@ const CartPage = () => {
 
     try {
       const res = await axios.post("http://localhost:3000/orders", orderData);
+
       if (res.status === 201) {
+        // invio email con EmailJS
+        await emailjs.send(
+          "service_qzbsi0g",
+          "template_vdx9vwa",
+          {
+            order_number,
+            customer_number,
+            nome: name,
+            cognome: surname,
+            email,
+            indirizzo: address,
+            pagamento,
+            totale: total.toFixed(2),
+            carrello: cart
+              .map(
+                (item) =>
+                  `${item.name} (x${item.quantity}) - €${(
+                    item.sales_price * item.quantity
+                  ).toFixed(2)}`
+              )
+              .join("\n"),
+          },
+          "K3JfamoSQh9AVE4XN"
+        );
+
+        // invio autoreply
+        await emailjs.send(
+          "service_qzbsi0g",
+          "template_8gxvhar",
+          {
+            nome: name,
+            cognome: surname,
+            email,
+            order_number,
+            prodotti: cart
+              .map((item) => `• ${item.name} — x${item.quantity}`)
+              .join("\n"),
+          },
+          "K3JfamoSQh9AVE4XN"
+        );
+
         setModalType("success");
-        setModalMessage("✅ Ordine creato con successo!");
+        setModalMessage("✅ Ordine creato con successo e email inviata!");
         setShowModal(true);
-        clearCart(); // svuota carrello solo dopo conferma
+        clearCart();
       }
     } catch (err) {
       console.error(err);
       setModalType("error");
-      setModalMessage("❌ Si è verificato un errore durante la creazione dell'ordine.");
+      setModalMessage("❌ Errore durante la creazione o invio dell'ordine.");
       setShowModal(true);
     }
   };
-
-
-
 
   const total = cart.reduce((sum, item) => {
     const price = parseFloat(item.sales_price) || 0;
@@ -130,6 +219,7 @@ const CartPage = () => {
             <div className="mb-3">
               <input
                 type="text"
+                name="interno"
                 className="form-control"
                 placeholder="Interno, scala, ecc."
               />
@@ -205,8 +295,8 @@ const CartPage = () => {
                 const discountPercentage =
                   item.sales != 0 && originalPrice > 0
                     ? Math.round(
-                      ((originalPrice - unitPrice) / originalPrice) * 100
-                    )
+                        ((originalPrice - unitPrice) / originalPrice) * 100
+                      )
                     : 0;
                 const isDiscounted = item.sales != 0 && discountPercentage > 0;
                 const quantity = parseInt(item.quantity) || 1;
@@ -254,7 +344,19 @@ const CartPage = () => {
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
-                            onClick={() => removeFromCart(item.id)}
+                            onClick={() => {
+                              if (quantity === 1) {
+                                // Mostra modal di conferma rimozione
+                                setModalType("confirm");
+                                setModalMessage(
+                                  `Vuoi rimuovere "${item.name}" dal carrello?`
+                                );
+                                setPendingRemoveId(item.id);
+                                setShowModal(true);
+                              } else {
+                                updateQuantity(item.id, quantity - 1);
+                              }
+                            }}
                           >
                             ×
                           </button>
@@ -341,12 +443,13 @@ const CartPage = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div
-                className={`modal-body text-center ${modalType === "success"
-                  ? "text-success"
-                  : modalType === "error"
+                className={`modal-body text-center ${
+                  modalType === "success"
+                    ? "text-success"
+                    : modalType === "error"
                     ? "text-danger"
                     : ""
-                  }`}
+                }`}
               >
                 <h5>{modalMessage}</h5>
               </div>
