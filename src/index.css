@@ -558,3 +558,105 @@ body {
   background-color: #C3993A;
   color: #111111;
 }
+
+
+
+/*banner discount*/
+
+.simple-discount-banner-container {
+  text-align: center;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #eccd8b; /* Sfondo scuro elegante */
+  color: #0b0b0b;
+  border-radius: 0px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Ombra per profondità */
+  max-width: 60%;
+  position: relative;
+  overflow: hidden; /* Per contenere l'effetto di bordo */
+  border: 1px solid transparent; /* Bordo iniziale trasparente */
+  animation: simpleBorderGlow 3s infinite alternate; /* Animazione del bordo */
+}
+
+@keyframes simpleBorderGlow {
+  0% {
+    border-color: #000000; /* Un blu profondo */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.458);
+  }
+  50% {
+    border-color: #ffc107; /* Giallo/oro brillante */
+    box-shadow: 0 0 25px rgba(255, 193, 7, 0.8);
+  }
+  100% {
+    border-color: #000000; /* Un fucsia vibrante */
+    box-shadow: 0 0 15px rgba(233, 186, 30, 0.7);
+  }
+}
+
+
+.simple-discount-text {
+  font-family: 'cambria', sans-serif;
+  font-size: 3em;
+  font-weight: 800;
+  color: #000000; /* Giallo brillante */
+  text-shadow: 0 0 10px rgba(255, 235, 59, 0.6); /* Bagliore più semplice */
+  margin-bottom: 0px;
+  text-transform: uppercase;
+}
+
+.simple-discount-tagline {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2em;
+  color: #141212;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.simple-discount-button {
+  display: inline-block;
+  background-color: #deb537; /* Giallo/oro per il bottone */
+  color: #1a1a2e;
+  padding: 10px 30px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+}
+
+.simple-discount-button:hover {
+  background-color: #fbd013; /* Giallo più chiaro all'hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  color: #1a1a2e;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .simple-discount-text {
+    font-size: 2em;
+  }
+  .simple-discount-tagline {
+    font-size: 1.1em;
+  }
+  .simple-discount-button {
+    font-size: 1em;
+    padding: 10px 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .simple-discount-text {
+    font-size: 1.5em;
+  }
+  .simple-discount-tagline {
+    font-size: 0.9em;
+  }
+  .simple-discount-button {
+    font-size: 0.9em;
+    padding: 8px 20px;
+  }
+}
