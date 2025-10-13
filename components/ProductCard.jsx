@@ -22,7 +22,8 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
   const isInWishlist = wishlist.some((p) => p.id === product.id);
   const isInCart = cart.some((p) => p.id === product.id);
 
-  // Stato per modale
+  // Stato per modale di conferma
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
@@ -30,15 +31,22 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
   const showConfirmation = (message) => {
     setModalMessage(message);
     setShowModal(true);
-    setTimeout(() => setShowModal(false), 1500); // chiude dopo 1.5 secondi
+    setTimeout(() => setShowModal(false), 1500);
+  };
+
+  const handleRemoveFromWishlist = () => {
+    removeFromWishlist(product.id);
+    setShowConfirmationModal(false);
+    showConfirmation("Rimosso dalla wishlist");
   };
 
   const toggleWishlist = (e) => {
     e.stopPropagation();
     if (isInWishlist) {
-      removeFromWishlist(product.id);
-      showConfirmation("Rimosso dalla wishlist");
+      // Se è nella wishlist, mostra modal di conferma
+      setShowConfirmationModal(true);
     } else {
+      // Se non è nella wishlist, aggiungilo direttamente
       addToWishlist(product);
       showConfirmation("Aggiunto alla wishlist ❤️");
     }
@@ -63,7 +71,49 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
         )
       : 0;
 
-  // Modal condiviso per entrambe le viste (posizionato fixed nella viewport)
+  // Modal di conferma rimozione dalla wishlist
+  const RemovalConfirmationModal = () =>
+    showConfirmationModal && (
+      <div
+        className="position-fixed top-0 start-0 w-100 h-100"
+        style={{
+          zIndex: 1040,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
+        onClick={() => setShowConfirmationModal(false)}
+      >
+        <div
+          className="position-fixed top-50 start-50 translate-middle bg-white rounded shadow-lg p-4"
+          style={{
+            zIndex: 1050,
+            width: "90%",
+            maxWidth: "400px",
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h5 className="mb-3">Rimuovere dalla wishlist?</h5>
+          <p className="text-muted mb-4">
+            Sei sicuro di voler rimuovere "{product.name}" dai tuoi desideri?
+          </p>
+          <div className="d-flex gap-2 justify-content-end">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowConfirmationModal(false)}
+            >
+              Annulla
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={handleRemoveFromWishlist}
+            >
+              Rimuovi
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+
+  // Modal di conferma azione (feedback)
   const ConfirmationModal = () =>
     showModal && (
       <div
@@ -80,7 +130,6 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
     );
 
   if (viewMode === "list") {
-    // Layout elenco: immagine piccola a sinistra, contenuto a destra
     return (
       <>
         <div
@@ -89,7 +138,6 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
           onClick={goToDetail}
         >
           <div className="card-body d-flex align-items-start p-3">
-            {/* Immagine piccola a sinistra (senza icone) */}
             <div className="me-3" style={{ flexShrink: 0 }}>
               <img
                 src={product.image}
@@ -99,7 +147,6 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
               />
             </div>
 
-            {/* Contenuto a destra */}
             <div className="flex-grow-1">
               <h6 className="card-title mb-2">{product.name}</h6>
               {product.sales != 0 ? (
@@ -120,7 +167,6 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
                 <p className="card-text mb-3">€{product.price.toFixed(2)}</p>
               )}
 
-              {/* Icone wishlist e cart sotto la descrizione */}
               <div className="d-flex gap-3">
                 <i
                   className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
@@ -146,12 +192,12 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             </div>
           </div>
         </div>
+        <RemovalConfirmationModal />
         <ConfirmationModal />
       </>
     );
   }
 
-  // Layout griglia: come originale, ma con h-100 per uniformità
   return (
     <>
       <div
@@ -167,7 +213,6 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             alt={product.name}
           />
 
-          {/* Cuore wishlist */}
           <i
             className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
             style={{
@@ -181,7 +226,6 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             onClick={toggleWishlist}
           ></i>
 
-          {/* Carrello */}
           <i
             className={`fa-solid fa-cart-plus`}
             style={{
@@ -217,6 +261,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
           )}
         </div>
       </div>
+      <RemovalConfirmationModal />
       <ConfirmationModal />
     </>
   );
