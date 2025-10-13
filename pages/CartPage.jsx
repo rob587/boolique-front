@@ -1,5 +1,29 @@
 import { useState } from "react";
 import useCartStore from "../src/store/useCartStore";
+import axios from "axios";
+import emailjs from "emailjs-com";
+
+// genero numero ordine progressivo
+function generateOrderNumber() {
+  const lastOrder = localStorage.getItem("lastOrderNumber");
+  const nextOrder = lastOrder ? parseInt(lastOrder) + 1 : 1;
+  localStorage.setItem("lastOrderNumber", nextOrder);
+  return nextOrder;
+}
+
+// assegno numero cliente fisso per email
+function getOrCreateCustomerNumber(email) {
+  let customers = JSON.parse(localStorage.getItem("customers")) || {};
+  if (customers[email]) return customers[email];
+
+  const lastCustomer = localStorage.getItem("lastCustomerNumber");
+  const nextCustomer = lastCustomer ? parseInt(lastCustomer) + 1 : 1;
+
+  customers[email] = nextCustomer;
+  localStorage.setItem("customers", JSON.stringify(customers));
+  localStorage.setItem("lastCustomerNumber", nextCustomer);
+  return nextCustomer;
+}
 
 const CartPage = () => {
   const cart = useCartStore((state) => state.cart);
@@ -13,43 +37,137 @@ const CartPage = () => {
   const [modalType, setModalType] = useState("success"); // success | error
   const [pendingRemoveId, setPendingRemoveId] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
-    const nome = formData.get("nome");
-    const cognome = formData.get("cognome");
+    const name = formData.get("nome");
+    const surname = formData.get("cognome");
+    const email = formData.get("email");
     const indirizzo = formData.get("indirizzo");
+    const interno = formData.get("interno") || "";
     const cap = formData.get("cap");
     const citta = formData.get("citta");
     const provincia = formData.get("provincia");
     const pagamento = formData.get("pagamento");
 
-    // Controlla se tutti i campi sono compilati
+    const address = `${indirizzo} ${
+      interno ? ", " + interno : ""
+    }, ${cap} ${citta} (${provincia})`;
+
     if (
-      !nome ||
-      !cognome ||
+      !name ||
+      !surname ||
+      !email ||
       !indirizzo ||
       !cap ||
       !citta ||
       !provincia ||
-      !pagamento
+      !pagamento ||
+      cart.length === 0
     ) {
       setModalType("error");
-      setModalMessage("⚠️ Compila tutti i campi per procedere al pagamento!");
+      setModalMessage(
+        "⚠️ Compila tutti i campi e aggiungi almeno un prodotto al carrello!"
+      );
       setShowModal(true);
       return;
     }
 
-    // Tutto ok → svuota carrello e mostra conferma
-    clearCart();
-    setModalType("success");
-    setModalMessage("✅ Pagamento effettuato correttamente!");
-    setShowModal(true);
+    const total = cart.reduce((sum, item) => {
+      const price = parseFloat(item.sales_price) || 0;
+      const quantity = parseInt(item.quantity) || 1;
+      return sum + price * quantity;
+    }, 0);
+
+    const free_shipping = total > 500;
+
+    // numero ordine e cliente
+    const order_number = generateOrderNumber();
+    const customer_number = getOrCreateCustomerNumber(email);
+
+    // oggetto con tutti i dati da inviare al backend e via email
+    const orderData = {
+      order_number,
+      customer_number,
+      name,
+      surname,
+      email,
+      address,
+      pagamento,
+      free_shipping,
+      amount: total,
+      cartItems: cart.map((item) => ({
+        id: item.id,
+        name: item.name,
+        sales_price: item.sales_price,
+        quantity: item.quantity || 1,
+      })),
+    };
+
+    try {
+      const res = await axios.post("http://localhost:3000/orders", orderData);
+
+      if (res.status === 201) {
+        // invio email con EmailJS
+        await emailjs.send(
+          "service_qzbsi0g",
+          "template_vdx9vwa", // <- Admin
+          {
+            order_number,
+            customer_number,
+            nome: name,
+            cognome: surname,
+            email,
+            indirizzo: address,
+            pagamento,
+            totale: total.toFixed(2),
+            prodotti: cart
+              .map((item) => {
+                const qty = parseInt(item.quantity) || 1;
+                const price = parseFloat(item.sales_price) || 0;
+                return `${item.name} (x${qty}) - €${(price * qty).toFixed(2)}`;
+              })
+              .join("<br>"),
+          },
+          "K3JfamoSQh9AVE4XN"
+        );
+
+        // invio autoreply
+        await emailjs.send(
+          "service_qzbsi0g",
+          "template_8gxvhar", // <- Cliente
+          {
+            nome: name,
+            cognome: surname,
+            email,
+            order_number,
+            prodotti: cart
+              .map((item) => {
+                const qty = parseInt(item.quantity) || 1;
+                const price = parseFloat(item.sales_price) || 0;
+                return `• ${item.name} x${qty} (€${(price * qty).toFixed(2)})`;
+              })
+              .join("<br>"),
+          },
+          "K3JfamoSQh9AVE4XN"
+        );
+
+        setModalType("success");
+        setModalMessage("✅ Ordine creato con successo e email inviata!");
+        setShowModal(true);
+        clearCart();
+      }
+    } catch (err) {
+      console.error(err);
+      setModalType("error");
+      setModalMessage("❌ Errore durante la creazione o invio dell'ordine.");
+      setShowModal(true);
+    }
   };
 
   const total = cart.reduce((sum, item) => {
-    const price = item.sales_price;
+    const price = parseFloat(item.sales_price) || 0;
     const quantity = parseInt(item.quantity) || 1;
     return sum + price * quantity;
   }, 0);
@@ -85,6 +203,15 @@ const CartPage = () => {
             </div>
             <div className="mb-3">
               <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Inserisci la tua mail"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
                 type="text"
                 name="indirizzo"
                 className="form-control"
@@ -95,6 +222,7 @@ const CartPage = () => {
             <div className="mb-3">
               <input
                 type="text"
+                name="interno"
                 className="form-control"
                 placeholder="Interno, scala, ecc."
               />
@@ -165,7 +293,15 @@ const CartPage = () => {
           ) : (
             <ul className="list-group mb-3">
               {cart.map((item) => {
-                const price = parseFloat(item.sales_price) || 0;
+                const unitPrice = parseFloat(item.sales_price) || 0;
+                const originalPrice = parseFloat(item.price) || unitPrice;
+                const discountPercentage =
+                  item.sales != 0 && originalPrice > 0
+                    ? Math.round(
+                        ((originalPrice - unitPrice) / originalPrice) * 100
+                      )
+                    : 0;
+                const isDiscounted = item.sales != 0 && discountPercentage > 0;
                 const quantity = parseInt(item.quantity) || 1;
 
                 return (
@@ -193,11 +329,37 @@ const CartPage = () => {
                               Disponibile
                             </span>
                             <br />
-                            <small>€{price.toFixed(2)} cad.</small>
+                            {isDiscounted ? (
+                              <>
+                                <small className="mb-1 d-block">
+                                  €{unitPrice.toFixed(2)} cad.
+                                  <span className="badge bg-danger ms-1">
+                                    -{discountPercentage}%
+                                  </span>
+                                </small>
+                                <small className="text-decoration-line-through text-muted">
+                                  €{originalPrice.toFixed(2)}
+                                </small>
+                              </>
+                            ) : (
+                              <small>€{originalPrice.toFixed(2)} cad.</small>
+                            )}
                           </div>
                           <button
                             className="btn btn-sm btn-danger"
-                            onClick={() => removeFromCart(item.id)}
+                            onClick={() => {
+                              if (quantity === 1) {
+                                // Mostra modal di conferma rimozione
+                                setModalType("confirm");
+                                setModalMessage(
+                                  `Vuoi rimuovere "${item.name}" dal carrello?`
+                                );
+                                setPendingRemoveId(item.id);
+                                setShowModal(true);
+                              } else {
+                                updateQuantity(item.id, quantity - 1);
+                              }
+                            }}
                           >
                             ×
                           </button>
@@ -242,7 +404,7 @@ const CartPage = () => {
                               +
                             </button>
                           </div>
-                          <strong>€{(price * quantity).toFixed(2)}</strong>
+                          <strong>€{(unitPrice * quantity).toFixed(2)}</strong>
                         </div>
                       </div>
                     </div>
@@ -254,6 +416,23 @@ const CartPage = () => {
               <li className="list-group-item d-flex justify-content-between">
                 <span>Totale prodotti</span>
                 <strong>€{total.toFixed(2)}</strong>
+              </li>
+
+              <li className="list-group-item codice-sconto-box">
+                <label htmlFor="codiceSconto" className="form-label mb-1">
+                  Hai un codice sconto?
+                </label>
+                <div className="d-flex gap-2">
+                  <input 
+                  type="text" 
+                  id="codiceSconto"
+                  className="form-control"
+                  placeholder="Inserisci il codice"
+                  />
+                  <button type="button" className="btn btn-outline-dark">
+                    Applica
+                  </button>
+                </div>
               </li>
 
               <li className="list-group-item d-flex justify-content-between">
