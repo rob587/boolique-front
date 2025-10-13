@@ -1,6 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import useCartStore from '../src/store/useCartStore'; 
+import useWishlistStore from '../src/store/useWishlIstStore';
+
+
+const counterStyles = {
+  position: "absolute",
+  top: "-8px",
+  right: "-8px",
+  backgroundColor: "#c3993a",
+  color: "black",
+  borderRadius: "50%",
+  padding: "5px 12px",
+  fontSize: "14px",
+  fontWeight: "bold",
+  lineHeight: "",
+  textAlign: "center",
+  minWidth: "18px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
 
 const Header = () => {
   const [products, setProducts] = useState([]);
@@ -8,7 +29,15 @@ const Header = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const navigate = useNavigate();
 
-  // Carica tutti i prodotti dal backend all'avvio
+/*recupero conteggio*/
+ const cart = useCartStore((state) => state.cart);
+  const wishlist = useWishlistStore((state) => state.wishlist);
+
+ /*calcolo conteggio*/
+  const cartCount = cart.length;
+  const wishlistCount = wishlist.length;
+
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/products")
@@ -18,7 +47,6 @@ const Header = () => {
       );
   }, []);
 
-  // Filtra i prodotti in base alla query su name, brand e category
   useEffect(() => {
     const q = query.toLowerCase().trim();
 
@@ -41,7 +69,7 @@ const Header = () => {
       })
       .filter((p) => p.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 5); // Limita ai primi 5 risultati per il dropdown
+      .slice(0, 5);
 
     setFilteredProducts(scored);
   }, [query, products]);
@@ -57,7 +85,7 @@ const Header = () => {
 
   const handleResultClick = (product) => {
     navigate(`/details/${product.slug || product.id}`);
-    setQuery(""); // Pulisci la query dopo il click
+    setQuery("");
   };
 
   return (
@@ -75,12 +103,11 @@ const Header = () => {
             <span className="logo d-none d-md-inline-block mx-3">Boolique</span>
           </Link>
 
-          {/* Spostato qui la form e aggiunta la classe ms-auto */}
           <form
-            className="d-flex position-relative ms-auto me-3" // Aggiunto ms-auto e me-3
+            className="d-flex position-relative ms-auto me-3"
             role="search"
             onSubmit={handleSubmit}
-            style={{ maxWidth: "400px" }} // Opzionale: limita la larghezza
+            style={{ maxWidth: "400px" }}
           >
             <input
               className="form-control me-2"
@@ -146,13 +173,25 @@ const Header = () => {
             )}
           </form>
 
-          {/* Wishlist e Carrello */}
-          <div className="wishcart d-flex align-items-center"> {/* Aggiunto d-flex e align-items-center qui */}
-            <Link className="wish-link fs-1 me-3" to={"wish"}> {/* Aggiunto me-3 */}
+          <div className="wishcart d-flex align-items-center">
+            {/* Counter Wish */}
+            <Link className="wish-link fs-1 me-3 position-relative" to={"wish"}>
               <i className="fa-solid fa-heart"></i>
+              {wishlistCount > 0 && (
+                <span className="counter wishlist-counter" style={counterStyles}>
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
-            <Link className="cart-link fs-1" to={"cart"}>
+
+            {/* Counter Cart */}
+            <Link className="cart-link fs-1 position-relative" to={"cart"}>
               <i className="fa-solid fa-cart-shopping"></i>
+              {cartCount > 0 && (
+                <span className="counter cart-counter" style={counterStyles}>
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </div>
         </div>
