@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
+import useWishlistStore from "../src/store/useWishlIstStore";
 
 const DetailProducts = () => {
   const [products, setProducts] = useState(null);
@@ -10,6 +11,9 @@ const DetailProducts = () => {
   const { param } = useParams();
 
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const wishlist = useWishlistStore((state) => state.wishlist);
+  const addToWishlist = useWishlistStore((state) => state.addToWishlist);
 
   useEffect(() => {
     if (products && products.id) {
@@ -47,8 +51,8 @@ const DetailProducts = () => {
   const discountPercentage =
     products.sales != 0
       ? Math.round(
-        ((products.price - products.sales_price) / products.price) * 100
-      )
+          ((products.price - products.sales_price) / products.price) * 100
+        )
       : 0;
 
   return (
@@ -68,8 +72,9 @@ const DetailProducts = () => {
                     {products.images.map((img, index) => (
                       <div
                         key={index}
-                        className={`carousel-item ${index === 0 ? "active" : ""
-                          }`}
+                        className={`carousel-item ${
+                          index === 0 ? "active" : ""
+                        }`}
                       >
                         <img
                           src={img}
@@ -159,6 +164,16 @@ const DetailProducts = () => {
               >
                 Aggiungi al carrello
               </button>
+              <button
+                className="btn-buy"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                onClick={() => {
+                  addToWishlist(wishlist);
+                }}
+              >
+                Aggiungi alla Wishlist
+              </button>
               <div
                 className="modal fade"
                 id="exampleModal"
@@ -197,8 +212,8 @@ const DetailProducts = () => {
             const relatedDiscountPercentage =
               prod.sales != 0 && prod.price && prod.sales_price
                 ? Math.round(
-                  ((prod.price - prod.sales_price) / prod.price) * 100
-                )
+                    ((prod.price - prod.sales_price) / prod.price) * 100
+                  )
                 : 0;
 
             return (
