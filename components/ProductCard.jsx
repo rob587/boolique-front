@@ -63,161 +63,162 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
         )
       : 0;
 
+  // Modal condiviso per entrambe le viste (posizionato fixed nella viewport)
+  const ConfirmationModal = () =>
+    showModal && (
+      <div
+        className="position-fixed top-50 start-50 translate-middle bg-dark text-white text-center p-3 rounded shadow"
+        style={{
+          zIndex: 1050,
+          width: "80%",
+          maxWidth: "300px",
+          fontSize: "0.9rem",
+        }}
+      >
+        {modalMessage}
+      </div>
+    );
+
   if (viewMode === "list") {
     // Layout elenco: immagine piccola a sinistra, contenuto a destra
     return (
-      <div className="card mb-3 border-0 shadow-sm" style={{ cursor: "pointer" }} onClick={goToDetail}>
-        <div className="card-body d-flex align-items-start p-3">
-          {/* Immagine piccola a sinistra (senza icone) */}
-          <div className="me-3" style={{ flexShrink: 0 }}>
-            <img
-              src={product.image}
-              className="rounded"
-              style={{ width: "100px", height: "100px", objectFit: "cover" }}
-              alt={product.name}
-            />
-          </div>
+      <>
+        <div
+          className="card mb-3 border-0 shadow-sm"
+          style={{ cursor: "pointer" }}
+          onClick={goToDetail}
+        >
+          <div className="card-body d-flex align-items-start p-3">
+            {/* Immagine piccola a sinistra (senza icone) */}
+            <div className="me-3" style={{ flexShrink: 0 }}>
+              <img
+                src={product.image}
+                className="rounded"
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                alt={product.name}
+              />
+            </div>
 
-          {/* Contenuto a destra */}
-          <div className="flex-grow-1">
-            <h6 className="card-title mb-2">{product.name}</h6>
-            {product.sales != 0 ? (
-              <div>
-                <p className="card-text mb-1">
-                  €{product.sales_price.toFixed(2)}
-                  <span className="badge bg-danger ms-2">
-                    -{discountPercentage}%
-                  </span>
-                </p>
-                <p className="card-text mb-3">
-                  <small className="text-decoration-line-through text-muted">
-                    €{product.price.toFixed(2)}
-                  </small>
-                </p>
+            {/* Contenuto a destra */}
+            <div className="flex-grow-1">
+              <h6 className="card-title mb-2">{product.name}</h6>
+              {product.sales != 0 ? (
+                <div>
+                  <p className="card-text mb-1">
+                    €{product.sales_price.toFixed(2)}
+                    <span className="badge bg-danger ms-2">
+                      -{discountPercentage}%
+                    </span>
+                  </p>
+                  <p className="card-text mb-3">
+                    <small className="text-decoration-line-through text-muted">
+                      €{product.price.toFixed(2)}
+                    </small>
+                  </p>
+                </div>
+              ) : (
+                <p className="card-text mb-3">€{product.price.toFixed(2)}</p>
+              )}
+
+              {/* Icone wishlist e cart sotto la descrizione */}
+              <div className="d-flex gap-3">
+                <i
+                  className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
+                  style={{
+                    color: "#C3993A",
+                    cursor: "pointer",
+                    fontSize: "1.2rem",
+                  }}
+                  onClick={toggleWishlist}
+                  title="Aggiungi/rimuovi dai preferiti"
+                ></i>
+                <i
+                  className="fa-solid fa-cart-plus"
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "1.2rem",
+                    color: isInCart ? "#C3993A" : "#111111",
+                  }}
+                  onClick={toggleCart}
+                  title="Aggiungi/rimuovi dal carrello"
+                ></i>
               </div>
-            ) : (
-              <p className="card-text mb-3">€{product.price.toFixed(2)}</p>
-            )}
-
-            {/* Icone wishlist e cart sotto la descrizione */}
-            <div className="d-flex gap-3">
-              <i
-                className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
-                style={{
-                  color: "#C3993A",
-                  cursor: "pointer",
-                  fontSize: "1.2rem",
-                }}
-                onClick={toggleWishlist}
-                title="Aggiungi/rimuovi dai preferiti"
-              ></i>
-              <i
-                className="fa-solid fa-cart-plus"
-                style={{
-                  cursor: "pointer",
-                  fontSize: "1.2rem",
-                  color: isInCart ? "#C3993A" : "#111111",
-                }}
-                onClick={toggleCart}
-                title="Aggiungi/rimuovi dal carrello"
-              ></i>
             </div>
           </div>
         </div>
-      </div>
+        <ConfirmationModal />
+      </>
     );
   }
 
   // Layout griglia: come originale, ma con h-100 per uniformità
   return (
+    <>
+      <div
+        className="card h-100 my-3"
+        style={{ cursor: "pointer" }}
+        onClick={goToDetail}
+      >
+        <div style={{ position: "relative" }}>
+          <img
+            src={product.image}
+            className="card-img-top img-fluid"
+            style={{ maxHeight: "33rem", objectFit: "cover" }}
+            alt={product.name}
+          />
 
-    <div className="card h-100 my-3" style={{ cursor: "pointer" }} onClick={goToDetail}>
+          {/* Cuore wishlist */}
+          <i
+            className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
+            style={{
+              color: "#C3993A",
+              cursor: "pointer",
+              position: "absolute",
+              top: "10px",
+              left: "10px",
+              fontSize: "1.5rem",
+            }}
+            onClick={toggleWishlist}
+          ></i>
 
-    <div
-      className="card my-3"
-      style={{ height: "40rem", position: "relative" }}
-    >
-
-      <div style={{ position: "relative" }}>
-        <img
-          src={product.image}
-          className="card-img-top img-fluid"
-          style={{ maxHeight: "33rem", objectFit: "cover" }}
-          alt={product.name}
-        />
-
-        {/* Cuore wishlist */}
-        <i
-          className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
-          style={{
-            color: "#C3993A",
-            cursor: "pointer",
-            position: "absolute",
-            top: "10px",
-            left: "10px",
-            fontSize: "1.5rem",
-          }}
-          onClick={toggleWishlist}
-        ></i>
-
-        {/* Carrello */}
-        <i
-          className={`fa-solid fa-cart-plus`}
-          style={{
-            position: "absolute",
-            bottom: "10px",
-            left: "10px",
-            cursor: "pointer",
-            fontSize: "1.5rem",
-            color: isInCart ? "#C3993A" : "#111111",
-          }}
-          onClick={toggleCart}
-        ></i>
-      </div>
-
-      <div className="card-body d-flex flex-column">
-        <h5 className="card-title flex-grow-1">{product.name}</h5>
-        {product.sales != 0 ? (
-          <div className="mt-auto">
-            <p className="card-text mb-1">
-              €{Number(product.sales_price || product.price || 0).toFixed(2)}
-              <span className="badge bg-danger ms-2">
-                -{discountPercentage}%
-              </span>
-            </p>
-            <p className="card-text mb-0">
-              <small className="text-decoration-line-through text-muted">
-                €{Number(product.sales_price || product.price || 0).toFixed(2)}
-              </small>
-            </p>
-          </div>
-        ) : (
-
-          <p className="card-text mt-auto">€{product.price.toFixed(2)}</p>
-
-          <p className="card-text">
-            {" "}
-            €{Number(product.sales_price || product.price || 0).toFixed(2)}
-          </p>
-
-        )}
-      </div>
-
-      {/* 🔹 Modal conferma semplice */}
-      {showModal && (
-        <div
-          className="position-absolute top-50 start-50 translate-middle bg-dark text-white text-center p-3 rounded shadow"
-          style={{
-            zIndex: 9999,
-            width: "80%",
-            maxWidth: "300px",
-            fontSize: "0.9rem",
-          }}
-        >
-          {modalMessage}
+          {/* Carrello */}
+          <i
+            className={`fa-solid fa-cart-plus`}
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              left: "10px",
+              cursor: "pointer",
+              fontSize: "1.5rem",
+              color: isInCart ? "#C3993A" : "#111111",
+            }}
+            onClick={toggleCart}
+          ></i>
         </div>
-      )}
-    </div>
+
+        <div className="card-body d-flex flex-column">
+          <h5 className="card-title flex-grow-1">{product.name}</h5>
+          {product.sales != 0 ? (
+            <div className="mt-auto">
+              <p className="card-text mb-1">
+                €{product.sales_price.toFixed(2)}
+                <span className="badge bg-danger ms-2">
+                  -{discountPercentage}%
+                </span>
+              </p>
+              <p className="card-text mb-0">
+                <small className="text-decoration-line-through text-muted">
+                  €{product.price.toFixed(2)}
+                </small>
+              </p>
+            </div>
+          ) : (
+            <p className="card-text mt-auto">€{product.price.toFixed(2)}</p>
+          )}
+        </div>
+      </div>
+      <ConfirmationModal />
+    </>
   );
 };
 
