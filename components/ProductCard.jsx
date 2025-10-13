@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
 import useWishlistStore from "../src/store/useWishlIstStore";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onShowNotification }) => {
   const navigate = useNavigate();
   const goToDetail = () => navigate(`/details/${product.slug || product.id}`);
 
@@ -24,14 +24,33 @@ const ProductCard = ({ product }) => {
 
   const toggleWishlist = (e) => {
     e.stopPropagation();
-    if (isInWishlist) removeFromWishlist(product.id);
-    else addToWishlist(product);
+    if (isInWishlist) {
+      removeFromWishlist(product.id);
+      if (onShowNotification) {
+        onShowNotification("Prodotto rimosso dalla wishlist", "error");
+      }
+    } else {
+      addToWishlist(product);
+      if (onShowNotification) {
+        onShowNotification("Prodotto aggiunto alla wishlist!", "flash");
+      }
+    }
   };
 
   const toggleCart = (e) => {
     e.stopPropagation();
-    if (isInCart) removeFromCart(product.id);
-    else addToCart(product);
+    if (isInCart) {
+      removeFromCart(product.id);
+      if (onShowNotification) {
+        onShowNotification("Prodotto rimosso dal carrello.", "error");
+      }
+    } else {
+      addToCart(product);
+      // Mostra la notifica di successo per il carrello usando il tipo 'flash'
+      if (onShowNotification) {
+        onShowNotification("Prodotto aggiunto al carrello!", "flash"); // Modificato qui
+      }
+    }
   };
 
   // Calcolo percentuale sconto se sales != 0
@@ -99,7 +118,7 @@ const ProductCard = ({ product }) => {
             </p>
           </div>
         ) : (
-          <p className="card-text">€{product.price.toFixed(2)}</p>
+       <p className="card-text">€{product.price.toFixed(2)}</p>
         )}
       </div>
     </div>
