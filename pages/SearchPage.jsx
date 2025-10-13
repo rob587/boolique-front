@@ -14,16 +14,19 @@ const SearchPage = () => {
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
+  const [viewMode, setViewMode] = useState("grid");
 
-  // 🔹 Carica prodotti
+  // Carica prodotti
   const fetchProducts = async () => {
     try {
       const res = await axios.get("http://localhost:3000/products");
       const data = res.data;
       setProducts(data);
 
-      setCategories(Array.from(new Set(data.map(p => p.category).filter(Boolean))));
-      setBrands(Array.from(new Set(data.map(p => p.brand).filter(Boolean))));
+      setCategories(
+        Array.from(new Set(data.map((p) => p.category).filter(Boolean)))
+      );
+      setBrands(Array.from(new Set(data.map((p) => p.brand).filter(Boolean))));
     } catch (err) {
       console.error("Errore caricamento prodotti:", err);
     }
@@ -33,7 +36,7 @@ const SearchPage = () => {
     fetchProducts();
   }, []);
 
-  // 🔹 Legge i parametri dalla URL
+  // Legge i parametri dalla URL
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setQuery(searchParams.get("q") || "");
@@ -41,14 +44,14 @@ const SearchPage = () => {
     setSelectedBrand(searchParams.get("brand") || "");
   }, [location.search]);
 
-  // 🔹 Filtra prodotti
+  // Filtra prodotti
   useEffect(() => {
     let results = [...products];
 
     if (query) {
       const qLower = query.toLowerCase().trim();
       results = results.filter(
-        p =>
+        (p) =>
           p.name.toLowerCase().includes(qLower) ||
           (p.brand && p.brand.toLowerCase().includes(qLower)) ||
           (p.category && p.category.toLowerCase().includes(qLower))
@@ -56,17 +59,17 @@ const SearchPage = () => {
     }
 
     if (selectedCategory) {
-      results = results.filter(p => p.category === selectedCategory);
+      results = results.filter((p) => p.category === selectedCategory);
     }
 
     if (selectedBrand) {
-      results = results.filter(p => p.brand === selectedBrand);
+      results = results.filter((p) => p.brand === selectedBrand);
     }
 
     setFiltered(results);
   }, [products, query, selectedCategory, selectedBrand]);
 
-  // 🔹 Aggiorna URL e filtri quando invii la searchbar
+  // Aggiorna URL e filtri
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
@@ -76,26 +79,43 @@ const SearchPage = () => {
     navigate(`/search?${params.toString()}`);
   };
 
-  // 🔹 Gestione click categoria
+  // Gestione click categoria
   const handleCategoryClick = (cat) => {
     const params = new URLSearchParams(location.search);
+
+    // Rimuove la query di ricerca testuale
+    params.delete("q");
+    params.delete("brand");
+
     if (cat) {
       params.set("category", cat);
     } else {
       params.delete("category");
     }
+
     navigate(`/search?${params.toString()}`);
   };
 
-  // 🔹 Gestione click brand
+  // Gestione click brand
   const handleBrandClick = (brand) => {
     const params = new URLSearchParams(location.search);
+
+    // Rimuove la query di ricerca testuale
+    params.delete("q");
+    params.delete("category");
+
     if (brand) {
       params.set("brand", brand);
     } else {
       params.delete("brand");
     }
+
     navigate(`/search?${params.toString()}`);
+  };
+
+  // Handler per toggle vista
+  const handleViewToggle = (mode) => {
+    setViewMode(mode);
   };
 
   return (
@@ -112,10 +132,12 @@ const SearchPage = () => {
             >
               Tutti
             </li>
-            {categories.map(cat => (
+            {categories.map((cat) => (
               <li
                 key={cat}
-                className={`list-group-item ${selectedCategory === cat ? "active" : ""}`}
+                className={`list-group-item ${
+                  selectedCategory === cat ? "active" : ""
+                }`}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleCategoryClick(cat)}
               >
@@ -133,10 +155,12 @@ const SearchPage = () => {
             >
               Tutti
             </li>
-            {brands.map(brand => (
+            {brands.map((brand) => (
               <li
                 key={brand}
-                className={`list-group-item ${selectedBrand === brand ? "active" : ""}`}
+                className={`list-group-item ${
+                  selectedBrand === brand ? "active" : ""
+                }`}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleBrandClick(brand)}
               >
@@ -154,27 +178,55 @@ const SearchPage = () => {
               className="form-control me-2"
               placeholder="Cerca per nome, brand o categoria"
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
             />
             <button className="btn btn-outline-warning" type="submit">
               Cerca
             </button>
           </form>
 
+          {/* Pulsanti toggle vista (invariati) */}
+          <div className="mb-3">
+            <button
+              className={`btn me-2 ${
+                viewMode === "grid" ? "btn-warning" : "btn-outline-warning"
+              }`}
+              onClick={() => handleViewToggle("grid")}
+            >
+              Griglia
+            </button>
+            <button
+              className={`btn ${
+                viewMode === "list" ? "btn-warning" : "btn-outline-warning"
+              }`}
+              onClick={() => handleViewToggle("list")}
+            >
+              Elenco
+            </button>
+          </div>
+
           <h4 className="mb-4">
-            {selectedCategory ? `Categoria: ${selectedCategory}` :
-             selectedBrand ? `Brand: ${selectedBrand}` :
-             query ? `Risultati per: "${query}"` :
-             "Tutti i prodotti"}
+            {selectedCategory
+              ? `Categoria: ${selectedCategory}`
+              : selectedBrand
+              ? `Brand: ${selectedBrand}`
+              : query
+              ? `Risultati per: "${query}"`
+              : "Tutti i prodotti"}
           </h4>
 
           {filtered.length === 0 ? (
             <p>Nessun prodotto trovato.</p>
           ) : (
             <div className="row">
-              {filtered.map(product => (
-                <div key={product.id} className="col-12 col-md-4 col-lg-3 mb-4">
-                  <ProductCard product={product} />
+              {filtered.map((product) => (
+                <div
+                  key={product.id}
+                  className={`col-12 mb-3 ${
+                    viewMode === "grid" ? "col-md-4 col-lg-3" : ""
+                  }`}
+                >
+                  <ProductCard product={product} viewMode={viewMode} />
                 </div>
               ))}
             </div>
@@ -196,6 +248,7 @@ const SearchPage = () => {
           background-color: #111111;
           color: #C3993A;
         }
+        /* Stili per lista rimossi, gestiti in ProductCard */
       `}</style>
     </div>
   );
