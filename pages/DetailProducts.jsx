@@ -154,31 +154,35 @@ const DetailProducts = () => {
                 </div>
               </div>
 
+              {/* Pulsanti */}
               <button
                 className="btn-buy"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
+                data-bs-target="#cartModal"
                 onClick={() => {
                   addToCart(products);
                 }}
               >
                 Aggiungi al carrello
               </button>
+
               <button
                 className="btn-buy"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
+                data-bs-target="#wishlistModal"
                 onClick={() => {
-                  addToWishlist(wishlist);
+                  addToWishlist(products);
                 }}
               >
                 Aggiungi alla Wishlist
               </button>
+
+              {/* MODALE CARRELLO */}
               <div
                 className="modal fade"
-                id="exampleModal"
+                id="cartModal"
                 tabIndex="-1"
-                aria-labelledby="exampleModalLabel"
+                aria-labelledby="cartModalLabel"
                 aria-hidden="true"
               >
                 <div className="modal-dialog">
@@ -199,16 +203,43 @@ const DetailProducts = () => {
                   </div>
                 </div>
               </div>
+
+              {/* MODALE WISHLIST */}
+              <div
+                className="modal fade"
+                id="wishlistModal"
+                tabIndex="-1"
+                aria-labelledby="wishlistModalLabel"
+                aria-hidden="true"
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header"></div>
+                    <div className="modal-body text-center">
+                      Aggiunto alla wishlist correttamente!
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-dark w-100 mt-3"
+                        data-bs-dismiss="modal"
+                      >
+                        Chiudi
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* PRODOTTI CORRELATI */}
       <section className="related-section container my-5">
         <h2 className="mb-4">Prodotti correlati</h2>
         <div className="row g-4">
           {relatedProducts.map((prod) => {
-            // Calcolo percentuale sconto per related products
             const relatedDiscountPercentage =
               prod.sales != 0 && prod.price && prod.sales_price
                 ? Math.round(
