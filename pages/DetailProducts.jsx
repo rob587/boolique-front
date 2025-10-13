@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
+import useWishlistStore from "../src/store/useWishlIstStore";
 
 const DetailProducts = () => {
   const [products, setProducts] = useState(null);
@@ -10,6 +11,9 @@ const DetailProducts = () => {
   const { param } = useParams();
 
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const wishlist = useWishlistStore((state) => state.wishlist);
+  const addToWishlist = useWishlistStore((state) => state.addToWishlist);
 
   useEffect(() => {
     if (products && products.id) {
@@ -47,8 +51,8 @@ const DetailProducts = () => {
   const discountPercentage =
     products.sales != 0
       ? Math.round(
-        ((products.price - products.sales_price) / products.price) * 100
-      )
+          ((products.price - products.sales_price) / products.price) * 100
+        )
       : 0;
 
   return (
@@ -68,8 +72,9 @@ const DetailProducts = () => {
                     {products.images.map((img, index) => (
                       <div
                         key={index}
-                        className={`carousel-item ${index === 0 ? "active" : ""
-                          }`}
+                        className={`carousel-item ${
+                          index === 0 ? "active" : ""
+                        }`}
                       >
                         <img
                           src={img}
@@ -149,21 +154,35 @@ const DetailProducts = () => {
                 </div>
               </div>
 
+              {/* Pulsanti */}
               <button
                 className="btn-buy"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
+                data-bs-target="#cartModal"
                 onClick={() => {
                   addToCart(products);
                 }}
               >
                 Aggiungi al carrello
               </button>
+
+              <button
+                className="btn-buy"
+                data-bs-toggle="modal"
+                data-bs-target="#wishlistModal"
+                onClick={() => {
+                  addToWishlist(products);
+                }}
+              >
+                Aggiungi alla Wishlist
+              </button>
+
+              {/* MODALE CARRELLO */}
               <div
                 className="modal fade"
-                id="exampleModal"
+                id="cartModal"
                 tabIndex="-1"
-                aria-labelledby="exampleModalLabel"
+                aria-labelledby="cartModalLabel"
                 aria-hidden="true"
               >
                 <div className="modal-dialog">
@@ -184,21 +203,48 @@ const DetailProducts = () => {
                   </div>
                 </div>
               </div>
+
+              {/* MODALE WISHLIST */}
+              <div
+                className="modal fade"
+                id="wishlistModal"
+                tabIndex="-1"
+                aria-labelledby="wishlistModalLabel"
+                aria-hidden="true"
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header"></div>
+                    <div className="modal-body text-center">
+                      Aggiunto alla wishlist correttamente!
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-dark w-100 mt-3"
+                        data-bs-dismiss="modal"
+                      >
+                        Chiudi
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* PRODOTTI CORRELATI */}
       <section className="related-section container my-5">
         <h2 className="mb-4">Prodotti correlati</h2>
         <div className="row g-4">
           {relatedProducts.map((prod) => {
-            // Calcolo percentuale sconto per related products
             const relatedDiscountPercentage =
               prod.sales != 0 && prod.price && prod.sales_price
                 ? Math.round(
-                  ((prod.price - prod.sales_price) / prod.price) * 100
-                )
+                    ((prod.price - prod.sales_price) / prod.price) * 100
+                  )
                 : 0;
 
             return (
