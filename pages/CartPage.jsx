@@ -112,32 +112,7 @@ const CartPage = () => {
         // invio email con EmailJS
         await emailjs.send(
           "service_qzbsi0g",
-          "template_vdx9vwa",
-          {
-            order_number,
-            customer_number,
-            nome: name,
-            cognome: surname,
-            email,
-            indirizzo: address,
-            pagamento,
-            totale: total.toFixed(2),
-            carrello: cart
-              .map(
-                (item) =>
-                  `${item.name} (x${item.quantity}) - €${(
-                    item.sales_price * item.quantity
-                  ).toFixed(2)}`
-              )
-              .join("\n"),
-          },
-          "K3JfamoSQh9AVE4XN"
-        );
-
-        // invio autoreply
-        await emailjs.send(
-          "service_qzbsi0g",
-          "template_vdx9vwa",
+          "template_vdx9vwa", // <- Admin
           {
             order_number,
             customer_number,
@@ -148,13 +123,32 @@ const CartPage = () => {
             pagamento,
             totale: total.toFixed(2),
             prodotti: cart
-              .map(
-                (item) =>
-                  `${item.name} (x${item.quantity}) - €${(
-                    item.sales_price * item.quantity
-                  ).toFixed(2)}`
-              )
-              .join("\n"),
+              .map((item) => {
+                const qty = parseInt(item.quantity) || 1;
+                const price = parseFloat(item.sales_price) || 0;
+                return `${item.name} (x${qty}) - €${(price * qty).toFixed(2)}`;
+              })
+              .join("<br>"),
+          },
+          "K3JfamoSQh9AVE4XN"
+        );
+
+        // invio autoreply
+        await emailjs.send(
+          "service_qzbsi0g",
+          "template_8gxvhar", // <- Cliente
+          {
+            nome: name,
+            cognome: surname,
+            email,
+            order_number,
+            prodotti: cart
+              .map((item) => {
+                const qty = parseInt(item.quantity) || 1;
+                const price = parseFloat(item.sales_price) || 0;
+                return `• ${item.name} x${qty} (€${(price * qty).toFixed(2)})`;
+              })
+              .join("<br>"),
           },
           "K3JfamoSQh9AVE4XN"
         );

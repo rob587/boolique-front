@@ -5,10 +5,27 @@ const useCartStore = create(
   persist(
     (set, get) => ({
       cart: [],
+
       addToCart: (product) => {
         const existing = get().cart.find((p) => p.id === product.id);
-        if (!existing) set({ cart: [...get().cart, product] });
+
+        if (existing) {
+          // Se il prodotto esiste già, incremento la quantità
+          set({
+            cart: get().cart.map((p) =>
+              p.id === product.id
+                ? { ...p, quantity: (p.quantity || 1) + 1 }
+                : p
+            ),
+          });
+        } else {
+          // Se è nuovo, lo aggiungo con quantity = 1
+          set({
+            cart: [...get().cart, { ...product, quantity: 1 }],
+          });
+        }
       },
+
       updateQuantity: (id, newQuantity) => {
         if (newQuantity < 1) {
           set({ cart: get().cart.filter((p) => p.id !== id) });
@@ -20,9 +37,11 @@ const useCartStore = create(
           });
         }
       },
+
       removeFromCart: (id) => {
         set({ cart: get().cart.filter((p) => p.id !== id) });
       },
+
       clearCart: () => set({ cart: [] }),
     }),
     {
