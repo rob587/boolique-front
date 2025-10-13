@@ -107,14 +107,14 @@ const Homepage = () => {
               <div className="row g-1">
                 <div className="col-6">
                   <img
-                    src="/homepagebanners/nuovacol.png"
+                    src="/homepagebanners/aiuomo.png"
                     className="d-block w-100"
                     alt="Banner di Moda 1a"
                   />
                 </div>
                 <div className="col-6">
                   <img
-                    src="/homepagebanners/sales1.png"
+                    src="/homepagebanners/aidonna.png"
                     className="d-block w-100"
                     alt="Banner di Moda 1b"
                   />
@@ -126,14 +126,14 @@ const Homepage = () => {
               <div className="row g-1">
                 <div className="col-6">
                   <img
-                    src="/homepagebanners/sales2.png"
+                    src="/homepagebanners/scontiye.png"
                     className="d-block w-100"
                     alt="Banner di Moda 2a"
                   />
                 </div>
                 <div className="col-6">
                   <img
-                    src="/homepagebanners/nuovacol.png" // ho riutilizzato banner41
+                    src="/homepagebanners/sconti.png" // ho riutilizzato banner41
                     className="d-block w-100"
                     alt="Banner di Moda 2b"
                   />
@@ -146,7 +146,7 @@ const Homepage = () => {
                 <div className="col-6">
                   {/* Sostituisci con i tuoi percorsi */}
                   <img
-                    src="/homepagebanners/sales1.png"
+                    src="/homepagebanners/nuoviaccessori.png"
                     className="d-block w-100"
                     alt="Nuovo Banner di Moda 3a"
                   />
@@ -154,7 +154,7 @@ const Homepage = () => {
                 <div className="col-6">
                   {/* Sostituisci con i tuoi percorsi */}
                   <img
-                    src="/homepagebanners/sales2.png"
+                    src="/homepagebanners/newstore.png"
                     className="d-block w-100"
                     alt="Nuovo Banner di Moda 3b"
                   />
@@ -213,6 +213,16 @@ const Homepage = () => {
         </div>
       </div>
 
+      <div className="simple-discount-banner-container">
+  <div className="simple-discount-banner">
+    <h3 className="simple-discount-text">SCOPRI I NOSTRI CODICI SCONTO</h3>
+    <p className="simple-discount-tagline">SPEDIZIONE GRATUITA A PARTIRE DA 500 $</p>
+    <Link to="/search" className="simple-discount-button">
+      VAI ALLO STORE
+    </Link>
+  </div>
+</div>
+
 
 
       {/* Featured */}
@@ -235,7 +245,7 @@ const Homepage = () => {
         <div className="row">
           <div className="col-12">
             <img
-              src="/homepagebanners/banner3 (1).png"
+              src="/homepagebanners/bestseller1.png"
               alt="banner3"
               className="img-fluid mb-4"
             />
@@ -263,7 +273,7 @@ const Homepage = () => {
         <div className="row">
           <div className="col-12">
             <img
-              src="/homepagebanners/banner41.png"
+              src="/homepagebanners/inpromo.png"
               alt="banner4"
               className="img-fluid mb-4"
             />
