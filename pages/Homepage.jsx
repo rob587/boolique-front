@@ -123,7 +123,7 @@ const Homepage = () => {
             </div>
             {/* Seconda slide del carosello: altre due immagini affiancate */}
             <div className="carousel-item">
-              <div className="row g-0">
+              <div className="row g-1">
                 <div className="col-6">
                   <img
                     src="/homepagebanners/sales2.png"
@@ -142,7 +142,7 @@ const Homepage = () => {
             </div>
             {/* Terza slide del carosello (il commento problematico è stato spostato) */}
              <div className="carousel-item">
-              <div className="row g-0">
+              <div className="row g-1">
                 <div className="col-6">
                   {/* Sostituisci con i tuoi percorsi */}
                   <img

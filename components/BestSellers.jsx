@@ -1,6 +1,6 @@
 import ProductCard from "./ProductCard";
 
-const BestSellers = ({ products, onShowNotification }) => {
+const BestSellers = ({ products, }) => {
   return (
     <div className="row">
       {products.map((product) => (
@@ -9,7 +9,7 @@ const BestSellers = ({ products, onShowNotification }) => {
           key={product.slug || product.id}
         >
  
-          <ProductCard product={product} onShowNotification={onShowNotification} />
+          <ProductCard product={product} />
         </div>
       ))}
     </div>

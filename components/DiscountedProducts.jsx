@@ -2,7 +2,7 @@
 import ProductCard from "./ProductCard";
 
 
-const DiscountedProducts = ({ products, onShowNotification }) => {
+const DiscountedProducts = ({ products, }) => {
   return (
     <div className="row">
       {products.map((product) => (
@@ -11,7 +11,7 @@ const DiscountedProducts = ({ products, onShowNotification }) => {
           key={product.slug || product.id}
         >
 
-          <ProductCard product={product} onShowNotification={onShowNotification} />
+          <ProductCard product={product} />
         </div>
       ))}
     </div>

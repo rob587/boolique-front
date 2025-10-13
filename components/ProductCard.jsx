@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
 import useWishlistStore from "../src/store/useWishlIstStore";
 
-const ProductCard = ({ product, onShowNotification }) => {
+const ProductCard = ({ product,}) => {
   const navigate = useNavigate();
   const goToDetail = () => navigate(`/details/${product.slug || product.id}`);
 

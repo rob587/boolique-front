@@ -1,7 +1,7 @@
 
 import ProductCard from "./ProductCard";
 
-const Featured = ({ products, onShowNotification }) => {
+const Featured = ({ products, }) => {
   return (
     <div className="row">
       {products.map((product) => (
@@ -10,7 +10,7 @@ const Featured = ({ products, onShowNotification }) => {
           key={product.slug || product.id}
         >
   
-          <ProductCard product={product} onShowNotification={onShowNotification} />
+          <ProductCard product={product} />
         </div>
       ))}
     </div>
