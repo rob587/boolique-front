@@ -567,28 +567,28 @@ body {
   text-align: center;
   margin: 20px auto;
   padding: 10px 20px;
-  background-color: #eccd8b; /* Sfondo scuro elegante */
+  background-color: #eccd8b; 
   color: #0b0b0b;
   border-radius: 0px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Ombra per profondità */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); 
   max-width: 60%;
   position: relative;
-  overflow: hidden; /* Per contenere l'effetto di bordo */
-  border: 1px solid transparent; /* Bordo iniziale trasparente */
-  animation: simpleBorderGlow 3s infinite alternate; /* Animazione del bordo */
+  overflow: hidden; 
+  border: 1px solid transparent; 
+  animation: simpleBorderGlow 3s infinite alternate; 
 }
 
 @keyframes simpleBorderGlow {
   0% {
-    border-color: #000000; /* Un blu profondo */
+    border-color: #000000;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.458);
   }
   50% {
-    border-color: #ffc107; /* Giallo/oro brillante */
+    border-color: #ffc107; 
     box-shadow: 0 0 25px rgba(255, 193, 7, 0.8);
   }
   100% {
-    border-color: #000000; /* Un fucsia vibrante */
+    border-color: #000000;
     box-shadow: 0 0 15px rgba(233, 186, 30, 0.7);
   }
 }
@@ -598,8 +598,8 @@ body {
   font-family: 'cambria', sans-serif;
   font-size: 3em;
   font-weight: 800;
-  color: #000000; /* Giallo brillante */
-  text-shadow: 0 0 10px rgba(255, 235, 59, 0.6); /* Bagliore più semplice */
+  color: #000000; 
+  text-shadow: 0 0 10px rgba(255, 235, 59, 0.6); 
   margin-bottom: 0px;
   text-transform: uppercase;
 }
@@ -614,7 +614,7 @@ body {
 
 .simple-discount-button {
   display: inline-block;
-  background-color: #deb537; /* Giallo/oro per il bottone */
+  background-color: #deb537; 
   color: #1a1a2e;
   padding: 10px 30px;
   border-radius: 10px;
@@ -628,7 +628,7 @@ body {
 }
 
 .simple-discount-button:hover {
-  background-color: #fbd013; /* Giallo più chiaro all'hover */
+  background-color: #fbd013; 
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   color: #1a1a2e;
