@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
 import useWishlistStore from "../src/store/useWishlIstStore";
 
-const ProductCard = ({ product,}) => {
+const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const goToDetail = () => navigate(`/details/${product.slug || product.id}`);
 
@@ -111,19 +111,22 @@ const ProductCard = ({ product,}) => {
         {product.sales != 0 ? (
           <div>
             <p className="card-text mb-1">
-              €{product.sales_price.toFixed(2)}
+              €{Number(product.sales_price || product.price || 0).toFixed(2)}
               <span className="badge bg-danger ms-2">
                 -{discountPercentage}%
               </span>
             </p>
             <p className="card-text mb-0">
               <small className="text-decoration-line-through text-muted">
-                €{product.price.toFixed(2)}
+                €{Number(product.sales_price || product.price || 0).toFixed(2)}
               </small>
             </p>
           </div>
         ) : (
-       <p className="card-text">€{product.price.toFixed(2)}</p>
+          <p className="card-text">
+            {" "}
+            €{Number(product.sales_price || product.price || 0).toFixed(2)}
+          </p>
         )}
       </div>
 
