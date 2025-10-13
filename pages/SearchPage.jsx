@@ -15,6 +15,7 @@ const SearchPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [viewMode, setViewMode] = useState("grid");
+  const [editMode, setEditMode] = useState(false); // 👈 nuovo stato per attivare la modalità eliminazione
 
   // Carica prodotti
   const fetchProducts = async () => {
@@ -69,7 +70,7 @@ const SearchPage = () => {
     setFiltered(results);
   }, [products, query, selectedCategory, selectedBrand]);
 
-  // Aggiorna URL e filtri
+  // Gestione ricerca
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
@@ -79,43 +80,36 @@ const SearchPage = () => {
     navigate(`/search?${params.toString()}`);
   };
 
-  // Gestione click categoria
   const handleCategoryClick = (cat) => {
     const params = new URLSearchParams(location.search);
-
-    // Rimuove la query di ricerca testuale
     params.delete("q");
     params.delete("brand");
-
-    if (cat) {
-      params.set("category", cat);
-    } else {
-      params.delete("category");
-    }
-
+    cat ? params.set("category", cat) : params.delete("category");
     navigate(`/search?${params.toString()}`);
   };
 
-  // Gestione click brand
   const handleBrandClick = (brand) => {
     const params = new URLSearchParams(location.search);
-
-    // Rimuove la query di ricerca testuale
     params.delete("q");
     params.delete("category");
-
-    if (brand) {
-      params.set("brand", brand);
-    } else {
-      params.delete("brand");
-    }
-
+    brand ? params.set("brand", brand) : params.delete("brand");
     navigate(`/search?${params.toString()}`);
   };
 
-  // Handler per toggle vista
-  const handleViewToggle = (mode) => {
-    setViewMode(mode);
+  const handleViewToggle = (mode) => setViewMode(mode);
+
+  // 🗑️ Eliminazione prodotto
+  const handleDeleteProduct = async (id) => {
+    const confirmDelete = window.confirm("Sei sicuro di voler eliminare questo prodotto?");
+    if (!confirmDelete) return;
+    try {
+      await axios.delete(`http://localhost:3000/products/${id}`);
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+      alert("✅ Prodotto eliminato con successo!");
+    } catch (err) {
+      console.error("Errore durante l'eliminazione:", err);
+      alert("❌ Errore durante l'eliminazione del prodotto");
+    }
   };
 
   return (
@@ -135,9 +129,8 @@ const SearchPage = () => {
             {categories.map((cat) => (
               <li
                 key={cat}
-                className={`list-group-item ${
-                  selectedCategory === cat ? "active" : ""
-                }`}
+                className={`list-group-item ${selectedCategory === cat ? "active" : ""
+                  }`}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleCategoryClick(cat)}
               >
@@ -158,9 +151,8 @@ const SearchPage = () => {
             {brands.map((brand) => (
               <li
                 key={brand}
-                className={`list-group-item ${
-                  selectedBrand === brand ? "active" : ""
-                }`}
+                className={`list-group-item ${selectedBrand === brand ? "active" : ""
+                  }`}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleBrandClick(brand)}
               >
@@ -168,6 +160,15 @@ const SearchPage = () => {
               </li>
             ))}
           </ul>
+
+          <hr />
+          {/* 🛠️ Toggle modalità modifica */}
+          <button
+            className={`btn ${editMode ? "btn-danger" : "btn-outline-danger"} w-100 mt-3`}
+            onClick={() => setEditMode(!editMode)}
+          >
+            {editMode ? "Esci dalla Modifica" : "Modifica Prodotti"}
+          </button>
         </div>
 
         {/* Risultati */}
@@ -185,20 +186,17 @@ const SearchPage = () => {
             </button>
           </form>
 
-          {/* Pulsanti toggle vista (invariati) */}
           <div className="mb-3">
             <button
-              className={`btn me-2 ${
-                viewMode === "grid" ? "btn-warning" : "btn-outline-warning"
-              }`}
+              className={`btn me-2 ${viewMode === "grid" ? "btn-warning" : "btn-outline-warning"
+                }`}
               onClick={() => handleViewToggle("grid")}
             >
               Griglia
             </button>
             <button
-              className={`btn ${
-                viewMode === "list" ? "btn-warning" : "btn-outline-warning"
-              }`}
+              className={`btn ${viewMode === "list" ? "btn-warning" : "btn-outline-warning"
+                }`}
               onClick={() => handleViewToggle("list")}
             >
               Elenco
@@ -209,10 +207,10 @@ const SearchPage = () => {
             {selectedCategory
               ? `Categoria: ${selectedCategory}`
               : selectedBrand
-              ? `Brand: ${selectedBrand}`
-              : query
-              ? `Risultati per: "${query}"`
-              : "Tutti i prodotti"}
+                ? `Brand: ${selectedBrand}`
+                : query
+                  ? `Risultati per: "${query}"`
+                  : "Tutti i prodotti"}
           </h4>
 
           {filtered.length === 0 ? (
@@ -222,11 +220,15 @@ const SearchPage = () => {
               {filtered.map((product) => (
                 <div
                   key={product.id}
-                  className={`col-12 mb-3 ${
-                    viewMode === "grid" ? "col-md-4 col-lg-3" : ""
-                  }`}
+                  className={`col-12 mb-3 ${viewMode === "grid" ? "col-md-4 col-lg-3" : ""
+                    }`}
                 >
-                  <ProductCard product={product} viewMode={viewMode} />
+                  <ProductCard
+                    product={product}
+                    viewMode={viewMode}
+                    editMode={editMode}
+                    onDelete={handleDeleteProduct} // 👈 passiamo la funzione di eliminazione
+                  />
                 </div>
               ))}
             </div>
@@ -248,7 +250,6 @@ const SearchPage = () => {
           background-color: #111111;
           color: #C3993A;
         }
-        /* Stili per lista rimossi, gestiti in ProductCard */
       `}</style>
     </div>
   );
