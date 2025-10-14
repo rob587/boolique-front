@@ -104,7 +104,8 @@ const SearchPage = () => {
     setViewMode(mode);
   };
 
-  return (
+  return ( 
+    <div className="searchlist">
     <div className="container-fluid my-4">
       <div className="row">
         {/* Sidebar */}
@@ -225,7 +226,7 @@ const SearchPage = () => {
         }
         /* Stili per lista rimossi, gestiti in ProductCard */
       `}</style>
-    </div>
+    </div> </div>
   );
 };
 

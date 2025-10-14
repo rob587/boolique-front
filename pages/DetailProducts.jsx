@@ -56,6 +56,7 @@ const DetailProducts = () => {
       : 0;
 
   return (
+    <div className="detailspace">
     <div className="details-page">
       {/* PRODUCT DETAILS */}
       <section className="product-section">
@@ -287,7 +288,7 @@ const DetailProducts = () => {
           })}
         </div>
       </section>
-    </div>
+    </div> </div>
   );
 };
 

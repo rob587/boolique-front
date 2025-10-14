@@ -197,10 +197,11 @@ const CartPage = () => {
   };
 
   return (
+    <div className="cartspace">
     <div className="container my-5 pay-box">
       <div className="row">
         {/* Checkout */}
-        <div className="col-12 col-md-7 col-lg-8 mb-5">
+        <div className="col-12 col-md-6 col-lg-8 mb-5">
           <h2 className="mb-4">Check-out</h2>
           <form onSubmit={handleSubmit}>
             {/* campi utente */}
@@ -242,7 +243,7 @@ const CartPage = () => {
         </div>
 
         {/* Riepilogo carrello */}
-        <div className="col-12 col-md-5 col-lg-4">
+        <div className="col-12 col-md-6 col-lg-4">
           <h4 className="mb-3">Il tuo carrello</h4>
           <span>Se la spedizione è superiore i 500€ è gratuita!</span>
           <span className="mb-2 d-block">Altrimenti ci sono 20€ di spedizione</span>
@@ -457,7 +458,7 @@ const CartPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </div></div>
   );
 };
 

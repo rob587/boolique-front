@@ -76,6 +76,7 @@ const Homepage = () => {
 
   return (
     <div>
+      
       <div className="jumbotron-container d-flex justify-content-center align-items-center">
         <img
           className="jumbotron-image img-fluid"
@@ -88,10 +89,12 @@ const Homepage = () => {
         </div>
       </div>
 
-      <div className="col-12 text-center my-5">
+        <div className="col-12 text-center my-5 imglogospace"><img className="logospace" src="public/imgs/logo.png" alt="logo" /></div>
+
+      <div className="col-12 text-center">
         <h1 className="title">BENVENUTO IN BOOLIQUE</h1>
         <h2 className="subtitle">La casa dell'eleganza sartoriale</h2>
-      </div>
+      </div> 
 
       {/*carosello*/}
       <div className="container my-4">
@@ -105,14 +108,14 @@ const Homepage = () => {
             {/* Prima slide del carosello*/}
             <div className="carousel-item active">
               <div className="row g-1">
-                <div className="col-6">
+                <div className="col-lg-6 col-md-6 col-sm-12">
                   <img
                     src="/homepagebanners/aiuomo.png"
                     className="d-block w-100"
                     alt="Banner di Moda 1a"
                   />
                 </div>
-                <div className="col-6">
+                <div className="col-lg-6  col-md-6 col-sm-12">
                   <img
                     src="/homepagebanners/aidonna.png"
                     className="d-block w-100"
@@ -124,14 +127,14 @@ const Homepage = () => {
             {/* Seconda slide del carosello: altre due immagini affiancate */}
             <div className="carousel-item">
               <div className="row g-1">
-                <div className="col-6">
+                <div className="col-lg-6  col-md-6 col-sm-12">
                   <img
                     src="/homepagebanners/scontiye.png"
                     className="d-block w-100"
                     alt="Banner di Moda 2a"
                   />
                 </div>
-                <div className="col-6">
+                <div className="col-lg-6  col-md-6 col-sm-12">
                   <img
                     src="/homepagebanners/sconti.png" // ho riutilizzato banner41
                     className="d-block w-100"
@@ -143,7 +146,7 @@ const Homepage = () => {
             {/* Terza slide del carosello (il commento problematico è stato spostato) */}
              <div className="carousel-item">
               <div className="row g-1">
-                <div className="col-6">
+                <div className="col-lg-6  col-md-6 col-sm-12">
                   {/* Sostituisci con i tuoi percorsi */}
                   <img
                     src="/homepagebanners/nuoviaccessori.png"
@@ -151,7 +154,7 @@ const Homepage = () => {
                     alt="Nuovo Banner di Moda 3a"
                   />
                 </div>
-                <div className="col-6">
+                <div className="col-lg-6  col-md-6 col-sm-12">
                   {/* Sostituisci con i tuoi percorsi */}
                   <img
                     src="/homepagebanners/newstore.png"
@@ -216,7 +219,7 @@ const Homepage = () => {
       <div className="simple-discount-banner-container">
   <div className="simple-discount-banner">
     <h3 className="simple-discount-text">SCOPRI I NOSTRI CODICI SCONTO</h3>
-    <p className="simple-discount-tagline">SPEDIZIONE GRATUITA A PARTIRE DA 500 $</p>
+    <p className="simple-discount-tagline">SPEDIZIONE GRATUITA A PARTIRE DA 500€</p>
     <Link to="/search" className="simple-discount-button">
       VAI ALLO STORE
     </Link>
@@ -240,7 +243,7 @@ const Homepage = () => {
         />
       </div>
 
-
+<div className="largebanner">
       <div className="container">
         <div className="row">
           <div className="col-12">
@@ -251,7 +254,7 @@ const Homepage = () => {
             />
           </div>
         </div>
-      </div>
+      </div></div>
 
       {/* BestSellers */}
       <div className="container-h4 mt-5 mb-5">
@@ -268,7 +271,7 @@ const Homepage = () => {
         />
       </div>
 
-     
+     <div className="largebanner">
       <div className="container">
         <div className="row">
           <div className="col-12">
@@ -279,7 +282,7 @@ const Homepage = () => {
             />
           </div>
         </div>
-      </div>
+      </div> </div>
 
       {/* DiscountedProducts */}
       <div className="container-h4 mt-5 mb-5">
@@ -348,6 +351,7 @@ const Homepage = () => {
         </div>
       )}
     </div>
+
   );
 };
 
