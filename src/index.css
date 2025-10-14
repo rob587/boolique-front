@@ -82,6 +82,7 @@ footer .container {
 }
 
 .title {
+  margin-top: 10vh;
   color: #c5a46d;
   font-family: "Cormorant Garamond", serif;
   font-size: 50px;
@@ -104,19 +105,19 @@ body {
 }
 
 .searchlist {
-    margin-top: 110px;
+    margin-top: 15vh;
   }
 
   .wishspace {
-    margin-top: 110px;
+    margin-top: 15vh;
   }
 
   .cartspace {
-    margin-top: 110px;
+    margin-top: 15vh;
   }
 
   .detailspace {
-    margin-top: 30px;
+    margin-top: 15vh;
   }
 
 .logo {
@@ -126,14 +127,7 @@ body {
   text-transform: uppercase;
 }
 
-.logospace {
-  position: absolute;
-  bottom: 40%;
-left: 45%;
-  max-width: 150px;
-  margin: 0 auto;
-  z-index: 1;
-}
+
 
 /* HEADER STYLES */
 .navbar-dark .container-fluid {
@@ -385,6 +379,7 @@ label.form-label {
 
 
 .jumbotron-container {
+  margin-top: 11vh;
   position: relative;
   max-height: 300px;
   width: 100%;
@@ -543,25 +538,7 @@ body {
     font-size: 35px;
   }
 
-   .jumbotron-container {
-    margin-top: 90px;
-  }
 
-  .searchlist {
-    margin-top: 110px;
-  }
-
-  .wishspace {
-    margin-top: 110px;
-  }
-
-  .cartspace {
-    margin-top: 110px;
-  }
-
-  .logospace {
-    display: none;
-  }
 }
 
 /* Extra small (max 480px) */
@@ -611,17 +588,26 @@ body {
     font-size: 1.5rem;
   }
 
-  .jumbotron-container {
-    margin-top: 66px;
+  .jumbotron-container{
+    margin-top: 9vh;
   }
 
-  .searchlist {
-    margin-top: 80px;
+.searchlist {
+    margin-top: 11vh;
   }
 
-  .logospace {
-    display: none;
+  .wishspace {
+    margin-top: 11vh;
   }
+
+  .cartspace {
+    margin-top: 11vh;
+  }
+
+  .detailspace {
+    margin-top: 1vh;
+  }
+
 
   
 }
