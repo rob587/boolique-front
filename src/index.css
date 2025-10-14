@@ -538,6 +538,10 @@ body {
     font-size: 35px;
   }
 
+  .jumbotron-container {
+    margin-top: 12vh;
+  }
+
 
 }
 
