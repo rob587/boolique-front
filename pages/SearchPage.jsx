@@ -37,7 +37,7 @@ const SearchPage = () => {
     fetchProducts();
   }, []);
 
- 
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setQuery(searchParams.get("q") || "");
@@ -81,138 +81,123 @@ const SearchPage = () => {
 
   const handleCategoryClick = (cat) => {
     const params = new URLSearchParams(location.search);
-    params.delete("q");
-    params.delete("brand");
-    cat ? params.set("category", cat) : params.delete("category");
+    if (cat) params.set("category", cat);
+    else params.delete("category");
+    // non cancellare il brand
     navigate(`/search?${params.toString()}`);
   };
 
   const handleBrandClick = (brand) => {
     const params = new URLSearchParams(location.search);
-    params.delete("q");
-    params.delete("category");
-    brand ? params.set("brand", brand) : params.delete("brand");
+    if (brand) params.set("brand", brand);
+    else params.delete("brand");
+    // non cancellare la categoria
     navigate(`/search?${params.toString()}`);
   };
 
   const handleViewToggle = (mode) => setViewMode(mode);
 
 
-  return ( 
+  return (
     <div className="searchlist">
-    <div className="container-fluid my-4">
-      <div className="row">
-        {/* Sidebar */}
-        <div className="col-md-3 col-lg-2 border-end">
-          <h5 className="mb-3">Categorie</h5>
-          <ul className="list-group mb-4">
-            <li
-              className={`list-group-item ${!selectedCategory ? "active" : ""}`}
-              style={{ cursor: "pointer" }}
-              onClick={() => handleCategoryClick("")}
+      <div className="container-fluid my-4">
+        <div className="row">
+          {/* Sidebar */}
+          <div className="col-md-3 col-lg-2 border-end">
+            <h5 className="mb-3">Categorie</h5>
+            <select
+              className="form-select mb-4"
+              value={selectedCategory}
+              onChange={(e) => handleCategoryClick(e.target.value)}
             >
-              Tutti
-            </li>
-            {categories.map((cat) => (
-              <li
-                key={cat}
-                className={`list-group-item ${selectedCategory === cat ? "active" : ""
-                  }`}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleCategoryClick(cat)}
-              >
-                {cat}
-              </li>
-            ))}
-          </ul>
+              <option value="">Tutti</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
 
-          <h5 className="mb-3">Brand</h5>
-          <ul className="list-group">
-            <li
-              className={`list-group-item ${!selectedBrand ? "active" : ""}`}
-              style={{ cursor: "pointer" }}
-              onClick={() => handleBrandClick("")}
+            <h5 className="mb-3">Brand</h5>
+            <select
+              className="form-select"
+              value={selectedBrand}
+              onChange={(e) => handleBrandClick(e.target.value)}
             >
-              Tutti
-            </li>
-            {brands.map((brand) => (
-              <li
-                key={brand}
-                className={`list-group-item ${selectedBrand === brand ? "active" : ""
-                  }`}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleBrandClick(brand)}
-              >
-                {brand}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Risultati */}
-        <div className="col-md-9 col-lg-10">
-          <form className="mb-3 d-flex" onSubmit={handleSearchSubmit}>
-            <input
-              type="search"
-              className="form-control me-2"
-              placeholder="Cerca per nome, brand o categoria"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button className="btn btn-outline-warning" type="submit">
-              Cerca
-            </button>
-          </form>
-
-          <div className="mb-3">
-            <button
-              className={`btn me-2 ${viewMode === "grid" ? "btn-warning" : "btn-outline-warning"
-                }`}
-              onClick={() => handleViewToggle("grid")}
-            >
-              Griglia
-            </button>
-            <button
-              className={`btn ${viewMode === "list" ? "btn-warning" : "btn-outline-warning"
-                }`}
-              onClick={() => handleViewToggle("list")}
-            >
-              Elenco
-            </button>
+              <option value="">Tutti</option>
+              {brands.map((brand) => (
+                <option key={brand} value={brand}>
+                  {brand}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <h4 className="mb-4">
-            {selectedCategory
-              ? `Categoria: ${selectedCategory}`
-              : selectedBrand
-                ? `Brand: ${selectedBrand}`
-                : query
-                  ? `Risultati per: "${query}"`
-                  : "Tutti i prodotti"}
-          </h4>
 
-          {filtered.length === 0 ? (
-            <p>Nessun prodotto trovato.</p>
-          ) : (
-            <div className="row justify-content-center">
-              {filtered.map((product) => (
-                <div
-                  key={product.id}
-                  className={`col-10 mb-3 ${viewMode === "grid" ? "col-md-4 col-lg-3" : ""
-                    }`}
-                >
-                  <ProductCard
-                    product={product}
-                    viewMode={viewMode}
-                  />
-                </div>
-              ))}
+          {/* Risultati */}
+          <div className="col-md-9 col-lg-10">
+            <form className="my-3 d-flex" onSubmit={handleSearchSubmit}>
+              <input
+                type="search"
+                className="form-control me-2"
+                placeholder="Cerca per nome, brand o categoria"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button className="btn btn-outline-warning" type="submit">
+                Cerca
+              </button>
+            </form>
+
+            <div className="mb-3">
+              <button
+                className={`btn me-2 ${viewMode === "grid" ? "btn-warning" : "btn-outline-warning"
+                  }`}
+                onClick={() => handleViewToggle("grid")}
+              >
+                Griglia
+              </button>
+              <button
+                className={`btn ${viewMode === "list" ? "btn-warning" : "btn-outline-warning"
+                  }`}
+                onClick={() => handleViewToggle("list")}
+              >
+                Elenco
+              </button>
             </div>
-          )}
-        </div>
-      </div>
 
-      <style>{`
+            <h4 className="mb-4">
+              {selectedCategory
+                ? `Categoria: ${selectedCategory}`
+                : selectedBrand
+                  ? `Brand: ${selectedBrand}`
+                  : query
+                    ? `Risultati per: "${query}"`
+                    : "Tutti i prodotti"}
+            </h4>
+
+            {filtered.length === 0 ? (
+              <p>Nessun prodotto trovato.</p>
+            ) : (
+              <div className="row justify-content-center">
+                {filtered.map((product) => (
+                  <div
+                    key={product.id}
+                    className={`col-10 mb-3 ${viewMode === "grid" ? "col-md-4 col-lg-3" : ""
+                      }`}
+                  >
+                    <ProductCard
+                      product={product}
+                      viewMode={viewMode}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <style>{`
         .list-group-item.active {
           background-color: #C3993A;
           border-color: #C3993A;
@@ -227,7 +212,7 @@ const SearchPage = () => {
           color: #C3993A;
         }
       `}</style>
-    </div> </div>
+      </div> </div>
   );
 };
 
