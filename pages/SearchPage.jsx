@@ -221,7 +221,7 @@ const SearchPage = () => {
               {filtered.map((product) => (
                 <div
                   key={product.id}
-                  className={`col-12 mb-3 ${viewMode === "grid" ? "col-md-4 col-lg-3" : ""
+                  className={`col-10 mb-3 ${viewMode === "grid" ? "col-md-4 col-lg-3" : ""
                     }`}
                 >
                   <ProductCard
