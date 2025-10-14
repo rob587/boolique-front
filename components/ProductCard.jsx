@@ -3,18 +3,14 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
 import useWishlistStore from "../src/store/useWishlIstStore";
 
-const ProductCard = ({ product, viewMode = "grid" }) => {
+const ProductCard = ({ product, viewMode = "grid", editMode = false, onDelete }) => {
   const navigate = useNavigate();
-  const goToDetail = () => navigate(`/details/${product.slug || product.id}`);
+  const goToDetail = () => !editMode && navigate(`/details/${product.slug || product.id}`);
 
-  // Wishlist store
   const wishlist = useWishlistStore((state) => state.wishlist);
   const addToWishlist = useWishlistStore((state) => state.addToWishlist);
-  const removeFromWishlist = useWishlistStore(
-    (state) => state.removeFromWishlist
-  );
+  const removeFromWishlist = useWishlistStore((state) => state.removeFromWishlist);
 
-  // Cart store
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
@@ -22,12 +18,10 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
   const isInWishlist = wishlist.some((p) => p.id === product.id);
   const isInCart = cart.some((p) => p.id === product.id);
 
-  // Stato per modale di conferma
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  // Timer per chiusura automatica
   const showConfirmation = (message) => {
     setModalMessage(message);
     setShowModal(true);
@@ -42,11 +36,8 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
 
   const toggleWishlist = (e) => {
     e.stopPropagation();
-    if (isInWishlist) {
-      // Se è nella wishlist, mostra modal di conferma
-      setShowConfirmationModal(true);
-    } else {
-      // Se non è nella wishlist, aggiungilo direttamente
+    if (isInWishlist) setShowConfirmationModal(true);
+    else {
       addToWishlist(product);
       showConfirmation("Aggiunto alla wishlist ❤️");
     }
@@ -63,32 +54,21 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
     }
   };
 
-  // Calcolo percentuale sconto
   const discountPercentage =
     product.sales != 0
-      ? Math.round(
-          ((product.price - product.sales_price) / product.price) * 100
-        )
+      ? Math.round(((product.price - product.sales_price) / product.price) * 100)
       : 0;
 
-  // Modal di conferma rimozione dalla wishlist
   const RemovalConfirmationModal = () =>
     showConfirmationModal && (
       <div
         className="position-fixed top-0 start-0 w-100 h-100"
-        style={{
-          zIndex: 1040,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}
+        style={{ zIndex: 1040, backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         onClick={() => setShowConfirmationModal(false)}
       >
         <div
           className="position-fixed top-50 start-50 translate-middle bg-white rounded shadow-lg p-4"
-          style={{
-            zIndex: 1050,
-            width: "90%",
-            maxWidth: "400px",
-          }}
+          style={{ zIndex: 1050, width: "90%", maxWidth: "400px" }}
           onClick={(e) => e.stopPropagation()}
         >
           <h5 className="mb-3">Rimuovere dalla wishlist?</h5>
@@ -96,16 +76,10 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             Sei sicuro di voler rimuovere "{product.name}" dai tuoi desideri?
           </p>
           <div className="d-flex gap-2 justify-content-end">
-            <button
-              className="btn btn-secondary"
-              onClick={() => setShowConfirmationModal(false)}
-            >
+            <button className="btn btn-secondary" onClick={() => setShowConfirmationModal(false)}>
               Annulla
             </button>
-            <button
-              className="btn btn-danger"
-              onClick={handleRemoveFromWishlist}
-            >
+            <button className="btn btn-danger" onClick={handleRemoveFromWishlist}>
               Rimuovi
             </button>
           </div>
@@ -113,98 +87,32 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
       </div>
     );
 
-  // Modal di conferma azione (feedback)
   const ConfirmationModal = () =>
     showModal && (
       <div
         className="position-fixed top-50 start-50 translate-middle bg-dark text-white text-center p-3 rounded shadow"
-        style={{
-          zIndex: 1050,
-          width: "80%",
-          maxWidth: "300px",
-          fontSize: "0.9rem",
-        }}
+        style={{ zIndex: 1050, width: "80%", maxWidth: "300px", fontSize: "0.9rem" }}
       >
         {modalMessage}
       </div>
     );
 
-  if (viewMode === "list") {
-    return (
-      <>
-        <div
-          className="card mb-3 border-0 shadow-sm"
-          style={{ cursor: "pointer" }}
-          onClick={goToDetail}
-        >
-          <div className="card-body d-flex align-items-start p-3">
-            <div className="me-3" style={{ flexShrink: 0 }}>
-              <img
-                src={product.image}
-                className="rounded"
-                style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                alt={product.name}
-              />
-            </div>
-
-            <div className="flex-grow-1">
-              <h6 className="card-title mb-2">{product.name}</h6>
-              {product.sales != 0 ? (
-                <div>
-                  <p className="card-text mb-1">
-                    €{product.sales_price.toFixed(2)}
-                    <span className="badge bg-danger ms-2">
-                      -{discountPercentage}%
-                    </span>
-                  </p>
-                  <p className="card-text mb-3">
-                    <small className="text-decoration-line-through text-muted">
-                      €{product.price.toFixed(2)}
-                    </small>
-                  </p>
-                </div>
-              ) : (
-                <p className="card-text mb-3">€{product.price.toFixed(2)}</p>
-              )}
-
-              <div className="d-flex gap-3">
-                <i
-                  className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
-                  style={{
-                    color: "#C3993A",
-                    cursor: "pointer",
-                    fontSize: "1.2rem",
-                  }}
-                  onClick={toggleWishlist}
-                  title="Aggiungi/rimuovi dai preferiti"
-                ></i>
-                <i
-                  className="fa-solid fa-cart-plus"
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "1.2rem",
-                    color: isInCart ? "#C3993A" : "#111111",
-                  }}
-                  onClick={toggleCart}
-                  title="Aggiungi/rimuovi dal carrello"
-                ></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <RemovalConfirmationModal />
-        <ConfirmationModal />
-      </>
-    );
-  }
-
   return (
     <>
-      <div
-        className="card h-100 my-3"
-        style={{ cursor: "pointer" }}
-        onClick={goToDetail}
-      >
+      <div className="card h-100 my-3 position-relative" style={{ cursor: editMode ? "default" : "pointer" }} onClick={goToDetail}>
+        {/* Bottone elimina */}
+        {editMode && (
+          <button
+            className="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 z-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(product.id);
+            }}
+          >
+            X
+          </button>
+        )}
+
         <div style={{ position: "relative" }}>
           <img
             src={product.image}
@@ -213,31 +121,35 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             alt={product.name}
           />
 
-          <i
-            className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
-            style={{
-              color: "#C3993A",
-              cursor: "pointer",
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              fontSize: "1.5rem",
-            }}
-            onClick={toggleWishlist}
-          ></i>
+          {!editMode && (
+            <>
+              <i
+                className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
+                style={{
+                  color: "#C3993A",
+                  cursor: "pointer",
+                  position: "absolute",
+                  top: "10px",
+                  left: "10px",
+                  fontSize: "1.5rem",
+                }}
+                onClick={toggleWishlist}
+              ></i>
 
-          <i
-            className={`fa-solid fa-cart-plus`}
-            style={{
-              position: "absolute",
-              bottom: "10px",
-              left: "10px",
-              cursor: "pointer",
-              fontSize: "1.5rem",
-              color: isInCart ? "#C3993A" : "#111111",
-            }}
-            onClick={toggleCart}
-          ></i>
+              <i
+                className="fa-solid fa-cart-plus"
+                style={{
+                  position: "absolute",
+                  bottom: "10px",
+                  left: "10px",
+                  cursor: "pointer",
+                  fontSize: "1.5rem",
+                  color: isInCart ? "#C3993A" : "#111111",
+                }}
+                onClick={toggleCart}
+              ></i>
+            </>
+          )}
         </div>
 
         <div className="card-body d-flex flex-column">
@@ -246,9 +158,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
             <div className="mt-auto">
               <p className="card-text mb-1">
                 €{product.sales_price.toFixed(2)}
-                <span className="badge bg-danger ms-2">
-                  -{discountPercentage}%
-                </span>
+                <span className="badge bg-danger ms-2">-{discountPercentage}%</span>
               </p>
               <p className="card-text mb-0">
                 <small className="text-decoration-line-through text-muted">
@@ -261,6 +171,7 @@ const ProductCard = ({ product, viewMode = "grid" }) => {
           )}
         </div>
       </div>
+
       <RemovalConfirmationModal />
       <ConfirmationModal />
     </>
