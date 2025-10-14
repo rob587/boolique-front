@@ -66,7 +66,7 @@ const DetailProducts = () => {
               {products.images && products.images.length > 0 && (
                 <div
                   id="productCarousel"
-                  className="carousel slide"
+                  className="carousel slide shadow-lg rounded overflow-hidden bg-black p-2"
                   data-bs-ride="carousel"
                 >
                   <div className="carousel-inner">
@@ -250,7 +250,7 @@ const DetailProducts = () => {
 
             return (
               <div key={prod.id} className="col-6 col-md-3">
-                <div className="card h-100 text-center">
+                <div className="card h-100 text-center shadow-lg">
                   <img
                     src={prod.image}
                     alt={prod.name}

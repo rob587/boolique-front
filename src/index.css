@@ -728,3 +728,8 @@ body {
     padding: 8px 20px;
   }
 }
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(70%) sepia(83%) saturate(900%) hue-rotate(2deg) brightness(102%) contrast(95%);
+}
