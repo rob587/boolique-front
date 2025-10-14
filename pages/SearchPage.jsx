@@ -194,7 +194,7 @@ const SearchPage = () => {
           {filtered.length === 0 ? (
             <p>Nessun prodotto trovato.</p>
           ) : (
-            <div className="row">
+            <div className="row justify-content-center">
               {filtered.map((product) => (
                 <div
                   key={product.id}
