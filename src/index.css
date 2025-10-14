@@ -8,7 +8,6 @@ header {
   margin-bottom: 100px;
 }
 
-
 /* Footer */
 footer {
   background-color: #111;
@@ -28,15 +27,15 @@ footer .container {
 
 /*homepage body*/
 
-  .largebanner {
-    max-width: 900px;
-    margin: 0 auto;
-  }
+.largebanner {
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-  .largebanner img {
-    border-radius: 50px 0px;
-    border: 3px solid #C3993A
-  }
+.largebanner img {
+  border-radius: 50px 0px;
+  border: 3px solid #c3993a;
+}
 
 /* Footer Layout */
 .footer-left {
@@ -53,9 +52,9 @@ footer .container {
   list-style: none;
   display: flex;
   justify-content: center;
- gap: 15px;
- padding: 0;
- margin: 0 auto;
+  gap: 15px;
+  padding: 0;
+  margin: 0 auto;
 }
 
 .footer-links li a {
@@ -88,7 +87,7 @@ footer .container {
 }
 
 .subtitle {
-  font-family: "Cormorant Garamond", serif;;
+  font-family: "Cormorant Garamond", serif;
   text-transform: uppercase;
   font-size: 40px;
   border-bottom: 3px double black;
@@ -101,20 +100,20 @@ body {
 }
 
 .searchlist {
-    margin-top: 15vh;
-  }
+  margin-top: 15vh;
+}
 
-  .wishspace {
-    margin-top: 15vh;
-  }
+.wishspace {
+  margin-top: 15vh;
+}
 
-  .cartspace {
-    margin-top: 15vh;
-  }
+.cartspace {
+  margin-top: 15vh;
+}
 
-  .detailspace {
-    margin-top: 15vh;
-  }
+.detailspace {
+  margin-top: 15vh;
+}
 
 .logo {
   font-family: "Cormorant Garamond", serif;
@@ -122,8 +121,6 @@ body {
   color: #c5a46d;
   text-transform: uppercase;
 }
-
-
 
 /* HEADER STYLES */
 .navbar-dark .container-fluid {
@@ -144,9 +141,8 @@ body {
   color: #d1b57a;
 }
 
-
 .logo {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 30px;
   color: #c5a46d;
   text-transform: uppercase;
@@ -158,7 +154,6 @@ body {
   font-size: 20px;
   transition: color 0.3s ease;
 }
-
 
 .wish-link,
 .cart-link {
@@ -173,7 +168,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 .wish-link:hover,
@@ -186,7 +180,6 @@ body {
   margin-right: 1rem !important;
 }
 
-
 .wish-link i,
 .cart-link i {
   font-size: 35px;
@@ -198,7 +191,6 @@ body {
 .cart-link:hover i {
   transform: scale(1);
 }
-
 
 /* Pages*/
 
@@ -262,9 +254,11 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 16px;
-  background: radial-gradient(circle at center,
-      rgba(189, 160, 106, 0.12),
-      transparent 70%);
+  background: radial-gradient(
+    circle at center,
+    rgba(189, 160, 106, 0.12),
+    transparent 70%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -373,9 +367,8 @@ label.form-label {
   min-height: 80vh;
 }
 
-
 .jumbotron-container {
-  margin-top: 11.1vh;
+  margin-top: 4%;
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -417,8 +410,7 @@ label.form-label {
 
 .jumbotron-text p {
   font-size: 1.25rem;
-    text-shadow: 0 2px 8px #000000;
-
+  text-shadow: 0 2px 8px #000000;
 }
 
 /*Media query: Mobile */
@@ -441,9 +433,11 @@ label.form-label {
   /*serve solo per attivare lo pseudo-elemento Senza di quello, il browser non lo renderizza affatto*/
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom,
-      rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.7));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0.7)
+  );
   z-index: 1;
 }
 
@@ -453,15 +447,15 @@ body {
 }
 
 .list-group-item.active {
-  background-color: #C3993A !important;
+  background-color: #c3993a !important;
   color: #111111 !important;
-  border-color: #C3993A !important;
+  border-color: #c3993a !important;
   font-weight: 600;
 }
 
 .list-group-item:hover {
   background-color: #2b2b2b;
-  color: #C3993A;
+  color: #c3993a;
   cursor: pointer;
 }
 
@@ -476,12 +470,10 @@ body {
   border-bottom: 1px solid #2b2b2b;
 }
 
-
 /* MEDIA QUERIES */
 
 /* Tablet e Mobile (max 768px) */
 @media (max-width: 768px) {
-
   /* Jumbotron - Stili esistenti */
   .jumbotron-text h1 {
     font-size: 2rem;
@@ -505,12 +497,10 @@ body {
     max-width: 250px;
   }
 
-
   .wish-link.fs-1 i,
   .cart-link.fs-1 i {
     font-size: 2rem;
   }
-
 
   .wishcart .wish-link {
     margin-right: 0.75rem !important;
@@ -536,8 +526,6 @@ body {
   .jumbotron-container {
     margin-top: 12vh;
   }
-
-
 }
 
 /* Extra small (max 480px) */
@@ -575,7 +563,7 @@ body {
   }
 
   .jumbotron-text h1 {
-   margin-top: 20px;
+    margin-top: 20px;
     font-size: 1.5rem;
   }
 
@@ -587,11 +575,11 @@ body {
     font-size: 1.5rem;
   }
 
-  .jumbotron-container{
+  .jumbotron-container {
     margin-top: 9vh;
   }
 
-.searchlist {
+  .searchlist {
     margin-top: 11vh;
   }
 
@@ -606,39 +594,32 @@ body {
   .detailspace {
     margin-top: 1vh;
   }
-
-
-  
 }
-
-
 
 /*discount box*/
 
 .codice-sconto-box {
   background-color: #1a1a1a;
-  color: #C3993A;
+  color: #c3993a;
   border: 1px solid #2b2b2b;
   padding: 15px;
 }
 
 .codice-sconto-box label {
-  color: #C3993A;
+  color: #c3993a;
   font-weight: 600;
 }
 
 .codice-sconto-box button {
-  border-color: #C3993A;
-  color: #C3993A;
+  border-color: #c3993a;
+  color: #c3993a;
   transition: all 0.2s ease;
 }
 
 .codice-sconto-box button:hover {
-  background-color: #C3993A;
+  background-color: #c3993a;
   color: #111111;
 }
-
-
 
 /*banner discount*/
 
@@ -646,15 +627,15 @@ body {
   text-align: center;
   margin: 20px auto;
   padding: 10px 20px;
-  background-color: #eccd8b; 
+  background-color: #eccd8b;
   color: #0b0b0b;
   border-radius: 0px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); 
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   max-width: 60%;
   position: relative;
-  overflow: hidden; 
-  border: 1px solid transparent; 
-  animation: simpleBorderGlow 3s infinite alternate; 
+  overflow: hidden;
+  border: 1px solid transparent;
+  animation: simpleBorderGlow 3s infinite alternate;
 }
 
 @keyframes simpleBorderGlow {
@@ -663,7 +644,7 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.458);
   }
   50% {
-    border-color: #ffc107; 
+    border-color: #ffc107;
     box-shadow: 0 0 25px rgba(255, 193, 7, 0.8);
   }
   100% {
@@ -672,19 +653,18 @@ body {
   }
 }
 
-
 .simple-discount-text {
-  font-family: 'cambria', sans-serif;
+  font-family: "cambria", sans-serif;
   font-size: 3em;
   font-weight: 800;
-  color: #000000; 
-  text-shadow: 0 0 10px rgba(255, 235, 59, 0.6); 
+  color: #000000;
+  text-shadow: 0 0 10px rgba(255, 235, 59, 0.6);
   margin-bottom: 0px;
   text-transform: uppercase;
 }
 
 .simple-discount-tagline {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 1.2em;
   color: #141212;
   margin-bottom: 10px;
@@ -693,12 +673,12 @@ body {
 
 .simple-discount-button {
   display: inline-block;
-  background-color: #deb537; 
+  background-color: #deb537;
   color: #1a1a2e;
   padding: 10px 30px;
   border-radius: 10px;
   text-decoration: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 1em;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -707,7 +687,7 @@ body {
 }
 
 .simple-discount-button:hover {
-  background-color: #fbd013; 
+  background-color: #fbd013;
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   color: #1a1a2e;
@@ -715,9 +695,9 @@ body {
 
 /* Media Queries Discount*/
 @media (max-width: 768px) {
-.simple-discount-banner-container{
-  max-width: 90%;
-}
+  .simple-discount-banner-container {
+    max-width: 90%;
+  }
 
   .simple-discount-text {
     font-size: 2em;
@@ -732,10 +712,10 @@ body {
 }
 
 @media (max-width: 480px) {
-.simple-discount-banner-container {
-  max-width: 90%;
-  padding: 8px 15px;
-}
+  .simple-discount-banner-container {
+    max-width: 90%;
+    padding: 8px 15px;
+  }
 
   .simple-discount-text {
     font-size: 1em;
