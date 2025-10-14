@@ -89,7 +89,7 @@ const Homepage = () => {
         </div>
       </div>
 
-        <div className="col-12 text-center my-5 imglogospace"><img className="logospace" src="public/imgs/logo.png" alt="logo" /></div>
+        <div className="col-12 text-center my-5 imglogospace"><img className="logospace" src="/imgs/logo.png" alt="logo" /></div>
 
       <div className="col-12 text-center">
         <h1 className="title">BENVENUTO IN BOOLIQUE</h1>
