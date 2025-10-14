@@ -3,13 +3,21 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "../src/store/useCartStore";
 import useWishlistStore from "../src/store/useWishlIstStore";
 
-const ProductCard = ({ product, viewMode = "grid", editMode = false, onDelete }) => {
+const ProductCard = ({
+  product,
+  viewMode = "grid",
+  editMode = false,
+  onDelete,
+}) => {
   const navigate = useNavigate();
-  const goToDetail = () => !editMode && navigate(`/details/${product.slug || product.id}`);
+  const goToDetail = () =>
+    !editMode && navigate(`/details/${product.slug || product.id}`);
 
   const wishlist = useWishlistStore((state) => state.wishlist);
   const addToWishlist = useWishlistStore((state) => state.addToWishlist);
-  const removeFromWishlist = useWishlistStore((state) => state.removeFromWishlist);
+  const removeFromWishlist = useWishlistStore(
+    (state) => state.removeFromWishlist
+  );
 
   const cart = useCartStore((state) => state.cart);
   const addToCart = useCartStore((state) => state.addToCart);
@@ -55,8 +63,10 @@ const ProductCard = ({ product, viewMode = "grid", editMode = false, onDelete })
   };
 
   const discountPercentage =
-    product.sales != 0
-      ? Math.round(((product.price - product.sales_price) / product.price) * 100)
+    product.sales !== 0
+      ? Math.round(
+          ((product.price - product.sales_price) / product.price) * 100
+        )
       : 0;
 
   const RemovalConfirmationModal = () =>
@@ -76,10 +86,16 @@ const ProductCard = ({ product, viewMode = "grid", editMode = false, onDelete })
             Sei sicuro di voler rimuovere "{product.name}" dai tuoi desideri?
           </p>
           <div className="d-flex gap-2 justify-content-end">
-            <button className="btn btn-secondary" onClick={() => setShowConfirmationModal(false)}>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowConfirmationModal(false)}
+            >
               Annulla
             </button>
-            <button className="btn btn-danger" onClick={handleRemoveFromWishlist}>
+            <button
+              className="btn btn-danger"
+              onClick={handleRemoveFromWishlist}
+            >
               Rimuovi
             </button>
           </div>
@@ -91,16 +107,121 @@ const ProductCard = ({ product, viewMode = "grid", editMode = false, onDelete })
     showModal && (
       <div
         className="position-fixed top-50 start-50 translate-middle bg-dark text-white text-center p-3 rounded shadow"
-        style={{ zIndex: 1050, width: "80%", maxWidth: "300px", fontSize: "0.9rem" }}
+        style={{
+          zIndex: 1050,
+          width: "80%",
+          maxWidth: "300px",
+          fontSize: "0.9rem",
+        }}
       >
         {modalMessage}
       </div>
     );
 
+  // ✅ Layout a elenco (LIST VIEW)
+  if (viewMode === "list") {
+    return (
+      <>
+        <div
+          className="card my-3 d-flex flex-row align-items-stretch p-2"
+          style={{
+            borderRadius: "10px",
+            overflow: "hidden",
+            cursor: editMode ? "default" : "pointer",
+          }}
+          onClick={goToDetail}
+        >
+          {/* Bottone elimina */}
+          {editMode && (
+            <button
+              className="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 z-1"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(product.id);
+              }}
+            >
+              X
+            </button>
+          )}
+
+          {/* Immagine a sinistra */}
+          <div className="flex-shrink-0" style={{ width: "200px" }}>
+            <img
+              src={product.image}
+              alt={product.name}
+              className="img-fluid h-100"
+              style={{ objectFit: "cover", borderRadius: "8px" }}
+            />
+          </div>
+
+          {/* Contenuto a destra */}
+          <div className="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 className="card-title mb-2">{product.name}</h5>
+              {product.description && (
+                <p className="card-text text-muted small mb-2">
+                  {product.description}
+                </p>
+              )}
+              {product.sales !== 0 ? (
+                <>
+                  <p className="mb-1">
+                    €{product.sales_price.toFixed(2)}
+                    <span className="badge bg-danger ms-2">
+                      -{discountPercentage}%
+                    </span>
+                  </p>
+                  <p className="text-muted mb-0">
+                    <small className="text-decoration-line-through">
+                      €{product.price.toFixed(2)}
+                    </small>
+                  </p>
+                </>
+              ) : (
+                <p className="fw-semibold">€{product.price.toFixed(2)}</p>
+              )}
+            </div>
+
+            {/* ❤️ 🛒 sotto descrizione */}
+            {!editMode && (
+              <div className="mt-3 d-flex align-items-center gap-3">
+                <i
+                  className={`fa${isInWishlist ? "s" : "r"} fa-heart`}
+                  style={{
+                    color: isInWishlist ? "#C3993A" : "#111111",
+                    cursor: "pointer",
+                    fontSize: "1.5rem",
+                  }}
+                  onClick={toggleWishlist}
+                ></i>
+                <i
+                  className="fa-solid fa-cart-plus"
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "1.5rem",
+                    color: isInCart ? "#C3993A" : "#111111",
+                  }}
+                  onClick={toggleCart}
+                ></i>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <RemovalConfirmationModal />
+        <ConfirmationModal />
+      </>
+    );
+  }
+
+  // 🔸 VISTA GRIGLIA (rimane IDENTICA alla tua attuale)
   return (
     <>
-      <div className="card h-100 my-3 position-relative" style={{ cursor: editMode ? "default" : "pointer" }} onClick={goToDetail}>
-        {/* Bottone elimina */}
+      <div
+        className="card h-100 my-3 position-relative"
+        style={{ cursor: editMode ? "default" : "pointer" }}
+        onClick={goToDetail}
+      >
         {editMode && (
           <button
             className="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 z-1"
@@ -154,11 +275,13 @@ const ProductCard = ({ product, viewMode = "grid", editMode = false, onDelete })
 
         <div className="card-body d-flex flex-column">
           <h5 className="card-title flex-grow-1">{product.name}</h5>
-          {product.sales != 0 ? (
+          {product.sales !== 0 ? (
             <div className="mt-auto">
               <p className="card-text mb-1">
                 €{product.sales_price.toFixed(2)}
-                <span className="badge bg-danger ms-2">-{discountPercentage}%</span>
+                <span className="badge bg-danger ms-2">
+                  -{discountPercentage}%
+                </span>
               </p>
               <p className="card-text mb-0">
                 <small className="text-decoration-line-through text-muted">
