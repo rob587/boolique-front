@@ -80,7 +80,7 @@ const Homepage = () => {
       <div className="jumbotron-container d-flex justify-content-center align-items-center">
         <img
           className="jumbotron-image img-fluid"
-          src="/jumbotron/groupimgjumbo.png"
+          src="/jumbotron/jumbotwo.png"
           alt="Abiti in evidenza"
         />
         <div className="jumbotron-text text-center">
