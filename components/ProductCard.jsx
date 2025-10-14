@@ -100,18 +100,6 @@ const ProductCard = ({ product, viewMode = "grid", editMode = false, onDelete })
   return (
     <>
       <div className="card h-100 my-3 position-relative" style={{ cursor: editMode ? "default" : "pointer" }} onClick={goToDetail}>
-        {/* Bottone elimina */}
-        {editMode && (
-          <button
-            className="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 z-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(product.id);
-            }}
-          >
-            X
-          </button>
-        )}
 
         <div style={{ position: "relative" }}>
           <img

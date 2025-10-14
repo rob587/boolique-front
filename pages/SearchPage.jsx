@@ -37,7 +37,7 @@ const SearchPage = () => {
     fetchProducts();
   }, []);
 
-  // Legge i parametri dalla URL
+ 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setQuery(searchParams.get("q") || "");
@@ -45,7 +45,6 @@ const SearchPage = () => {
     setSelectedBrand(searchParams.get("brand") || "");
   }, [location.search]);
 
-  // Filtra prodotti
   useEffect(() => {
     let results = [...products];
 
@@ -98,19 +97,6 @@ const SearchPage = () => {
 
   const handleViewToggle = (mode) => setViewMode(mode);
 
-  // 🗑️ Eliminazione prodotto
-  const handleDeleteProduct = async (id) => {
-    const confirmDelete = window.confirm("Sei sicuro di voler eliminare questo prodotto?");
-    if (!confirmDelete) return;
-    try {
-      await axios.delete(`http://localhost:3000/products/${id}`);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-      alert("✅ Prodotto eliminato con successo!");
-    } catch (err) {
-      console.error("Errore durante l'eliminazione:", err);
-      alert("❌ Errore durante l'eliminazione del prodotto");
-    }
-  };
 
   return (
     <div className="container-fluid my-4">
@@ -160,15 +146,6 @@ const SearchPage = () => {
               </li>
             ))}
           </ul>
-
-          <hr />
-          {/* 🛠️ Toggle modalità modifica */}
-          <button
-            className={`btn ${editMode ? "btn-danger" : "btn-outline-danger"} w-100 mt-3`}
-            onClick={() => setEditMode(!editMode)}
-          >
-            {editMode ? "Esci dalla Modifica" : "Modifica Prodotti"}
-          </button>
         </div>
 
         {/* Risultati */}
@@ -226,8 +203,6 @@ const SearchPage = () => {
                   <ProductCard
                     product={product}
                     viewMode={viewMode}
-                    editMode={editMode}
-                    onDelete={handleDeleteProduct} // 👈 passiamo la funzione di eliminazione
                   />
                 </div>
               ))}
