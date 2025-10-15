@@ -159,7 +159,6 @@ body {
 .cart-link {
   padding: 8px;
   z-index: 1;
-  /* Non più 10, in quanto sono nella navbar */
   opacity: 1;
   border-radius: 50%;
   color: #e3e3e3;
@@ -731,5 +730,6 @@ body {
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  filter: invert(70%) sepia(83%) saturate(900%) hue-rotate(2deg) brightness(102%) contrast(95%);
+  filter: invert(70%) sepia(83%) saturate(900%) hue-rotate(2deg)
+    brightness(102%) contrast(95%);
 }

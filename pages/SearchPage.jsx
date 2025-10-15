@@ -37,7 +37,6 @@ const SearchPage = () => {
     fetchProducts();
   }, []);
 
-
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setQuery(searchParams.get("q") || "");
@@ -81,22 +80,29 @@ const SearchPage = () => {
 
   const handleCategoryClick = (cat) => {
     const params = new URLSearchParams(location.search);
+
     if (cat) params.set("category", cat);
     else params.delete("category");
-    // non cancellare il brand
+
+    // ❌ Rimuoviamo la query di ricerca per evitare conflitti
+    params.delete("q");
+
     navigate(`/search?${params.toString()}`);
   };
 
   const handleBrandClick = (brand) => {
     const params = new URLSearchParams(location.search);
+
     if (brand) params.set("brand", brand);
     else params.delete("brand");
-    // non cancellare la categoria
+
+    // ❌ Anche qui, togliamo il filtro di ricerca
+    params.delete("q");
+
     navigate(`/search?${params.toString()}`);
   };
 
   const handleViewToggle = (mode) => setViewMode(mode);
-
 
   return (
     <div className="searchlist">
@@ -133,7 +139,6 @@ const SearchPage = () => {
             </select>
           </div>
 
-
           {/* Risultati */}
           <div className="col-md-9 col-lg-10">
             <form className="my-3 d-flex" onSubmit={handleSearchSubmit}>
@@ -151,15 +156,17 @@ const SearchPage = () => {
 
             <div className="mb-3">
               <button
-                className={`btn me-2 ${viewMode === "grid" ? "btn-warning" : "btn-outline-warning"
-                  }`}
+                className={`btn me-2 ${
+                  viewMode === "grid" ? "btn-warning" : "btn-outline-warning"
+                }`}
                 onClick={() => handleViewToggle("grid")}
               >
                 Griglia
               </button>
               <button
-                className={`btn ${viewMode === "list" ? "btn-warning" : "btn-outline-warning"
-                  }`}
+                className={`btn ${
+                  viewMode === "list" ? "btn-warning" : "btn-outline-warning"
+                }`}
                 onClick={() => handleViewToggle("list")}
               >
                 Elenco
@@ -170,10 +177,10 @@ const SearchPage = () => {
               {selectedCategory
                 ? `Categoria: ${selectedCategory}`
                 : selectedBrand
-                  ? `Brand: ${selectedBrand}`
-                  : query
-                    ? `Risultati per: "${query}"`
-                    : "Tutti i prodotti"}
+                ? `Brand: ${selectedBrand}`
+                : query
+                ? `Risultati per: "${query}"`
+                : "Tutti i prodotti"}
             </h4>
 
             {filtered.length === 0 ? (
@@ -183,13 +190,11 @@ const SearchPage = () => {
                 {filtered.map((product) => (
                   <div
                     key={product.id}
-                    className={`col-10 mb-3 ${viewMode === "grid" ? "col-md-4 col-lg-3" : ""
-                      }`}
+                    className={`col-10 mb-3 ${
+                      viewMode === "grid" ? "col-md-4 col-lg-3" : ""
+                    }`}
                   >
-                    <ProductCard
-                      product={product}
-                      viewMode={viewMode}
-                    />
+                    <ProductCard product={product} viewMode={viewMode} />
                   </div>
                 ))}
               </div>
@@ -212,7 +217,8 @@ const SearchPage = () => {
           color: #C3993A;
         }
       `}</style>
-      </div> </div>
+      </div>{" "}
+    </div>
   );
 };
 

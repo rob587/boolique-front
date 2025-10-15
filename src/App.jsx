@@ -2,10 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DefaultLayout from "../layout/DefaultLayout";
 import Homepage from "../pages/Homepage";
 import DetailProducts from "../pages/DetailProducts";
-import { useState } from "react";
 import CartPage from "../pages/CartPage";
 import WishPage from "../pages/WishPage";
 import SearchPage from "../pages/SearchPage";
+import NotFound from "../pages/NotFound";
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
             <Route path="cart" element={<CartPage />} />
             <Route path="wish" element={<WishPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>
