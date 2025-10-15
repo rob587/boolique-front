@@ -4,7 +4,7 @@ header {
   top: 0;
   width: 100%;
   z-index: 1000;
-  height: 100px;
+  height: auto;
   margin-bottom: 100px;
 }
 
@@ -576,7 +576,7 @@ body {
   }
 
   .jumbotron-container {
-    margin-top: 9vh;
+    margin-top: 7.8vh;
   }
 
   .searchlist {
